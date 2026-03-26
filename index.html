@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Fitness Pro</title>
+  <title>كابتن ياسر</title>
   <meta name="theme-color" content="#080808" />
   <style>
     :root{
@@ -18,10 +18,12 @@
       --red2:#b91c1c;
       --yellow:#facc15;
       --yellow2:#f59e0b;
+      --ok:#22c55e;
       --radius:22px;
       --shadow:0 18px 40px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
@@ -31,11 +33,34 @@
         radial-gradient(circle at top left, rgba(250,204,21,.10), transparent 24%),
         linear-gradient(180deg,var(--bg) 0%, #020202 100%);
       min-height:100vh;
+      overflow-x:hidden;
     }
     .hidden{display:none!important}
-    .app{max-width:920px;margin:0 auto;padding:16px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-    .brand{font-size:27px;font-weight:900}
+    .app{
+      max-width:960px;
+      margin:0 auto;
+      padding:16px 16px 96px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:25px;
+      font-weight:900;
+    }
+    .brand-avatar{
+      width:48px;height:48px;border-radius:50%;
+      object-fit:cover;
+      border:2px solid rgba(250,204,21,.35);
+      box-shadow:0 0 0 4px rgba(225,29,47,.08);
+    }
     .pill,.tab{
       border:1px solid var(--line);
       background:rgba(255,255,255,.03);
@@ -53,7 +78,15 @@
       border-radius:var(--radius);
       padding:18px;
       box-shadow:var(--shadow);
+      opacity:0;
+      transform:translateY(18px);
+      animation:fadeUp .55s ease forwards;
     }
+    .card:nth-child(1){animation-delay:.05s}
+    .card:nth-child(2){animation-delay:.10s}
+    .card:nth-child(3){animation-delay:.15s}
+    .card:nth-child(4){animation-delay:.20s}
+    .card:nth-child(5){animation-delay:.25s}
     .hero{
       background:
         radial-gradient(circle at top right, rgba(225,29,47,.18), transparent 28%),
@@ -64,6 +97,7 @@
     .small{font-size:13px;color:var(--muted)}
     .grid{display:grid;gap:14px}
     .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
     .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
     .menu-btn{
       border:none;
@@ -96,12 +130,14 @@
     .check{
       display:flex;
       align-items:center;
+      justify-content:space-between;
       gap:8px;
       background:rgba(255,255,255,.04);
       border:1px solid var(--line);
       border-radius:16px;
       padding:12px 14px;
     }
+    .check input{width:auto}
     .btn{
       border:none;
       border-radius:18px;
@@ -130,7 +166,9 @@
       height:100%;
       background:linear-gradient(90deg,var(--yellow),var(--red));
       width:0%;
+      transition:width .35s ease;
     }
+    .progress-bar.ok{background:linear-gradient(90deg,#84cc16,#22c55e)}
     .badge{
       display:inline-block;
       background:rgba(250,204,21,.12);
@@ -144,7 +182,7 @@
     }
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
     .tab.active{background:var(--yellow);color:#241700}
-    .list-item,.exercise{
+    .list-item,.exercise,.meal-card{
       background:rgba(255,255,255,.035);
       border:1px solid var(--line);
       padding:14px;
@@ -154,7 +192,7 @@
       outline:2px solid rgba(250,204,21,.35);
       background:rgba(225,29,47,.08);
     }
-    .exercise-title{font-size:18px;font-weight:900}
+    .exercise-title,.meal-title{font-size:18px;font-weight:900}
     .photo-grid,.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
     .photo-box{
       aspect-ratio:3/4;
@@ -188,31 +226,143 @@
       padding:12px;
       border-radius:18px;
     }
+    .ok-box{
+      background:rgba(34,197,94,.10);
+      border:1px solid rgba(34,197,94,.22);
+      padding:12px;
+      border-radius:18px;
+    }
     a.link{color:#ffd84d;text-decoration:none;font-weight:800}
     .footer-note{opacity:.8;text-align:center;font-size:12px;margin-top:8px}
-    @media (max-width:680px){
-      .grid-2,.menu,.photo-grid,.stats{grid-template-columns:1fr}
+    .bottom-nav{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      background:rgba(10,10,10,.96);
+      border-top:1px solid var(--line);
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+      padding:10px 10px calc(10px + env(safe-area-inset-bottom));
+      z-index:999;
+      backdrop-filter:blur(10px);
+    }
+    .nav-btn{
+      border:none;
+      background:transparent;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+      padding:8px 4px;
+      border-radius:14px;
+      cursor:pointer;
+    }
+    .nav-btn span{
+      display:block;
+      font-size:20px;
+      margin-bottom:4px;
+    }
+    .nav-btn.active{
+      background:rgba(225,29,47,.16);
+      color:#fff;
+      border:1px solid rgba(250,204,21,.18);
+    }
+    .splash{
+      position:fixed;
+      inset:0;
+      z-index:2000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(0,0,0,.58),rgba(0,0,0,.72)),
+        url('https://raw.githubusercontent.com/yaas1401-hash/my-fitness-app/main/file_00000000b81472438c6597d941395a05.png') center/cover no-repeat;
+      transition:opacity .7s ease, visibility .7s ease;
+    }
+    .splash.hide{opacity:0;visibility:hidden}
+    .splash-box{
+      text-align:center;
+      padding:24px;
+      border-radius:30px;
+      backdrop-filter:blur(8px);
+      background:rgba(0,0,0,.26);
+      border:1px solid rgba(255,204,0,.16);
+      animation:zoomIn .9s ease;
+      max-width:90%;
+    }
+    .splash-avatar{
+      width:110px;height:110px;border-radius:50%;
+      object-fit:cover;border:3px solid rgba(250,204,21,.5);
+      box-shadow:0 0 0 8px rgba(225,29,47,.15);
+      margin-bottom:14px;
+    }
+    .splash h1{margin:0 0 8px;font-size:32px}
+    .splash p{margin:0;color:#ffe8b0}
+    .points-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(250,204,21,.10);
+      border:1px solid rgba(250,204,21,.22);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:900;
+    }
+    .level{
+      color:#ffd84d;
+      font-weight:900;
+    }
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(18px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    @keyframes zoomIn{
+      from{opacity:0;transform:scale(.92)}
+      to{opacity:1;transform:scale(1)}
+    }
+    @media (max-width:720px){
+      .grid-2,.grid-3,.menu,.photo-grid,.stats{grid-template-columns:1fr}
       .brand{font-size:22px}
+      .bottom-nav{grid-template-columns:repeat(5,1fr)}
     }
   </style>
 </head>
 <body>
+
+<div class="splash" id="splashScreen">
+  <div class="splash-box">
+    <img class="splash-avatar" src="https://raw.githubusercontent.com/yaas1401-hash/my-fitness-app/main/file_00000000b81472438c6597d941395a05.png" alt="كابتن ياسر">
+    <h1>كابتن ياسر 🔥</h1>
+    <p>انضباط • قوة • نتيجة</p>
+  </div>
+</div>
+
 <div class="app">
   <div id="homeScreen">
     <div class="topbar">
-      <div class="brand">🔥 My Fitness Pro</div>
+      <div class="brand">
+        <img class="brand-avatar" src="https://raw.githubusercontent.com/yaas1401-hash/my-fitness-app/main/file_00000000b81472438c6597d941395a05.png" alt="كابتن ياسر">
+        <div>كابتن ياسر</div>
+      </div>
       <button class="pill" id="resetAppBtn">تصفير</button>
     </div>
 
     <div class="card hero">
-      <div class="small">المدرب الذكي — إصدار حماسي</div>
-      <h2 id="aiMessage" style="margin:8px 0 4px;font-size:24px">جاهز تبدأ يومك؟ 💪</h2>
-      <div class="grid grid-2" style="margin-top:12px">
+      <div class="small">المدرب الذكي — إصدار حماسي شخصي</div>
+      <h2 id="aiMessage" style="margin:8px 0 10px;font-size:24px">جاهز تبدأ يومك؟ 💪</h2>
+      <div class="row" style="margin-bottom:12px">
+        <div class="points-pill">⭐ النقاط: <span id="pointsValue">0</span></div>
+        <div class="points-pill">🏆 المستوى: <span class="level" id="levelValue">مبتدئ</span></div>
+      </div>
+      <div class="grid grid-2">
         <input id="sleepHours" type="number" placeholder="ساعات النوم" />
         <input id="energyLevel" type="number" placeholder="الطاقة 1-10" />
         <input id="painLevel" type="number" placeholder="الألم 0-10" />
-        <label class="check"><input id="proteinDone" type="checkbox" style="width:auto"> حققت البروتين اليوم</label>
-        <label class="check"><input id="creatineDone" type="checkbox" style="width:auto"> أخذت الكرياتين اليوم</label>
+        <label class="check"><span>حققت البروتين اليوم</span><input id="proteinDone" type="checkbox"></label>
+        <label class="check"><span>أخذت الكرياتين اليوم</span><input id="creatineDone" type="checkbox"></label>
+        <label class="check"><span>أخذت فيتامين د اليوم</span><input id="vitaminDDone" type="checkbox"></label>
+        <label class="check"><span>أخذت أوميغا 3 اليوم</span><input id="omegaDone" type="checkbox"></label>
+        <label class="check"><span>أخذت المغنيسيوم اليوم</span><input id="magnesiumDone" type="checkbox"></label>
         <button class="btn" id="refreshAdviceBtn">تحديث النصيحة</button>
       </div>
     </div>
@@ -241,7 +391,7 @@
     <div class="menu" style="margin-top:14px">
       <button class="menu-btn" data-open="workoutScreen"><span>🏋️</span>التمرين</button>
       <button class="menu-btn" data-open="nutritionScreen"><span>🍽️</span>الأكل</button>
-      <button class="menu-btn" data-open="supplementsScreen"><span>💊</span>المكملات</button>
+      <button class="menu-btn" data-open="mealsScreen"><span>🥗</span>الوجبات</button>
       <button class="menu-btn" data-open="progressScreen"><span>📊</span>التقدم</button>
     </div>
 
@@ -257,7 +407,7 @@
       <div id="dynamicPlan" class="notice hidden" style="margin-top:10px"></div>
     </div>
 
-    <div class="footer-note">أسود + أحمر + أصفر — نسخة حماسية</div>
+    <div class="footer-note">نسخة كابتن ياسر الشخصية</div>
   </div>
 
   <div id="workoutScreen" class="hidden">
@@ -304,14 +454,66 @@
       <div class="section-title">جدول يوم التمرين</div>
       <div class="stack" id="scheduleList"></div>
     </div>
+    <div class="card" style="margin-top:14px">
+      <div class="section-title">💊 المكملات</div>
+      <div id="suppList" class="grid"></div>
+    </div>
   </div>
 
-  <div id="supplementsScreen" class="hidden">
+  <div id="mealsScreen" class="hidden">
     <div class="topbar">
-      <div class="brand">💊 المكملات</div>
+      <div class="brand">🥗 الوجبات الذكية</div>
       <button class="pill backBtn">رجوع</button>
     </div>
-    <div id="suppList" class="grid"></div>
+
+    <div class="card">
+      <div class="section-title">الاحتياج اليومي</div>
+      <div class="grid grid-2">
+        <input id="targetCalories" type="number" placeholder="السعرات المستهدفة" />
+        <input id="targetProtein" type="number" placeholder="البروتين المستهدف" />
+        <input id="targetCarbs" type="number" placeholder="الكارب المستهدف" />
+        <input id="targetFat" type="number" placeholder="الدهون المستهدفة" />
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn btn-gold" id="saveTargetsBtn">حفظ الأهداف</button>
+        <button class="btn btn-dark" id="resetMealsBtn">تصفير وجبات اليوم</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="section-title">إجمالي اليوم</div>
+      <div class="stats">
+        <div class="stat">السعرات<b id="sumCalories">0</b></div>
+        <div class="stat">البروتين<b id="sumProtein">0g</b></div>
+        <div class="stat">الكارب<b id="sumCarbs">0g</b></div>
+        <div class="stat">الدهون<b id="sumFat">0g</b></div>
+      </div>
+      <div class="stack" style="margin-top:12px">
+        <div>
+          <div class="small">السعرات</div>
+          <div class="progress-wrap"><div id="caloriesBar" class="progress-bar"></div></div>
+        </div>
+        <div>
+          <div class="small">البروتين</div>
+          <div class="progress-wrap"><div id="proteinBar" class="progress-bar ok"></div></div>
+        </div>
+        <div>
+          <div class="small">الكارب</div>
+          <div class="progress-wrap"><div id="carbsBar" class="progress-bar"></div></div>
+        </div>
+        <div>
+          <div class="small">الدهون</div>
+          <div class="progress-wrap"><div id="fatBar" class="progress-bar"></div></div>
+        </div>
+      </div>
+      <div id="mealsAlert" class="warn hidden" style="margin-top:12px"></div>
+      <div id="mealsGood" class="ok-box hidden" style="margin-top:12px"></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="tabs" id="smartMealTabs"></div>
+      <div id="smartMealsList" class="stack" style="margin-top:12px"></div>
+    </div>
   </div>
 
   <div id="progressScreen" class="hidden">
@@ -326,6 +528,14 @@
         <div class="stat">نسبة الإنجاز<b id="progressStat">0%</b></div>
         <div class="stat">هدف الدهون<b id="fatStat">22% → 15%</b></div>
         <div class="stat">السجلات<b id="historyStat">0</b></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="section-title">النقاط والمستوى</div>
+      <div class="stats">
+        <div class="stat">النقاط<b id="pointsStat">0</b></div>
+        <div class="stat">المستوى<b id="levelStat">مبتدئ</b></div>
       </div>
     </div>
 
@@ -355,10 +565,19 @@
   </div>
 </div>
 
-<script>
-const STORAGE_KEY='myFitnessProHypeV1';
+<div class="bottom-nav">
+  <button class="nav-btn" data-open="homeScreen"><span>🏠</span>الرئيسية</button>
+  <button class="nav-btn" data-open="workoutScreen"><span>🏋️</span>التمرين</button>
+  <button class="nav-btn" data-open="nutritionScreen"><span>🍽️</span>الأكل</button>
+  <button class="nav-btn" data-open="mealsScreen"><span>🥗</span>الوجبات</button>
+  <button class="nav-btn" data-open="progressScreen"><span>📊</span>التقدم</button>
+</div>
 
-const workoutDays=[
+<script>
+const PHOTO_URL = 'https://raw.githubusercontent.com/yaas1401-hash/my-fitness-app/main/file_00000000b81472438c6597d941395a05.png';
+const STORAGE_KEY = 'captainYasserAppV1';
+
+const workoutDays = [
   {id:'push',title:'اليوم 1 — Push',subtitle:'صدر + كتف + ترايسبس',note:'ابدأ بخفة أول أسبوعين وركز على التكنيك.',exercises:[
     ['ضغط دمبل مستوي','4 × 8','https://youtu.be/VmB1G1K7v94'],
     ['ضغط دمبل مائل','3 × 10','https://youtu.be/8iPEnn-ltC8'],
@@ -389,7 +608,7 @@ const workoutDays=[
   ]}
 ];
 
-const mealPlans={
+const mealPlans = {
   economy:[
     ['الفطور','2 بيض + 2 بياض + 50 جم شوفان + موزة'],
     ['قبل التمرين','2 تمر أو موزة + قهوة'],
@@ -406,14 +625,15 @@ const mealPlans={
   ]
 };
 
-const supplements=[
+const supplements = [
   ['كرياتين مونوهيدرات','5 جم يوميًا','في أي وقت مع الماء'],
   ['واي بروتين','سكوب بعد التمرين','أو عند نقص البروتين'],
   ['أوميغا 3','1–2 كبسولة','مع وجبة رئيسية'],
-  ['فيتامين د','حسب الجرعة المناسبة','يفضل حسب التحليل']
+  ['فيتامين د','حسب الجرعة المناسبة','يفضل حسب التحليل'],
+  ['مغنيسيوم','يفضل مساءً','يساعد على الاسترخاء والاستشفاء']
 ];
 
-const schedule=[
+const schedule = [
   ['بعد الفجر','فطور رئيسي متوازن'],
   ['10:30','سناك خفيف قبل التمرين'],
   ['11:15','قهوة سوداء'],
@@ -422,18 +642,46 @@ const schedule=[
   ['1:30 تقريبًا','الغداء']
 ];
 
-const state=loadState()||{
+const smartMeals = {
+  breakfast:[
+    {name:'شوفان + واي + موز',cal:420,p:32,c:52,f:10},
+    {name:'3 بيض + توست + جبن',cal:390,p:28,c:24,f:18},
+    {name:'زبادي يوناني + عسل + شوفان',cal:350,p:24,c:42,f:8}
+  ],
+  lunch:[
+    {name:'رز + دجاج + سلطة',cal:620,p:48,c:62,f:16},
+    {name:'بطاطس + لحم + خضار',cal:680,p:44,c:56,f:24},
+    {name:'سمك + رز + سلطة',cal:540,p:42,c:46,f:18}
+  ],
+  dinner:[
+    {name:'تونة + خبز أسمر + سلطة',cal:410,p:34,c:28,f:14},
+    {name:'بيض + جبن قريش + خيار',cal:330,p:29,c:10,f:18},
+    {name:'زبادي يوناني + مكسرات',cal:300,p:20,c:12,f:18}
+  ],
+  snack:[
+    {name:'موزة + قهوة',cal:120,p:1,c:27,f:0},
+    {name:'سكوب واي بروتين',cal:120,p:24,c:3,f:2},
+    {name:'تمر 3 حبات',cal:85,p:1,c:22,f:0}
+  ]
+};
+
+const state = loadState() || {
   screen:'homeScreen',
   activeDay:'push',
   mealTab:'economy',
+  smartMealTab:'breakfast',
   bodyFat:22,
   streak:0,
   badges:[],
+  points:0,
   sleepHours:'',
   energyLevel:'',
   painLevel:'',
   proteinDone:false,
   creatineDone:false,
+  vitaminDDone:false,
+  omegaDone:false,
+  magnesiumDone:false,
   aiMessage:'جاهز تبدأ يومك؟ 💪',
   checks:{},
   weights:{},
@@ -444,95 +692,121 @@ const state=loadState()||{
   report:'',
   dynamicPlan:'',
   history:[],
-  photos:{frontBefore:'',frontAfter:'',sideBefore:'',sideAfter:''}
+  photos:{frontBefore:'',frontAfter:'',sideBefore:'',sideAfter:''},
+  targets:{cal:2200,p:160,c:220,f:70},
+  totals:{cal:0,p:0,c:0,f:0},
+  chosenMeals:[]
 };
 
-let timerInterval=null;
+let timerInterval = null;
 
-function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))}catch{return null}}
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function qs(id){return document.getElementById(id)}
-function exKey(dayId,name){return dayId+'__'+name}
-function goalPercent(){return Math.max(0,Math.min(100,((22-Number(state.bodyFat||22))/(22-15))*100))}
-
-function showScreen(id){
-  ['homeScreen','workoutScreen','nutritionScreen','supplementsScreen','progressScreen'].forEach(s=>qs(s).classList.add('hidden'));
-  qs(id).classList.remove('hidden');
-  state.screen=id;
+function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; } }
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function qs(id){ return document.getElementById(id); }
+function exKey(dayId,name){ return dayId+'__'+name; }
+function goalPercent(){ return Math.max(0, Math.min(100, ((22-Number(state.bodyFat||22))/(22-15))*100)); }
+function levelName(points){
+  if(points >= 1200) return 'وحش 🔥';
+  if(points >= 700) return 'محترف';
+  if(points >= 300) return 'ملتزم';
+  return 'مبتدئ';
+}
+function addPoints(n){
+  state.points += n;
   saveState();
 }
-
+function updateNav(){
+  document.querySelectorAll('.nav-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.getAttribute('data-open') === state.screen);
+  });
+}
+function showScreen(id){
+  ['homeScreen','workoutScreen','nutritionScreen','mealsScreen','progressScreen'].forEach(s=>qs(s).classList.add('hidden'));
+  qs(id).classList.remove('hidden');
+  state.screen = id;
+  saveState();
+  updateNav();
+}
 function recommendations(){
-  const recs=[];
-  const sleep=Number(state.sleepHours||0),pain=Number(state.painLevel||0),energy=Number(state.energyLevel||0);
-  if(sleep&&sleep<6) recs.push('نومك قليل؛ خفف الشدة اليوم 10% إلى 15%.');
-  if(pain>=7) recs.push('الألم مرتفع؛ الأفضل تمرين خفيف أو راحة.');
-  if(energy>=8&&sleep>=7) recs.push('طاقتك ممتازة؛ اليوم مناسب لزيادة بسيطة في الأوزان.');
+  const recs = [];
+  const sleep=Number(state.sleepHours||0), pain=Number(state.painLevel||0), energy=Number(state.energyLevel||0);
+  if(sleep && sleep < 6) recs.push('نومك قليل؛ خفف الشدة اليوم 10% إلى 15%.');
+  if(pain >= 7) recs.push('الألم مرتفع؛ الأفضل تمرين خفيف أو راحة.');
+  if(energy >= 8 && sleep >= 7) recs.push('طاقتك ممتازة؛ اليوم مناسب لزيادة بسيطة في الأوزان.');
   if(!state.proteinDone) recs.push('أنت لم تحقق البروتين اليوم؛ أضف وجبة بروتينية أو سكوب واي.');
-  if(!state.creatineDone) recs.push('لا تنس الكرياتين اليوم: 5 جم مع الماء.');
-  if(!recs.length) recs.push('وضعك ممتاز اليوم — التزم بالخطة كما هي.');
+  if(!state.creatineDone) recs.push('لا تنس الكرياتين اليوم.');
+  if(!state.vitaminDDone) recs.push('لا تنس فيتامين د اليوم.');
+  if(!state.omegaDone) recs.push('لا تنس أوميغا 3 اليوم.');
+  if(!state.magnesiumDone) recs.push('المغنيسيوم مساءً يساعدك على الاسترخاء.');
+  if(!recs.length) recs.push('وضعك ممتاز اليوم — استمر بنفس المستوى.');
   return recs;
 }
-
 function generateAIMessage(){
-  const sleep=Number(state.sleepHours||0),pain=Number(state.painLevel||0),energy=Number(state.energyLevel||0);
-  if(sleep&&sleep<6) state.aiMessage='💤 نومك قليل — خفف التمرين اليوم وركز على الاستشفاء';
-  else if(pain>=7) state.aiMessage='⚠️ فيه ألم عالي — الأفضل تمرين خفيف أو راحة';
-  else if(energy>=8&&sleep>=7) state.aiMessage='🔥 طاقتك عالية — اليوم مناسب ترفع الأوزان';
-  else if(!state.proteinDone) state.aiMessage='🍗 لا تنس البروتين اليوم — مهم لبناء العضلات';
-  else if(!state.creatineDone) state.aiMessage='💧 خذ الكرياتين اليوم قبل ما تنسى';
-  else state.aiMessage='💪 وضعك ممتاز — استمر بنفس المستوى';
-  saveState(); renderHome(); renderWorkout();
+  const sleep=Number(state.sleepHours||0), pain=Number(state.painLevel||0), energy=Number(state.energyLevel||0);
+  if(sleep && sleep < 6) state.aiMessage='💤 نومك قليل — خفف التمرين اليوم وركز على الاستشفاء';
+  else if(pain >= 7) state.aiMessage='⚠️ فيه ألم عالي — الأفضل تمرين خفيف أو راحة';
+  else if(energy >= 8 && sleep >= 7) state.aiMessage='🔥 طاقتك عالية — اليوم مناسب ترفع الأوزان';
+  else if(!state.proteinDone) state.aiMessage='🍗 لا تنس البروتين اليوم';
+  else if(!state.creatineDone) state.aiMessage='💧 خذ الكرياتين اليوم';
+  else if(!state.vitaminDDone) state.aiMessage='☀️ لا تنس فيتامين د';
+  else if(!state.omegaDone) state.aiMessage='🐟 أوميغا 3 اليوم مهم';
+  else if(!state.magnesiumDone) state.aiMessage='🌙 المغنيسيوم الليلة فكرة ممتازة';
+  else state.aiMessage='💪 يومك مضبوط — استمر';
+  saveState();
+  renderHome();
+  renderWorkout();
 }
-
 function analyzeWeek(){
-  const prev=Number(state.lastWeekWeight),curr=Number(state.weeklyWeight);
-  if(!prev||!curr){
+  const prev=Number(state.lastWeekWeight), curr=Number(state.weeklyWeight);
+  if(!prev || !curr){
     state.report='⚠️ أدخل وزنك الحالي والسابق';
     state.dynamicPlan='';
     saveState(); renderHome(); renderProgress(); return;
   }
-  const diff=prev-curr;
-  if(diff>=0.4&&diff<=0.8){
+  const diff = prev - curr;
+  if(diff >= 0.4 && diff <= 0.8){
     state.report='🔥 ممتاز! نزول مثالي — استمر بنفس الخطة';
     state.dynamicPlan='استمر بنفس التمارين + زد الأوزان تدريجيًا إذا كان الأداء ممتازًا.';
-  }else if(diff<0.4){
+  } else if(diff < 0.4){
     state.report='⚠️ النزول بطيء — قلل السعرات أو زود الكارديو';
     state.dynamicPlan='أضف 10–15 دقيقة كارديو بعد يومين من التمرين وقلل 200 سعرة تقريبًا.';
-  }else{
+  } else {
     state.report='⚠️ النزول سريع — ممكن تخسر عضل، زود الأكل شوي';
-    state.dynamicPlan='خفف الكارديو وزد الكارب قبل التمرين أو بعده للحفاظ على الأداء.';
+    state.dynamicPlan='خفف الكارديو وزد الكارب قبل التمرين أو بعده.';
   }
+  addPoints(20);
   saveState(); renderHome(); renderProgress();
 }
-
 function saveWeeklyProgress(){
-  if(!state.weeklyWeight&&!state.weeklyWaist) return;
-  state.history.push({week:'الأسبوع '+(state.history.length+1),weight:state.weeklyWeight,waist:state.weeklyWaist});
-  saveState(); renderProgress();
+  if(!state.weeklyWeight && !state.weeklyWaist) return;
+  state.history.push({
+    week:'الأسبوع ' + (state.history.length + 1),
+    weight:state.weeklyWeight,
+    waist:state.weeklyWaist
+  });
+  addPoints(25);
+  saveState(); renderProgress(); renderHome();
 }
-
 function completeWorkout(){
-  state.streak+=1;
-  if(state.streak===3&&!state.badges.includes('🔥 ملتزم 3 أيام')) state.badges.push('🔥 ملتزم 3 أيام');
-  if(state.streak===7&&!state.badges.includes('🏆 أسبوع كامل')) state.badges.push('🏆 أسبوع كامل');
-  if(goalPercent()>=50&&!state.badges.includes('🎯 نصف الطريق')) state.badges.push('🎯 نصف الطريق');
-  alert('🎉 ممتاز! كمل على هذا المستوى');
-  saveState(); renderHome(); renderProgress();
+  state.streak += 1;
+  addPoints(50);
+  if(state.streak===3 && !state.badges.includes('🔥 ملتزم 3 أيام')) state.badges.push('🔥 ملتزم 3 أيام');
+  if(state.streak===7 && !state.badges.includes('🏆 أسبوع كامل')) state.badges.push('🏆 أسبوع كامل');
+  if(goalPercent()>=50 && !state.badges.includes('🎯 نصف الطريق')) state.badges.push('🎯 نصف الطريق');
+  alert('🎉 ممتاز! سجلنا التمرين وأضفنا نقاطك');
+  saveState();
+  renderHome(); renderProgress();
 }
-
 function suggestWeight(v){
   const n=Number(v);
-  if(!v||Number.isNaN(n)) return 'أدخل الوزن أولًا';
-  return (n<20?(n+1).toFixed(1):(n+2.5).toFixed(1))+' كجم';
+  if(!v || Number.isNaN(n)) return 'أدخل الوزن أولًا';
+  return (n < 20 ? (n+1).toFixed(1) : (n+2.5).toFixed(1)) + ' كجم';
 }
-
 function formatTime(s){
   const m=String(Math.floor(s/60)).padStart(2,'0');
   const sec=String(s%60).padStart(2,'0');
-  return`${m}:${sec}`;
+  return `${m}:${sec}`;
 }
-
 function renderBadges(){
   const wrap=qs('badgesWrap');
   wrap.innerHTML='';
@@ -543,28 +817,31 @@ function renderBadges(){
     wrap.appendChild(s);
   });
 }
-
 function renderHome(){
-  qs('aiMessage').textContent=state.aiMessage;
-  qs('sleepHours').value=state.sleepHours;
-  qs('energyLevel').value=state.energyLevel;
-  qs('painLevel').value=state.painLevel;
-  qs('proteinDone').checked=state.proteinDone;
-  qs('creatineDone').checked=state.creatineDone;
-  qs('bodyFatInput').value=state.bodyFat;
-  qs('bodyFatLabel').textContent=(state.bodyFat||22)+'%';
-  qs('goalBar').style.width=goalPercent()+'%';
-  qs('streakValue').textContent=state.streak+' يوم';
+  qs('aiMessage').textContent = state.aiMessage;
+  qs('sleepHours').value = state.sleepHours;
+  qs('energyLevel').value = state.energyLevel;
+  qs('painLevel').value = state.painLevel;
+  qs('proteinDone').checked = state.proteinDone;
+  qs('creatineDone').checked = state.creatineDone;
+  qs('vitaminDDone').checked = state.vitaminDDone;
+  qs('omegaDone').checked = state.omegaDone;
+  qs('magnesiumDone').checked = state.magnesiumDone;
+  qs('bodyFatInput').value = state.bodyFat;
+  qs('bodyFatLabel').textContent = (state.bodyFat||22) + '%';
+  qs('goalBar').style.width = goalPercent() + '%';
+  qs('streakValue').textContent = state.streak + ' يوم';
+  qs('pointsValue').textContent = state.points;
+  qs('levelValue').textContent = levelName(state.points);
   renderBadges();
-  qs('lastWeekWeight').value=state.lastWeekWeight;
-  qs('weeklyWeight').value=state.weeklyWeight;
-  qs('weeklyWaist').value=state.weeklyWaist;
-  qs('weeklyReport').textContent=state.report||'';
-  qs('dynamicPlan').textContent=state.dynamicPlan||'';
-  qs('weeklyReport').classList.toggle('hidden',!state.report);
-  qs('dynamicPlan').classList.toggle('hidden',!state.dynamicPlan);
+  qs('lastWeekWeight').value = state.lastWeekWeight;
+  qs('weeklyWeight').value = state.weeklyWeight;
+  qs('weeklyWaist').value = state.weeklyWaist;
+  qs('weeklyReport').textContent = state.report || '';
+  qs('dynamicPlan').textContent = state.dynamicPlan || '';
+  qs('weeklyReport').classList.toggle('hidden', !state.report);
+  qs('dynamicPlan').classList.toggle('hidden', !state.dynamicPlan);
 }
-
 function renderWorkout(){
   const tabs=qs('dayTabs');
   tabs.innerHTML='';
@@ -572,18 +849,16 @@ function renderWorkout(){
     const b=document.createElement('button');
     b.className='tab'+(state.activeDay===day.id?' active':'');
     b.textContent=day.title;
-    b.onclick=()=>{state.activeDay=day.id;saveState();renderWorkout()};
+    b.onclick=()=>{ state.activeDay=day.id; saveState(); renderWorkout(); };
     tabs.appendChild(b);
   });
-
   const day=workoutDays.find(d=>d.id===state.activeDay)||workoutDays[0];
   const box=qs('dayInfo');
   let html=`<div class="section-title">${day.title}</div><div class="small">${day.subtitle}</div><div class="warn" style="margin-top:12px">${day.note}</div><div class="stack" style="margin-top:12px">`;
-
   day.exercises.forEach(ex=>{
-    const key=exKey(day.id,ex[0]);
+    const key=exKey(day.id, ex[0]);
     const done=!!state.checks[key];
-    html+=`<div class="exercise ${done?'done':''}">
+    html += `<div class="exercise ${done?'done':''}">
       <div class="row">
         <div><div class="exercise-title">${ex[0]}</div><div class="small">${ex[1]}</div></div>
         <label class="pill"><input ${done?'checked':''} data-check="${key}" type="checkbox" style="width:auto;margin-left:8px"> إنجاز</label>
@@ -595,93 +870,199 @@ function renderWorkout(){
       <div style="margin-top:10px"><a class="link" target="_blank" href="${ex[2]}">فتح فيديو الشرح</a></div>
     </div>`;
   });
-
-  html+=`</div><div class="row" style="margin-top:14px"><button id="completeWorkoutBtn" class="btn">إنهاء تمرين اليوم</button></div>`;
+  html += `</div><div class="row" style="margin-top:14px"><button id="completeWorkoutBtn" class="btn">إنهاء تمرين اليوم</button></div>`;
   box.innerHTML=html;
-
   box.querySelectorAll('[data-check]').forEach(el=>el.onchange=(e)=>{
-    state.checks[e.target.getAttribute('data-check')]=e.target.checked;
+    state.checks[e.target.getAttribute('data-check')] = e.target.checked;
     saveState(); renderWorkout(); renderProgress();
   });
-
   box.querySelectorAll('[data-weight]').forEach(el=>el.oninput=(e)=>{
-    state.weights[e.target.getAttribute('data-weight')]=e.target.value;
+    state.weights[e.target.getAttribute('data-weight')] = e.target.value;
     saveState();
   });
-
   qs('completeWorkoutBtn').onclick=completeWorkout;
   qs('timerDisplay').textContent=formatTime(state.timer);
-  qs('recommendations').innerHTML=recommendations().map(r=>`<div class="list-item">${r}</div>`).join('');
+  qs('recommendations').innerHTML = recommendations().map(r=>`<div class="list-item">${r}</div>`).join('');
 }
-
 function renderNutrition(){
-  document.querySelectorAll('[data-mealtab]').forEach(btn=>btn.classList.toggle('active',btn.getAttribute('data-mealtab')===state.mealTab));
-  qs('mealList').innerHTML=mealPlans[state.mealTab].map(item=>`<div class="list-item"><b>${item[0]}</b><div class="small" style="margin-top:6px">${item[1]}</div></div>`).join('');
-  qs('scheduleList').innerHTML=schedule.map(s=>`<div class="list-item"><b>${s[0]}</b><div class="small" style="margin-top:6px">${s[1]}</div></div>`).join('');
+  document.querySelectorAll('[data-mealtab]').forEach(btn=>{
+    btn.classList.toggle('active', btn.getAttribute('data-mealtab')===state.mealTab);
+  });
+  qs('mealList').innerHTML = mealPlans[state.mealTab].map(item=>`<div class="list-item"><b>${item[0]}</b><div class="small" style="margin-top:6px">${item[1]}</div></div>`).join('');
+  qs('scheduleList').innerHTML = schedule.map(s=>`<div class="list-item"><b>${s[0]}</b><div class="small" style="margin-top:6px">${s[1]}</div></div>`).join('');
+  qs('suppList').innerHTML = supplements.map(s=>`<div class="list-item"><b>${s[0]}</b><div class="small" style="margin-top:6px">الجرعة: ${s[1]}</div><div class="small" style="margin-top:4px">${s[2]}</div></div>`).join('');
 }
-
-function renderSupplements(){
-  qs('suppList').innerHTML=supplements.map(s=>`<div class="card"><div class="section-title" style="font-size:18px">${s[0]}</div><div class="small">الجرعة: ${s[1]}</div><div style="margin-top:8px">${s[2]}</div></div>`).join('');
+function renderSmartMealTabs(){
+  const tabs = qs('smartMealTabs');
+  tabs.innerHTML='';
+  const labels = {breakfast:'فطور', lunch:'غداء', dinner:'عشاء', snack:'سناك'};
+  Object.keys(labels).forEach(key=>{
+    const b=document.createElement('button');
+    b.className='tab'+(state.smartMealTab===key?' active':'');
+    b.textContent=labels[key];
+    b.onclick=()=>{ state.smartMealTab=key; saveState(); renderMeals(); };
+    tabs.appendChild(b);
+  });
 }
+function addMeal(item, type){
+  state.totals.cal += item.cal;
+  state.totals.p += item.p;
+  state.totals.c += item.c;
+  state.totals.f += item.f;
+  state.chosenMeals.push({...item, type});
+  addPoints(15);
+  saveState();
+  renderMeals();
+  renderHome();
+}
+function resetMeals(){
+  state.totals = {cal:0,p:0,c:0,f:0};
+  state.chosenMeals = [];
+  saveState();
+  renderMeals();
+}
+function renderMeals(){
+  renderSmartMealTabs();
+  qs('targetCalories').value = state.targets.cal;
+  qs('targetProtein').value = state.targets.p;
+  qs('targetCarbs').value = state.targets.c;
+  qs('targetFat').value = state.targets.f;
 
+  qs('sumCalories').textContent = state.totals.cal;
+  qs('sumProtein').textContent = state.totals.p + 'g';
+  qs('sumCarbs').textContent = state.totals.c + 'g';
+  qs('sumFat').textContent = state.totals.f + 'g';
+
+  const calPct = Math.min(100, Math.round((state.totals.cal / Math.max(1, state.targets.cal))*100));
+  const pPct = Math.min(100, Math.round((state.totals.p / Math.max(1, state.targets.p))*100));
+  const cPct = Math.min(100, Math.round((state.totals.c / Math.max(1, state.targets.c))*100));
+  const fPct = Math.min(100, Math.round((state.totals.f / Math.max(1, state.targets.f))*100));
+
+  qs('caloriesBar').style.width = calPct + '%';
+  qs('proteinBar').style.width = pPct + '%';
+  qs('carbsBar').style.width = cPct + '%';
+  qs('fatBar').style.width = fPct + '%';
+
+  const alerts = [];
+  if(state.totals.cal > state.targets.cal) alerts.push('تجاوزت السعرات اليومية.');
+  if(state.totals.c > state.targets.c) alerts.push('تجاوزت الكربوهيدرات.');
+  if(state.totals.f > state.targets.f) alerts.push('تجاوزت الدهون.');
+  if(state.totals.p < state.targets.p && state.totals.cal >= state.targets.cal * 0.7) alerts.push('بروتينك ما زال منخفضًا.');
+  qs('mealsAlert').textContent = alerts.join(' ');
+  qs('mealsAlert').classList.toggle('hidden', !alerts.length);
+
+  const goods = [];
+  if(state.totals.cal <= state.targets.cal) goods.push('السعرات ضمن الحد.');
+  if(state.totals.p >= state.targets.p) goods.push('أحسنت، حققت البروتين.');
+  qs('mealsGood').textContent = goods.join(' ');
+  qs('mealsGood').classList.toggle('hidden', !goods.length);
+
+  const list = qs('smartMealsList');
+  list.innerHTML = '';
+  smartMeals[state.smartMealTab].forEach(item=>{
+    const div=document.createElement('div');
+    div.className='meal-card';
+    div.innerHTML = `
+      <div class="meal-title">${item.name}</div>
+      <div class="small" style="margin-top:8px">
+        السعرات: ${item.cal} | بروتين: ${item.p}g | كارب: ${item.c}g | دهون: ${item.f}g
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn btn-gold">اختيار الوجبة</button>
+      </div>
+    `;
+    div.querySelector('button').onclick=()=>addMeal(item, state.smartMealTab);
+    list.appendChild(div);
+  });
+
+  if(state.chosenMeals.length){
+    const chosen=document.createElement('div');
+    chosen.className='list-item';
+    chosen.innerHTML = `<div class="section-title" style="font-size:18px">الوجبات المختارة اليوم</div>` +
+      state.chosenMeals.map(m=>`<div class="small" style="margin-top:6px">• ${m.name} — ${m.cal} سعرة</div>`).join('');
+    list.appendChild(chosen);
+  }
+}
 function drawPhoto(boxId,url,fallback){
   const box=qs(boxId);
-  box.innerHTML=url?`<img src="${url}" alt="${fallback}">`:fallback;
+  box.innerHTML = url ? `<img src="${url}" alt="${fallback}">` : fallback;
 }
-
 function renderProgress(){
-  const total=workoutDays.reduce((a,d)=>a+d.exercises.length,0);
-  const done=Object.values(state.checks).filter(Boolean).length;
-  qs('doneStat').textContent=`${done}/${total}`;
-  qs('progressStat').textContent=`${total?Math.round(done/total*100):0}%`;
-  qs('fatStat').textContent=`${state.bodyFat}% → 15%`;
-  qs('historyStat').textContent=state.history.length;
-  qs('historyList').innerHTML=state.history.length
+  const total = workoutDays.reduce((a,d)=>a+d.exercises.length,0);
+  const done = Object.values(state.checks).filter(Boolean).length;
+  qs('doneStat').textContent = `${done}/${total}`;
+  qs('progressStat').textContent = `${total ? Math.round(done/total*100) : 0}%`;
+  qs('fatStat').textContent = `${state.bodyFat}% → 15%`;
+  qs('historyStat').textContent = state.history.length;
+  qs('pointsStat').textContent = state.points;
+  qs('levelStat').textContent = levelName(state.points);
+  qs('historyList').innerHTML = state.history.length
     ? state.history.map(h=>`<div class="list-item"><b>${h.week}</b><div class="small" style="margin-top:6px">الوزن: ${h.weight||'-'} | البطن: ${h.waist||'-'}</div></div>`).join('')
     : '<div class="small">لا يوجد سجل بعد</div>';
-  ['frontBefore','frontAfter','sideBefore','sideAfter'].forEach(id=>qs(id).value=state.photos[id]||'');
-  drawPhoto('frontBeforeBox',state.photos.frontBefore,'قبل أمامي');
-  drawPhoto('frontAfterBox',state.photos.frontAfter,'بعد أمامي');
-  drawPhoto('sideBeforeBox',state.photos.sideBefore,'قبل جانبي');
-  drawPhoto('sideAfterBox',state.photos.sideAfter,'بعد جانبي');
+  ['frontBefore','frontAfter','sideBefore','sideAfter'].forEach(id=>qs(id).value = state.photos[id]||'');
+  drawPhoto('frontBeforeBox', state.photos.frontBefore, 'قبل أمامي');
+  drawPhoto('frontAfterBox', state.photos.frontAfter, 'بعد أمامي');
+  drawPhoto('sideBeforeBox', state.photos.sideBefore, 'قبل جانبي');
+  drawPhoto('sideAfterBox', state.photos.sideAfter, 'بعد جانبي');
 }
-
 function render(){
   renderHome();
   renderWorkout();
   renderNutrition();
-  renderSupplements();
+  renderMeals();
   renderProgress();
-  showScreen(state.screen||'homeScreen');
+  showScreen(state.screen || 'homeScreen');
 }
 
 document.querySelectorAll('[data-open]').forEach(btn=>btn.onclick=()=>showScreen(btn.getAttribute('data-open')));
+document.querySelectorAll('.nav-btn').forEach(btn=>btn.onclick=()=>showScreen(btn.getAttribute('data-open')));
 document.querySelectorAll('.backBtn').forEach(btn=>btn.onclick=()=>showScreen('homeScreen'));
-document.querySelectorAll('[data-mealtab]').forEach(btn=>btn.onclick=()=>{state.mealTab=btn.getAttribute('data-mealtab');saveState();renderNutrition()});
-document.querySelectorAll('[data-settimer]').forEach(btn=>btn.onclick=()=>{state.timer=Number(btn.getAttribute('data-settimer'));clearInterval(timerInterval);timerInterval=null;saveState();renderWorkout();qs('timerToggleBtn').textContent='تشغيل'});
+document.querySelectorAll('[data-mealtab]').forEach(btn=>btn.onclick=()=>{state.mealTab=btn.getAttribute('data-mealtab'); saveState(); renderNutrition();});
+document.querySelectorAll('[data-settimer]').forEach(btn=>btn.onclick=()=>{state.timer=Number(btn.getAttribute('data-settimer')); clearInterval(timerInterval); timerInterval=null; saveState(); renderWorkout(); qs('timerToggleBtn').textContent='تشغيل';});
 
 qs('refreshAdviceBtn').onclick=()=>{
-  state.sleepHours=qs('sleepHours').value;
-  state.energyLevel=qs('energyLevel').value;
-  state.painLevel=qs('painLevel').value;
-  state.proteinDone=qs('proteinDone').checked;
-  state.creatineDone=qs('creatineDone').checked;
+  state.sleepHours = qs('sleepHours').value;
+  state.energyLevel = qs('energyLevel').value;
+  state.painLevel = qs('painLevel').value;
+
+  const before = {
+    proteinDone:state.proteinDone,
+    creatineDone:state.creatineDone,
+    vitaminDDone:state.vitaminDDone,
+    omegaDone:state.omegaDone,
+    magnesiumDone:state.magnesiumDone
+  };
+
+  state.proteinDone = qs('proteinDone').checked;
+  state.creatineDone = qs('creatineDone').checked;
+  state.vitaminDDone = qs('vitaminDDone').checked;
+  state.omegaDone = qs('omegaDone').checked;
+  state.magnesiumDone = qs('magnesiumDone').checked;
+
+  let gained = 0;
+  if(!before.proteinDone && state.proteinDone) gained += 20;
+  if(!before.creatineDone && state.creatineDone) gained += 10;
+  if(!before.vitaminDDone && state.vitaminDDone) gained += 10;
+  if(!before.omegaDone && state.omegaDone) gained += 10;
+  if(!before.magnesiumDone && state.magnesiumDone) gained += 10;
+  if(gained) addPoints(gained);
+
   generateAIMessage();
+  renderProgress();
 };
 
-qs('bodyFatInput').oninput=e=>{
-  state.bodyFat=Number(e.target.value||22);
-  saveState(); renderHome(); renderProgress();
-};
-
-qs('analyzeWeekBtn').onclick=()=>{
-  state.lastWeekWeight=qs('lastWeekWeight').value;
-  state.weeklyWeight=qs('weeklyWeight').value;
-  state.weeklyWaist=qs('weeklyWaist').value;
-  analyzeWeek();
-};
-
+qs('bodyFatInput').oninput=(e)=>{ state.bodyFat=Number(e.target.value||22); saveState(); renderHome(); renderProgress(); };
+qs('analyzeWeekBtn').onclick=()=>{ state.lastWeekWeight=qs('lastWeekWeight').value; state.weeklyWeight=qs('weeklyWeight').value; state.weeklyWaist=qs('weeklyWaist').value; analyzeWeek(); };
 qs('saveWeeklyBtn').onclick=saveWeeklyProgress;
+qs('saveTargetsBtn').onclick=()=>{
+  state.targets.cal = Number(qs('targetCalories').value || 2200);
+  state.targets.p = Number(qs('targetProtein').value || 160);
+  state.targets.c = Number(qs('targetCarbs').value || 220);
+  state.targets.f = Number(qs('targetFat').value || 70);
+  saveState();
+  renderMeals();
+};
+qs('resetMealsBtn').onclick=resetMeals;
 
 qs('timerToggleBtn').onclick=()=>{
   if(timerInterval){
@@ -700,7 +1081,8 @@ qs('timerToggleBtn').onclick=()=>{
       qs('timerToggleBtn').textContent='تشغيل';
       alert('⏱️ انتهت الراحة');
     }
-    saveState(); renderWorkout();
+    saveState();
+    renderWorkout();
   },1000);
 };
 
@@ -709,7 +1091,8 @@ qs('timerResetBtn').onclick=()=>{
   clearInterval(timerInterval);
   timerInterval=null;
   qs('timerToggleBtn').textContent='تشغيل';
-  saveState(); renderWorkout();
+  saveState();
+  renderWorkout();
 };
 
 qs('resetAppBtn').onclick=()=>{
@@ -717,10 +1100,14 @@ qs('resetAppBtn').onclick=()=>{
   location.reload();
 };
 
-qs('frontBefore').oninput=e=>{state.photos.frontBefore=e.target.value;saveState();renderProgress()};
-qs('frontAfter').oninput=e=>{state.photos.frontAfter=e.target.value;saveState();renderProgress()};
-qs('sideBefore').oninput=e=>{state.photos.sideBefore=e.target.value;saveState();renderProgress()};
-qs('sideAfter').oninput=e=>{state.photos.sideAfter=e.target.value;saveState();renderProgress()};
+qs('frontBefore').oninput=e=>{ state.photos.frontBefore=e.target.value; saveState(); renderProgress(); };
+qs('frontAfter').oninput=e=>{ state.photos.frontAfter=e.target.value; saveState(); renderProgress(); };
+qs('sideBefore').oninput=e=>{ state.photos.sideBefore=e.target.value; saveState(); renderProgress(); };
+qs('sideAfter').oninput=e=>{ state.photos.sideAfter=e.target.value; saveState(); renderProgress(); };
+
+setTimeout(()=>{
+  qs('splashScreen').classList.add('hide');
+}, 2200);
 
 render();
 </script>
