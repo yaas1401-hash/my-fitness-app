@@ -1,419 +1,58 @@
-import React, { useEffect, useMemo, useState } from "react"; import { initializeApp } from "firebase/app"; import { getAuth, signInAnonymously } from "firebase/auth"; import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; import { motion } from "framer-motion"; import { Flame, Dumbbell, Moon, UtensilsCrossed, Play, Footprints, Trophy, Brain, ShieldCheck, ChevronRight, Timer, CheckCircle2, } from "lucide-react"; import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { Progress } from "@/components/ui/progress";
-
-const STORAGE_KEY = "captain-yasser-app-state";
-
-// ===================== Firebase Setup ===================== const firebaseConfig = { apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4", authDomain: "captain-yasser-pro.firebaseapp.com", projectId: "captain-yasser-pro", storageBucket: "captain-yasser-pro.firebasestorage.app", messagingSenderId: "1025929025248", appId: "1:1025929025248:web:86bb9469f4a5cd90356285", };
-
-const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const CLOUD_DOC_KEY = "captain-yasser-user-state";
-
-type AppState = { calories: number; calorieGoal: number; protein: number; proteinGoal: number; carbs: number; fats: number; steps: number; antiAgingScore: number; points: number; workoutDone: boolean; streak: number; level: number; achievements: string[]; lastActiveDate: string; };
-
-const defaultState: AppState = { calories: 1820, calorieGoal: 2200, protein: 128, proteinGoal: 160, carbs: 155, fats: 58, steps: 6240, antiAgingScore: 84, points: 45, workoutDone: false, streak: 0, level: 1, achievements: [], lastActiveDate: "", };
-
-function Ring({ label, value, icon: Icon, subtitle }: any) { const circumference = 2 * Math.PI * 34; const offset = circumference - (value / 100) * circumference; return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl shadow-2xl"> <CardContent className="p-5 flex flex-col items-center gap-3"> <div className="relative h-24 w-24"> <svg className="h-24 w-24 -rotate-90" viewBox="0 0 84 84"> <circle cx="42" cy="42" r="34" stroke="currentColor" strokeWidth="8" fill="none" className="text-zinc-800" /> <circle
-cx="42"
-cy="42"
-r="34"
-stroke="currentColor"
-strokeWidth="8"
-fill="none"
-strokeLinecap="round"
-strokeDasharray={circumference}
-strokeDashoffset={offset}
-className="text-red-500 transition-all duration-500"
-/> </svg> <div className="absolute inset-0 flex flex-col items-center justify-center text-center"> <Icon className="h-4 w-4 text-yellow-400 mb-1" /> <div className="text-lg font-bold text-white">{value}%</div> </div> </div> <div className="text-center"> <div className="text-sm font-semibold text-white">{label}</div> <div className="text-xs text-zinc-400">{subtitle}</div> </div> </CardContent> </Card> ); }
-
-function StatCard({ label, value, unit, icon: Icon }: any) { return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 flex items-center gap-3"> <div className="h-11 w-11 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20"> <Icon className="h-5 w-5 text-red-400" /> </div> <div> <div className="text-xs text-zinc-400">{label}</div> <div className="text-lg font-bold text-white"> {value} <span className="text-sm font-medium text-zinc-400">{unit}</span> </div> </div> </CardContent> </Card> ); }
-
-function MiniTask({ title, points, done = false }: any) { return ( <div className={flex items-center justify-between rounded-2xl border px-4 py-3 ${done ? "bg-yellow-400/10 border-yellow-400/20" : "bg-zinc-900 border-zinc-800"}}> <div> <div className="text-sm font-medium text-white">{title}</div> <div className="text-xs text-zinc-400">{points}</div> </div> <div className={h-3 w-3 rounded-full ${done ? "bg-yellow-400" : "bg-zinc-700"}} /> </div> ); }
-
-function Dashboard({ appState, setTab }: { appState: AppState; setTab: (tab: string) => void }) { const level = appState.level || Math.floor(appState.points / 100) + 1; const levelProgress = appState.points % 100; const proteinPct = Math.min(100, Math.round((appState.protein / appState.proteinGoal) * 100)); const caloriePct = Math.min(100, Math.round((appState.calories / appState.calorieGoal) * 100)); const badges = [ { label: "أول تمرين", active: appState.achievements.includes("first_workout") }, { label: "بروتين مكتمل", active: appState.achievements.includes("protein_goal") }, { label: "سلسلة نارية", active: appState.achievements.includes("hot_streak") || appState.streak >= 3 }, ];
-
-return ( <div className="space-y-5"> <div className="rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950 to-red-950/30 p-5 shadow-2xl"> <div className="flex items-start justify-between gap-4"> <div> <div className="text-sm text-zinc-400">صباح الخير</div> <h1 className="mt-1 text-2xl font-bold tracking-tight">كابتن ياسر 🔥</h1> <p className="mt-2 text-sm text-zinc-300">جاهز تبني عضل وتحافظ على صحتك اليوم؟</p> </div> <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-right"> <div className="text-xs text-yellow-300">النقاط</div> <div className="text-xl font-bold text-yellow-400">{appState.points}</div> </div> </div>
-
-<div className="mt-4 rounded-2xl border border-zinc-800 bg-black/30 p-4">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-300">Level {level} 🔥</span>
-        <span className="text-yellow-400 font-bold">{levelProgress}/100</span>
-      </div>
-      <Progress value={levelProgress} className="mt-3 h-2 bg-zinc-800" />
-      <div className="mt-3 flex items-center justify-between text-xs">
-        <span className="text-zinc-400">Streak</span>
-        <span className="font-bold text-red-400">{appState.streak} أيام 🔥</span>
-      </div>
-    </div>
-
-    <div className="mt-5 grid grid-cols-3 gap-3">
-      <Ring label="التمرين" value={appState.workoutDone ? 100 : 72} icon={Dumbbell} subtitle={appState.workoutDone ? "أُنجز اليوم" : "جاهز تقريبًا"} />
-      <Ring label="التغذية" value={proteinPct} icon={UtensilsCrossed} subtitle={proteinPct >= 100 ? "بروتين مكتمل" : "ناقص بروتين"} />
-      <Ring label="النوم" value={81} icon={Moon} subtitle="نوم جيد" />
-    </div>
-
-    <Button onClick={() => setTab("workout")} className="mt-5 h-14 w-full rounded-2xl bg-red-600 text-base font-bold hover:bg-red-500">
-      <Play className="ml-2 h-5 w-5" /> ابدأ تمرين اليوم
-    </Button>
-  </div>
-
-  <div className="grid grid-cols-2 gap-3">
-    <StatCard label="السعرات" value={`${appState.calories} / ${appState.calorieGoal}`} unit="سعرة" icon={Flame} />
-    <StatCard label="البروتين" value={`${appState.protein} / ${appState.proteinGoal}`} unit="جم" icon={Dumbbell} />
-    <StatCard label="الخطوات" value={appState.steps.toLocaleString()} unit="خطوة" icon={Footprints} />
-    <StatCard label="Anti-Aging" value={`${appState.antiAgingScore}`} unit="/ 100" icon={ShieldCheck} />
-  </div>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl overflow-hidden">
-    <CardHeader className="pb-3">
-      <div className="flex items-center justify-between">
-        <CardTitle className="text-lg">تسلسل التمرين اليوم</CardTitle>
-        <span className="text-xs text-zinc-400">مضاد للإصابة</span>
-      </div>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      <div>
-        <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-zinc-300">التسخين قبل التمرين</span>
-          <span className="text-yellow-400 font-semibold">5–7 دقائق</span>
-        </div>
-        <Progress value={100} className="h-2 bg-zinc-800" />
-      </div>
-      <div>
-        <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-zinc-300">التمرين الأساسي</span>
-          <span className="text-red-400 font-semibold">45–60 دقيقة</span>
-        </div>
-        <Progress value={appState.workoutDone ? 100 : 68} className="h-2 bg-zinc-800" />
-      </div>
-      <div>
-        <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-zinc-300">الإطالة بعد التمرين</span>
-          <span className="text-yellow-400 font-semibold">5–10 دقائق</span>
-        </div>
-        <Progress value={appState.workoutDone ? 100 : 25} className="h-2 bg-zinc-800" />
-      </div>
-    </CardContent>
-  </Card>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardHeader className="pb-3">
-      <div className="flex items-center justify-between">
-        <CardTitle className="text-lg">تحديات هذا الأسبوع</CardTitle>
-        <div className="flex items-center gap-1 text-yellow-400 text-sm font-medium">
-          <Trophy className="h-4 w-4" /> 2 / 4
-        </div>
-      </div>
-    </CardHeader>
-    <CardContent className="space-y-3">
-      <MiniTask title="4 أيام تمرين" points="+20 نقطة" done={appState.workoutDone} />
-      <MiniTask title="إكمال التسخين قبل كل تمرين" points="+10 نقاط" done={appState.workoutDone} />
-      <MiniTask title="160 جم بروتين 5 أيام" points="+15 نقطة" done={proteinPct >= 100} />
-      <MiniTask title="نوم 7 ساعات أو أكثر" points="+15 نقطة" />
-    </CardContent>
-  </Card>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardHeader className="pb-3">
-      <CardTitle className="text-lg">الشارات والإنجازات</CardTitle>
-    </CardHeader>
-    <CardContent className="grid grid-cols-3 gap-3">
-      {badges.map((badge) => (
-        <div key={badge.label} className={`rounded-2xl border p-3 text-center ${badge.active ? "border-yellow-500/30 bg-yellow-500/10" : "border-zinc-800 bg-zinc-900"}`}>
-          <div className="text-lg mb-1">{badge.active ? "🏆" : "🔒"}</div>
-          <div className={`text-xs font-medium ${badge.active ? "text-yellow-300" : "text-zinc-500"}`}>{badge.label}</div>
-        </div>
-      ))}
-    </CardContent>
-  </Card>
-
-  <Card className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-zinc-950 to-red-950/20">
-    <CardContent className="p-5">
-      <div className="flex items-start gap-3">
-        <div className="h-12 w-12 rounded-2xl border border-red-500/20 bg-red-500/10 flex items-center justify-center shrink-0">
-          <Brain className="h-6 w-6 text-red-400" />
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between gap-3">
-            <h3 className="text-lg font-bold">AI Coach</h3>
-            <Button variant="ghost" className="text-zinc-300 hover:text-white hover:bg-white/5 rounded-xl px-2">
-              <ChevronRight className="h-5 w-5" />
-            </Button>
-          </div>
-          <p className="mt-2 text-sm leading-6 text-zinc-300">
-            {appState.workoutDone
-              ? "أداء ممتاز اليوم 🔥 حافظ على الإطالة وخذ وجبة بروتين بعد التمرين."
-              : `نومك جيد اليوم، لكن باقي لك ${Math.max(appState.proteinGoal - appState.protein, 0)} جم بروتين. خذ وجبة عالية البروتين بعد التمرين وابدأ بالأجهزة ثم أضف الأوزان الحرة تدريجيًا.`}
-          </p>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-</div>
-
-); }
-
-function RestTimer({ seconds = 60 }: { seconds?: number }) { const [time, setTime] = useState(seconds);
-
-useEffect(() => { if (time <= 0) return; const timer = setTimeout(() => setTime(time - 1), 1000); return () => clearTimeout(timer); }, [time]);
-
-return <div className="text-center text-yellow-400 font-bold">راحة: {time}s</div>; }
-
-function ExerciseCard({ name, sets, reps }: any) { const [doneSets, setDoneSets] = useState(0); const [resting, setResting] = useState(false);
-
-return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 space-y-3"> <div className="flex items-center justify-between"> <div> <div className="text-white font-bold">{name}</div> <div className="text-xs text-zinc-400">{sets} × {reps}</div> </div> <div className="text-yellow-400 text-sm">{doneSets}/{sets}</div> </div>
-
-{resting && <RestTimer />}
-
-    <div className="flex gap-2">
-      <Button
-        onClick={() => {
-          setDoneSets(Math.min(doneSets + 1, sets));
-          setResting(true);
-          setTimeout(() => setResting(false), 60000);
-        }}
-        className="flex-1 bg-red-600 hover:bg-red-500"
-      >
-        تمت الجولة
-      </Button>
-      <Button variant="outline" className="border-zinc-700 text-zinc-300">وزن</Button>
-    </div>
-
-    <div className="text-xs text-zinc-500">💡 نصيحة: ركّز على الأداء الصحيح قبل زيادة الوزن</div>
-  </CardContent>
-</Card>
-
-); }
-
-function WorkoutScreen({ setAppState }: { setAppState: React.Dispatch<React.SetStateAction<AppState>> }) { const [completedWarmup, setCompletedWarmup] = useState(false); const [completedStretch, setCompletedStretch] = useState(false);
-
-return ( <div className="space-y-5"> <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-5"> <div className="flex items-center justify-between"> <div> <div className="text-sm text-zinc-400">تمرين اليوم</div> <div className="text-xl font-bold">صدر + ترايسبس 💪</div> </div> <div className="text-red-400 text-sm">60 دقيقة</div> </div>
-
-<Button onClick={() => setCompletedWarmup(true)} className="mt-4 w-full h-12 bg-red-600 hover:bg-red-500 rounded-2xl">
-        <Timer className="ml-2 h-4 w-4" /> {completedWarmup ? "تم التسخين ✅" : "ابدأ التسخين"}
-      </Button>
-    </CardContent>
-  </Card>
-
-  <ExerciseCard name="Bench Press" sets={4} reps={8} />
-  <ExerciseCard name="Incline Dumbbell Press" sets={3} reps={10} />
-  <ExerciseCard name="Chest Fly" sets={3} reps={12} />
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardContent className="p-5 text-center">
-      <div className="text-yellow-400 mb-2">الإطالة بعد التمرين</div>
-      <div className="mb-3 text-xs text-zinc-400">5–10 دقائق لتقليل الشد العضلي وتحسين الاستشفاء</div>
-      <Button
-        onClick={() => {
-          setCompletedStretch(true);
-          setAppState((prev) => {
-            const achievements = new Set(prev.achievements);
-            achievements.add("first_workout");
-            return {
-              ...prev,
-              workoutDone: true,
-              points: prev.points + 20,
-              achievements: Array.from(achievements),
-            };
-          });
-        }}
-        className="w-full bg-yellow-500 text-black hover:bg-yellow-400"
-      >
-        <CheckCircle2 className="ml-2 h-4 w-4" /> {completedStretch ? "تم إنهاء التمرين ✅" : "إنهاء التمرين"}
-      </Button>
-    </CardContent>
-  </Card>
-</div>
-
-); }
-
-function MacroCard({ label, value, target, unit, accent }: any) { const pct = Math.min(100, Math.round((value / target) * 100)); return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 space-y-3"> <div className="flex items-center justify-between"> <div className="text-sm text-zinc-300">{label}</div> <div className={text-sm font-bold ${accent}}>{pct}%</div> </div> <div className="text-xl font-bold text-white"> {value} <span className="text-sm text-zinc-400">/ {target} {unit}</span> </div> <Progress value={pct} className="h-2 bg-zinc-800" /> </CardContent> </Card> ); }
-
-function QuickMeal({ title, subtitle, protein, calories, onAdd }: any) { return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 flex items-center justify-between gap-3"> <div> <div className="text-white font-semibold">{title}</div> <div className="text-xs text-zinc-400 mt-1">{subtitle}</div> <div className="text-xs text-yellow-400 mt-2">{protein} بروتين • {calories} سعرة</div> </div> <Button onClick={onAdd} className="bg-red-600 hover:bg-red-500 rounded-2xl px-4">إضافة</Button> </CardContent> </Card> ); }
-
-function NutritionScreen({ appState, setAppState }: { appState: AppState; setAppState: React.Dispatch<React.SetStateAction<AppState>> }) { const remainingProtein = Math.max(appState.proteinGoal - appState.protein, 0);
-
-const addMeal = ({ calories, protein }: { calories: number; protein: number }) => { setAppState((prev) => { const nextProtein = prev.protein + protein; const achievements = new Set(prev.achievements); if (nextProtein >= prev.proteinGoal) achievements.add("protein_goal"); return { ...prev, calories: prev.calories + calories, protein: nextProtein, points: prev.points + 5, achievements: Array.from(achievements), }; }); };
-
-return ( <div className="space-y-5"> <Card className="rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950 to-red-950/30 p-1 shadow-2xl"> <CardContent className="p-5"> <div className="flex items-center justify-between"> <div> <div className="text-sm text-zinc-400">نظام التغذية الذكي</div> <h2 className="mt-1 text-2xl font-bold">تابع أكلك باحتراف 🔥</h2> <p className="mt-2 text-sm text-zinc-300">هدفك اليوم: بناء عضل نظيف + رفع البروتين</p> </div> <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-right"> <div className="text-xs text-yellow-300">Clean Score</div> <div className="text-xl font-bold text-yellow-400">88</div> </div> </div> </CardContent> </Card>
-
-<div className="grid grid-cols-2 gap-3">
-    <MacroCard label="السعرات" value={appState.calories} target={appState.calorieGoal} unit="سعرة" accent="text-red-400" />
-    <MacroCard label="البروتين" value={appState.protein} target={appState.proteinGoal} unit="جم" accent="text-yellow-400" />
-    <MacroCard label="الكربوهيدرات" value={appState.carbs} target={220} unit="جم" accent="text-red-400" />
-    <MacroCard label="الدهون" value={appState.fats} target={70} unit="جم" accent="text-yellow-400" />
-  </div>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardHeader className="pb-3">
-      <CardTitle className="text-lg">إضافة سريعة</CardTitle>
-    </CardHeader>
-    <CardContent className="grid grid-cols-3 gap-3">
-      <Button className="h-16 rounded-2xl bg-red-600 hover:bg-red-500 text-sm">📷 تصوير الوجبة</Button>
-      <Button variant="outline" className="h-16 rounded-2xl border-zinc-700 text-zinc-200 text-sm">📦 مسح باركود</Button>
-      <Button variant="outline" className="h-16 rounded-2xl border-zinc-700 text-zinc-200 text-sm">✍️ إضافة يدوية</Button>
-    </CardContent>
-  </Card>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardHeader className="pb-3">
-      <div className="flex items-center justify-between">
-        <CardTitle className="text-lg">اقتراحات سريعة لك</CardTitle>
-        <span className="text-xs text-zinc-400">عالية البروتين</span>
-      </div>
-    </CardHeader>
-    <CardContent className="space-y-3">
-      <QuickMeal title="فطور عضلي" subtitle="بيض + شوفان + زبادي يوناني" protein="35 جم" calories="520" onAdd={() => addMeal({ calories: 520, protein: 35 })} />
-      <QuickMeal title="غداء نظيف" subtitle="دجاج + رز + خضار" protein="48 جم" calories="690" onAdd={() => addMeal({ calories: 690, protein: 48 })} />
-      <QuickMeal title="سناك ذكي" subtitle="واي بروتين + موز" protein="27 جم" calories="210" onAdd={() => addMeal({ calories: 210, protein: 27 })} />
-    </CardContent>
-  </Card>
-
-  <Card className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-zinc-950 to-red-950/20">
-    <CardContent className="p-5">
-      <div className="flex items-start gap-3">
-        <div className="h-12 w-12 rounded-2xl border border-red-500/20 bg-red-500/10 flex items-center justify-center shrink-0">
-          <Brain className="h-6 w-6 text-red-400" />
-        </div>
-        <div className="flex-1">
-          <div className="text-lg font-bold">AI Nutrition Coach</div>
-          <p className="mt-2 text-sm leading-6 text-zinc-300">
-            باقي لك {remainingProtein} جم بروتين اليوم. أفضل خيار الآن: واي بروتين بعد التمرين أو وجبة دجاج خفيفة. أكلك جيد، لكن لا تنس المالتي فيتامين ADAM والزنك في وقتهما.
-          </p>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-</div>
-
-); }
-
-function MetricCard({ label, value, unit, change }: any) { return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4"> <div className="text-xs text-zinc-400">{label}</div> <div className="text-xl font-bold text-white mt-1"> {value} <span className="text-sm text-zinc-400">{unit}</span> </div> <div className={text-xs mt-1 ${change > 0 ? "text-green-400" : "text-red-400"}}> {change > 0 ? "+" : ""}{change}% هذا الأسبوع </div> </CardContent> </Card> ); }
-
-function BodyAnalyticsScreen({ appState }: { appState: AppState }) { const bodyStatus = useMemo(() => { if (appState.antiAgingScore >= 85) return "ممتاز"; if (appState.antiAgingScore >= 70) return "جيد جدًا"; return "يحتاج تحسين"; }, [appState.antiAgingScore]);
-
-const muscleScore = useMemo(() => { let score = 50; if (appState.protein >= appState.proteinGoal) score += 20; if (appState.workoutDone) score += 20; if (appState.steps >= 6000) score += 10; return Math.min(score, 100); }, [appState]);
-
-return ( <div className="space-y-5"> <Card className="rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950 to-red-950/30 p-5 shadow-2xl"> <div className="flex items-center justify-between"> <div> <div className="text-sm text-zinc-400">تحليل جسمك</div> <h2 className="text-2xl font-bold mt-1">تقدمك الحقيقي 🔥</h2> <p className="text-sm text-zinc-300 mt-2">تابع التغيير في جسمك وليس فقط الوزن — الحالة الحالية: {bodyStatus}</p> </div> <div className="text-yellow-400 font-bold text-xl">{appState.antiAgingScore}</div> </div> </Card>
-
-<div className="grid grid-cols-2 gap-3">
-    <MetricCard label="الوزن" value="77" unit="كجم" change={-1.2} />
-    <MetricCard label="نسبة الدهون" value="21" unit="%" change={-2.1} />
-    <MetricCard label="الكتلة العضلية" value={Math.round(muscleScore / 3)} unit="كجم" change={1.5} />
-    <MetricCard label="محيط الخصر" value="88" unit="سم" change={-1.8} />
-  </div>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardHeader>
-      <CardTitle className="text-lg">تقدمك الأسبوعي</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="text-sm text-zinc-400">📉 الوزن: {appState.calories <= appState.calorieGoal ? "ضمن الهدف بشكل ممتاز" : "أعلى من الهدف اليوم"}</div>
-      <div className="text-sm text-zinc-400 mt-2">📈 الكتلة العضلية: {appState.protein >= appState.proteinGoal ? "مرشحة للارتفاع 👏" : "تحتاج بروتين أعلى"}</div>
-      <div className="text-sm text-zinc-400 mt-2">🧬 Anti-Aging Score: {appState.antiAgingScore}/100</div>
-    </CardContent>
-  </Card>
-
-  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
-    <CardHeader>
-      <CardTitle className="text-lg">صور التقدم</CardTitle>
-    </CardHeader>
-    <CardContent className="grid grid-cols-2 gap-3">
-      <div className="h-32 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-400">قبل</div>
-      <div className="h-32 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-400">بعد</div>
-    </CardContent>
-  </Card>
-
-  <Card className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-zinc-950 to-red-950/20">
-    <CardContent className="p-5">
-      <div className="flex items-start gap-3">
-        <div className="h-12 w-12 rounded-2xl border border-red-500/20 bg-red-500/10 flex items-center justify-center">
-          <Brain className="h-6 w-6 text-red-400" />
-        </div>
-        <div>
-          <div className="font-bold text-lg">AI Body Coach</div>
-          <p className="text-sm text-zinc-300 mt-2">
-            {appState.protein >= appState.proteinGoal
-              ? "تقدمك ممتاز 🔥 البروتين اليوم مكتمل تقريبًا، واستمرارك على التمرين سيدعم زيادة الكتلة العضلية."
-              : "أداؤك جيد، لكن تحتاج ترفع البروتين قليلاً لزيادة الكتلة العضلية بشكل أسرع."}
-          </p>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-</div>
-
-); }
-
-export default function CaptainYasserApp() { const [cloudReady, setCloudReady] = useState(false); const [cloudStatus, setCloudStatus] = useState("محلي فقط"); const [cloudUid, setCloudUid] = useState(""); const [tab, setTab] = useState("dashboard"); const [appState, setAppState] = useState<AppState>(() => { if (typeof window !== "undefined") { const saved = window.localStorage.getItem(STORAGE_KEY); if (saved) { try { return { ...defaultState, ...JSON.parse(saved) }; } catch { return defaultState; } } } return defaultState; });
-
-useEffect(() => { setAppState((prev) => { let score = 60; if (prev.protein >= prev.proteinGoal) score += 15; if (prev.calories <= prev.calorieGoal) score += 10; if (prev.steps >= 6000) score += 5; if (prev.workoutDone) score += 10; score = Math.min(score, 100);
-
-const today = new Date().toISOString().split("T")[0];
-  const didQualifyToday = prev.workoutDone || prev.protein >= prev.proteinGoal || prev.steps >= 6000;
-  let streak = prev.streak;
-  if (didQualifyToday && prev.lastActiveDate !== today) streak += 1;
-
-  const achievements = new Set(prev.achievements);
-  if (prev.workoutDone) achievements.add("first_workout");
-  if (prev.protein >= prev.proteinGoal) achievements.add("protein_goal");
-  if (streak >= 3) achievements.add("hot_streak");
-
-  const level = Math.floor(prev.points / 100) + 1;
-  const nextState = {
-    ...prev,
-    antiAgingScore: score,
-    streak,
-    level,
-    achievements: Array.from(achievements),
-    lastActiveDate: didQualifyToday ? today : prev.lastActiveDate,
-  };
-
-  if (JSON.stringify(nextState) === JSON.stringify(prev)) return prev;
-  return nextState;
-});
-
-}, [appState.protein, appState.proteinGoal, appState.calories, appState.calorieGoal, appState.steps, appState.workoutDone, appState.points]);
-
-useEffect(() => { if (typeof window !== "undefined") { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(appState)); } }, [appState]);
-
-// ===================== Firebase Sync ===================== useEffect(() => { async function initCloud() { try { const result = await signInAnonymously(auth); const uid = result.user.uid; setCloudUid(uid);
-
-const ref = doc(db, "users", uid, "app", CLOUD_DOC_KEY);
-    const snapshot = await getDoc(ref);
-
-    if (snapshot.exists()) {
-      const cloudData = snapshot.data()?.state;
-      if (cloudData) {
-        setAppState((prev) => ({ ...prev, ...cloudData }));
-      }
-    } else {
-      await setDoc(ref, { state: defaultState, updatedAt: Date.now() });
-    }
-
-    setCloudReady(true);
-    setCloudStatus("متصل بالسحابة ✅");
-  } catch (error) {
-    console.error("Firebase init failed", error);
-    setCloudStatus("فشل الربط بالسحابة");
-  }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كابتن ياسر</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #0f0f1a;
+  color: white;
+  text-align: center;
 }
 
-initCloud();
+.card {
+  background: #1c1c2e;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 10px;
+}
 
-}, []);
+button {
+  padding: 10px;
+  margin-top: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 10px;
+}
+</style>
 
-useEffect(() => { async function syncCloud() { if (!cloudReady || !auth.currentUser) return; try { const ref = doc(db, "users", auth.currentUser.uid, "app", CLOUD_DOC_KEY); await setDoc(ref, { state: appState, updatedAt: Date.now() }); } catch (error) { console.error("Cloud sync failed", error); } }
+</head>
 
-syncCloud();
+<body>
 
-}, [appState, cloudReady]);
+<h1>🔥 كابتن ياسر</h1>
 
-return ( <div className="min-h-screen bg-black text-white"> <div className="mx-auto max-w-md px-4 pb-24 pt-6"> <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}> <div className="mb-4 rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs text-zinc-300"> حالة الحفظ: <span className="font-bold text-yellow-400">{cloudStatus}</span>{cloudUid ? <span className="mr-2 text-zinc-500">• UID: {cloudUid.slice(0, 8)}...</span> : null} </div> {tab === "dashboard" && <Dashboard appState={appState} setTab={setTab} />} {tab === "workout" && <WorkoutScreen setAppState={setAppState} />} {tab === "nutrition" && <NutritionScreen appState={appState} setAppState={setAppState} />} {tab === "body" && <BodyAnalyticsScreen appState={appState} />} </motion.div> </div>
-
-<div className="fixed bottom-0 left-0 right-0 border-t border-zinc-800 bg-zinc-950 p-3 flex justify-around">
-    <button onClick={() => setTab("dashboard")} className={`text-sm ${tab === "dashboard" ? "text-yellow-400" : "text-zinc-400"}`}>🏠</button>
-    <button onClick={() => setTab("workout")} className={`text-sm ${tab === "workout" ? "text-red-400" : "text-zinc-400"}`}>💪</button>
-    <button onClick={() => setTab("nutrition")} className={`text-sm ${tab === "nutrition" ? "text-yellow-400" : "text-zinc-400"}`}>🥗</button>
-    <button onClick={() => setTab("body")} className={`text-sm ${tab === "body" ? "text-yellow-400" : "text-zinc-400"}`}>📊</button>
-  </div>
+<div class="card">
+  <h2>XP</h2>
+  <p id="xp">50</p>
 </div>
 
-); }
+<div class="card">
+  <h2>تمرين الصدر</h2>
+  <img src="https://i.imgur.com/5b6XG6R.jpg" width="100%">
+  <br>
+  <button onclick="window.open('https://www.youtube.com/watch?v=rT7DgCr-3pg')">
+    مشاهدة التمرين
+  </button>
+</div>
+
+<script>
+console.log("التطبيق يعمل");
+</script>
+
+</body>
+</html>
