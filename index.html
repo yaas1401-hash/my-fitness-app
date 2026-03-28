@@ -6,37 +6,46 @@
   <title>كابتن ياسر</title>
   <style>
     :root{
-      --bg:#0b0b0f;
-      --card:#15151d;
-      --card-2:#1b1b25;
-      --line:#2a2a37;
-      --text:#f4f4f7;
-      --muted:#a6a6b3;
-      --red:#e53935;
+      --bg:#0a0a0f;
+      --bg-soft:#12121a;
+      --card:#151520;
+      --card-soft:#1b1b27;
+      --line:#2b2b39;
+      --text:#f5f7fb;
+      --muted:#a8adbb;
+      --red:#ef4444;
+      --red-dark:#dc2626;
       --yellow:#f6c344;
       --green:#22c55e;
+      --green-soft:#102116;
+      --green-line:#21452c;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
+      --radius:24px;
     }
 
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-      background:linear-gradient(180deg,#09090d 0%, #101018 100%);
       color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(239,68,68,.10), transparent 24%),
+        linear-gradient(180deg, #09090d 0%, #111118 100%);
     }
 
     .app{
-      max-width:460px;
+      max-width:480px;
       margin:0 auto;
       min-height:100vh;
-      padding:16px 16px 90px;
+      padding:16px 16px 96px;
     }
 
-    .top-badge{
+    .status-badge{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      background:#111118;
+      background:#101018;
       border:1px solid var(--line);
       color:var(--muted);
       padding:10px 14px;
@@ -45,12 +54,18 @@
       margin-bottom:14px;
     }
 
+    .danger{
+      color:#ffd3d3;
+      background:#251517;
+      border-color:#4a2528;
+    }
+
     .hero{
-      background:linear-gradient(135deg,#161620 0%, #231418 100%);
+      background:linear-gradient(135deg,#171722 0%, #26161b 100%);
       border:1px solid var(--line);
-      border-radius:24px;
+      border-radius:28px;
       padding:18px;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      box-shadow:var(--shadow);
       margin-bottom:14px;
     }
 
@@ -62,85 +77,94 @@
     }
 
     .title{
-      font-size:28px;
-      font-weight:800;
       margin:4px 0 8px;
+      font-size:31px;
+      font-weight:900;
+      line-height:1.2;
     }
 
     .sub{
       color:var(--muted);
       font-size:14px;
-      line-height:1.7;
+      line-height:1.8;
     }
 
-    .points-box{
-      min-width:96px;
+    .xp-box{
+      min-width:102px;
       text-align:center;
       background:rgba(246,195,68,.08);
       border:1px solid rgba(246,195,68,.18);
       color:var(--yellow);
-      border-radius:18px;
-      padding:10px 12px;
+      border-radius:20px;
+      padding:12px;
     }
 
-    .points-box .num{
-      font-size:24px;
-      font-weight:800;
-      margin-top:4px;
+    .xp-box .num{
+      margin-top:6px;
+      font-size:30px;
+      font-weight:900;
     }
 
-    .cards-2{
+    .grid-2{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:12px;
-      margin:14px 0;
+      margin-top:14px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
     }
 
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:22px;
+      border-radius:var(--radius);
       padding:16px;
     }
 
     .card h3{
-      margin:0 0 6px;
-      font-size:15px;
+      margin:0 0 8px;
+      font-size:14px;
+      font-weight:700;
       color:var(--muted);
-      font-weight:600;
     }
 
     .big{
-      font-size:26px;
-      font-weight:800;
       margin:0;
+      font-size:27px;
+      font-weight:900;
     }
 
     .small{
-      color:var(--muted);
+      margin-top:8px;
       font-size:13px;
-      margin-top:6px;
+      line-height:1.7;
+      color:var(--muted);
     }
 
     .section{
-      margin-top:14px;
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:22px;
+      border-radius:var(--radius);
       padding:16px;
+      margin-top:14px;
     }
 
     .section-title{
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       gap:10px;
       margin-bottom:14px;
     }
 
     .section-title h2{
       margin:0;
-      font-size:18px;
+      font-size:20px;
+      font-weight:900;
     }
 
     .muted{
@@ -148,83 +172,57 @@
       font-size:13px;
     }
 
-    .progress-wrap{
-      margin-top:10px;
-    }
-
-    .progress-label{
+    .label-row{
       display:flex;
       justify-content:space-between;
       align-items:center;
+      gap:8px;
+      margin-top:10px;
       font-size:14px;
-      margin-bottom:6px;
     }
 
     .bar{
-      height:10px;
       width:100%;
-      background:#242432;
-      border-radius:999px;
+      height:12px;
+      margin-top:8px;
       overflow:hidden;
+      border-radius:999px;
+      background:#262636;
     }
 
     .bar > span{
       display:block;
       height:100%;
+      width:0%;
       border-radius:999px;
       background:linear-gradient(90deg,var(--red), var(--yellow));
-      width:0%;
       transition:.25s ease;
     }
 
-    .actions{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:14px;
-    }
-
-    button{
-      border:none;
-      cursor:pointer;
-      border-radius:16px;
-      padding:14px 14px;
-      font-size:15px;
-      font-weight:700;
-      transition:.2s ease;
-    }
-
-    button:active{transform:scale(.98)}
-
-    .btn-primary{
-      background:var(--red);
-      color:white;
-    }
-
-    .btn-secondary{
-      background:#232330;
-      color:#f3f3f6;
-      border:1px solid var(--line);
-    }
-
-    .chips{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:10px;
-    }
-
     .chip{
-      background:var(--card-2);
+      background:var(--card-soft);
       border:1px solid var(--line);
       border-radius:18px;
-      padding:14px 10px;
+      padding:14px 8px;
       text-align:center;
     }
 
     .chip strong{
       display:block;
       margin-top:8px;
-      font-size:18px;
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .coach{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      background:var(--green-soft);
+      border:1px solid var(--green-line);
+      color:#d4ffe1;
+      font-size:14px;
+      line-height:1.8;
     }
 
     .list{
@@ -233,14 +231,14 @@
       gap:10px;
     }
 
-    .list-item{
-      background:var(--card-2);
+    .item{
+      background:var(--card-soft);
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:20px;
       padding:14px;
     }
 
-    .list-item .top{
+    .item-top{
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -248,71 +246,58 @@
       margin-bottom:8px;
     }
 
-    .list-item h4{
+    .item h4{
       margin:0;
-      font-size:15px;
+      font-size:16px;
+      font-weight:800;
     }
 
-    .list-item p{
+    .item p{
       margin:0;
       color:var(--muted);
       font-size:13px;
-      line-height:1.6;
+      line-height:1.7;
     }
 
-    .footer-nav{
-      position:fixed;
-      right:0;
-      left:0;
-      bottom:0;
-      background:#111118;
-      border-top:1px solid var(--line);
-      padding:10px 10px max(10px, env(safe-area-inset-bottom));
-      display:flex;
-      justify-content:center;
-      z-index:10;
-    }
-
-    .footer-inner{
-      width:min(460px,100%);
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:8px;
-    }
-
-    .nav-btn{
-      background:#171722;
+    .item ul{
+      margin:8px 0 0;
+      padding:0 18px 0 0;
       color:var(--muted);
-      border:1px solid var(--line);
-      padding:12px 8px;
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    button{
+      border:none;
+      cursor:pointer;
       border-radius:16px;
-      font-size:13px;
-      font-weight:700;
+      padding:13px 14px;
+      font-size:14px;
+      font-weight:800;
+      transition:.2s ease;
     }
 
-    .nav-btn.active{
+    button:active{transform:scale(.98)}
+
+    .btn-red{
+      background:var(--red);
       color:#fff;
-      border-color:#3a3a4b;
-      background:#242432;
     }
 
-    .hidden{display:none !important}
-
-    .notice{
-      margin-top:10px;
-      padding:12px 14px;
-      border-radius:16px;
-      background:#141a16;
-      border:1px solid #243427;
-      color:#bdf0c7;
-      font-size:13px;
-      line-height:1.6;
+    .btn-red:hover{
+      background:var(--red-dark);
     }
 
-    .danger{
-      background:#241516;
-      border-color:#4a2426;
-      color:#ffc8c8;
+    .btn-dark{
+      background:#252536;
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .btn-green{
+      background:#173020;
+      color:#c4f7d2;
+      border:1px solid #29503a;
     }
 
     .profile-grid{
@@ -320,62 +305,101 @@
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
+
+    .footer{
+      position:fixed;
+      right:0;
+      left:0;
+      bottom:0;
+      z-index:20;
+      display:flex;
+      justify-content:center;
+      padding:10px 10px max(10px, env(safe-area-inset-bottom));
+      background:#111118;
+      border-top:1px solid var(--line);
+    }
+
+    .footer-inner{
+      width:min(480px,100%);
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:8px;
+    }
+
+    .nav-btn{
+      background:#1b1b27;
+      border:1px solid var(--line);
+      color:var(--muted);
+      border-radius:16px;
+      padding:12px 8px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .nav-btn.active{
+      background:#272738;
+      color:#fff;
+      border-color:#3a3a4f;
+    }
+
+    .hidden{display:none !important}
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="top-badge" id="cloudStatus">☁️ جاري الاتصال بالسحابة...</div>
+    <div class="status-badge" id="cloudStatus">☁️ جاري الاتصال بالسحابة...</div>
 
+    <!-- الرئيسية -->
     <div id="screen-dashboard">
       <div class="hero">
         <div class="row">
           <div>
-            <div class="sub">أهلاً بك</div>
-            <div class="title" id="userNameHero">كابتن ياسر 🚀</div>
-            <div class="sub">تطبيقك الرياضي الذكي لبناء العضلات، الطاقة، والصحة العامة.</div>
+            <div class="sub">لوحتك الشخصية</div>
+            <div class="title" id="heroName">الكابتن ياسر 🚀</div>
+            <div class="sub">نظامك الذكي لبناء العضلات، رفع الطاقة، وتحسين صحتك بشكل شامل.</div>
           </div>
 
-          <div class="points-box">
+          <div class="xp-box">
             <div>XP</div>
-            <div class="num" id="xpHero">0</div>
+            <div class="num" id="heroXp">0</div>
           </div>
         </div>
 
-        <div class="cards-2">
+        <div class="grid-2">
+          <div class="card">
+            <h3>البروتين اليومي</h3>
+            <p class="big" id="proteinMain">0 / 160</p>
+            <div class="small">هدفك اليومي لدعم بناء العضلات والاستشفاء.</div>
+          </div>
+
           <div class="card">
             <h3>المستوى الحالي</h3>
-            <p class="big" id="levelValue">1</p>
-            <div class="small">يتحدث تلقائيًا من Firebase</div>
-          </div>
-
-          <div class="card">
-            <h3>حالة البروتين</h3>
-            <p class="big" id="proteinValue">0 / 160</p>
-            <div class="small">هدفك اليومي لبناء العضلات</div>
+            <p class="big" id="levelMain">1</p>
+            <div class="small">يرتفع تلقائيًا حسب نقاط الخبرة داخل التطبيق.</div>
           </div>
         </div>
 
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>تقدم المستوى</span>
-            <span id="levelProgressText">0 / 100</span>
-          </div>
-          <div class="bar"><span id="levelProgressBar"></span></div>
+        <div class="label-row">
+          <span id="levelProgressText">0 / 100</span>
+          <span>تقدم المستوى</span>
+        </div>
+        <div class="bar">
+          <span id="levelProgressBar"></span>
         </div>
 
-        <div class="actions">
-          <button class="btn-primary" id="btnWorkoutXp">💪 سجّل تمرين (+20 XP)</button>
-          <button class="btn-secondary" id="btnProteinXp">🥤 أضف بروتين (+10 XP)</button>
+        <div class="grid-2" style="margin-top:14px;">
+          <button class="btn-dark" id="btnQuickProtein">🥤 أضف بروتين (+10 XP)</button>
+          <button class="btn-red" id="btnQuickWorkout">💪 سجّل تمرينًا (+20 XP)</button>
         </div>
       </div>
 
       <div class="section">
         <div class="section-title">
           <h2>ملخص اليوم</h2>
-          <span class="muted" id="antiAgingText">Anti-Aging Score: 0</span>
+          <span class="muted" id="antiAgingText">مؤشر الحيوية: 0</span>
         </div>
 
-        <div class="chips">
+        <div class="grid-3">
           <div class="chip">
             السعرات
             <strong id="caloriesChip">0</strong>
@@ -390,13 +414,12 @@
           </div>
         </div>
 
-        <div class="notice" id="aiCoachBox">
-          AI Coach: جاهز لتحليل بياناتك...
-        </div>
+        <div class="coach" id="coachBox">AI Coach: جاهز لتحليل بياناتك وتقديم توصية يومية.</div>
       </div>
     </div>
 
-    <div id="screen-workout" class="hidden">
+    <!-- التمارين -->
+    <div id="screen-workouts" class="hidden">
       <div class="section">
         <div class="section-title">
           <h2>التمارين</h2>
@@ -404,52 +427,138 @@
         </div>
 
         <div class="list">
-          <div class="list-item">
-            <div class="top">
-              <h4>سجّل تمرين كامل</h4>
-              <button class="btn-primary" id="btnWorkoutFull">+20 XP</button>
+          <div class="item">
+            <div class="item-top">
+              <h4>تسجيل تمرين كامل</h4>
+              <button class="btn-red" id="btnWorkoutFull">+20 نقطة خبرة</button>
             </div>
-            <p>يضيف تمرين جديد، يرفع XP، ويحدّث المستوى تلقائيًا.</p>
+            <p>يسجل تمرينك، ويرفع نقاط الخبرة، ويحدث مستواك تلقائيًا.</p>
           </div>
 
-          <div class="list-item">
-            <div class="top">
-              <h4>إعادة تعيين التمارين</h4>
-              <button class="btn-secondary" id="btnResetWorkouts">إعادة</button>
+          <div class="item">
+            <div class="item-top">
+              <h4>إعادة ضبط التمارين</h4>
+              <button class="btn-dark" id="btnResetWorkout">إعادة</button>
             </div>
-            <p>يصفّر عدد التمارين إذا احتجت تبدأ من جديد.</p>
+            <p>يصفّر عدد التمارين إذا رغبت تبدأ من جديد.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>برنامجك الأسبوعي المقترح</h4>
+            </div>
+            <ul>
+              <li>اليوم 1: صدر + ترايسبس</li>
+              <li>اليوم 2: ظهر + بايسبس</li>
+              <li>اليوم 3: أرجل + بطن</li>
+              <li>اليوم 4: أكتاف + كارديو خفيف</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="screen-nutrition" class="hidden">
+    <!-- الوجبات -->
+    <div id="screen-meals" class="hidden">
       <div class="section">
         <div class="section-title">
-          <h2>التغذية</h2>
+          <h2>الوجبات والتغذية</h2>
           <span class="muted">تحديث فوري على السحابة</span>
         </div>
 
         <div class="list">
-          <div class="list-item">
-            <div class="top">
+          <div class="item">
+            <div class="item-top">
               <h4>إضافة 30 جم بروتين</h4>
-              <button class="btn-primary" id="btnAddProtein">إضافة</button>
+              <button class="btn-red" id="btnAddProtein">إضافة</button>
             </div>
-            <p>يرفع البروتين، يزيد XP، ويعدل توصية AI Coach.</p>
+            <p>يرفع البروتين اليومي، ويزيد XP، ويساعدك على الاقتراب من هدفك.</p>
           </div>
 
-          <div class="list-item">
-            <div class="top">
+          <div class="item">
+            <div class="item-top">
               <h4>إضافة 400 سعرة</h4>
-              <button class="btn-secondary" id="btnAddCalories">إضافة</button>
+              <button class="btn-dark" id="btnAddCalories">إضافة</button>
             </div>
-            <p>مفيدة عند تجربة تتبع الأكل والطاقة داخل التطبيق.</p>
+            <p>تفيد في تتبع الطاقة والسعرات اليومية بشكل سريع.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>وجبات مقترحة</h4>
+            </div>
+            <ul>
+              <li>فطور: بيض + شوفان + زبادي يوناني</li>
+              <li>غداء: دجاج + رز + خضار</li>
+              <li>سناك: واي بروتين + موز</li>
+              <li>عشاء: تونة + خبز أسمر + سلطة</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- المكملات -->
+    <div id="screen-supplements" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>المكملات والفيتامينات</h2>
+          <span class="muted">خطة أساسية مقترحة</span>
+        </div>
+
+        <div class="list">
+          <div class="item">
+            <div class="item-top">
+              <h4>ADAM Multi-Vitamin</h4>
+              <button class="btn-green">أساسي</button>
+            </div>
+            <p>مرة يوميًا بعد الأكل لدعم الصحة العامة والطاقة.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>الزنك</h4>
+              <button class="btn-green">أساسي</button>
+            </div>
+            <p>يفضل حسب الجرعة المكتوبة على العبوة أو توجيه المختص.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>واي بروتين</h4>
+              <button class="btn-green">مهم</button>
+            </div>
+            <p>بعد التمرين أو عند صعوبة الوصول لاحتياجك من البروتين.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>فيتامين د</h4>
+              <button class="btn-dark">اختياري</button>
+            </div>
+            <p>يفضل حسب التحاليل أو توصية الطبيب.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>أوميغا 3</h4>
+              <button class="btn-dark">اختياري</button>
+            </div>
+            <p>مفيد للصحة العامة ودعم المفاصل والقلب.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>المغنيسيوم</h4>
+              <button class="btn-dark">اختياري</button>
+            </div>
+            <p>يفضل مساءً، وقد يساعد على الاسترخاء وتحسين النوم.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الملف الشخصي -->
     <div id="screen-profile" class="hidden">
       <div class="section">
         <div class="section-title">
@@ -459,35 +568,39 @@
 
         <div class="profile-grid">
           <div class="card">
+            <h3>المعرّف</h3>
+            <p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">-</p>
+          </div>
+
+          <div class="card">
             <h3>الاسم</h3>
             <p class="big" id="profileName">-</p>
           </div>
-          <div class="card">
-            <h3>المعرف</h3>
-            <p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">-</p>
-          </div>
-          <div class="card">
-            <h3>المستوى</h3>
-            <p class="big" id="profileLevel">-</p>
-          </div>
+
           <div class="card">
             <h3>XP</h3>
             <p class="big" id="profileXp">-</p>
           </div>
+
+          <div class="card">
+            <h3>المستوى</h3>
+            <p class="big" id="profileLevel">-</p>
+          </div>
         </div>
 
-        <div class="notice" style="margin-top:12px;">
-          إذا شفت هذه البيانات، فهذا يعني أن التطبيق الكامل صار مربوط بـ Firebase بشكل صحيح.
+        <div class="coach">
+          إذا ظهرت لك هذه البيانات، فهذا يعني أن التطبيق الكامل مرتبط بـ Firebase بشكل صحيح.
         </div>
       </div>
     </div>
   </div>
 
-  <div class="footer-nav">
+  <div class="footer">
     <div class="footer-inner">
       <button class="nav-btn active" data-screen="dashboard">الرئيسية</button>
-      <button class="nav-btn" data-screen="workout">التمارين</button>
-      <button class="nav-btn" data-screen="nutrition">التغذية</button>
+      <button class="nav-btn" data-screen="workouts">التمارين</button>
+      <button class="nav-btn" data-screen="meals">الوجبات</button>
+      <button class="nav-btn" data-screen="supplements">المكملات</button>
       <button class="nav-btn" data-screen="profile">الملف</button>
     </div>
   </div>
@@ -520,26 +633,26 @@
 
     const els = {
       cloudStatus: document.getElementById("cloudStatus"),
-      userNameHero: document.getElementById("userNameHero"),
-      xpHero: document.getElementById("xpHero"),
-      levelValue: document.getElementById("levelValue"),
-      proteinValue: document.getElementById("proteinValue"),
+      heroName: document.getElementById("heroName"),
+      heroXp: document.getElementById("heroXp"),
+      levelMain: document.getElementById("levelMain"),
+      proteinMain: document.getElementById("proteinMain"),
       levelProgressText: document.getElementById("levelProgressText"),
       levelProgressBar: document.getElementById("levelProgressBar"),
       caloriesChip: document.getElementById("caloriesChip"),
       proteinChip: document.getElementById("proteinChip"),
       workoutsChip: document.getElementById("workoutsChip"),
       antiAgingText: document.getElementById("antiAgingText"),
-      aiCoachBox: document.getElementById("aiCoachBox"),
-      profileName: document.getElementById("profileName"),
+      coachBox: document.getElementById("coachBox"),
       profileDocId: document.getElementById("profileDocId"),
-      profileLevel: document.getElementById("profileLevel"),
-      profileXp: document.getElementById("profileXp")
+      profileName: document.getElementById("profileName"),
+      profileXp: document.getElementById("profileXp"),
+      profileLevel: document.getElementById("profileLevel")
     };
 
     function defaultUser() {
       return {
-        name: "Captain Yasser",
+        name: "الكابتن ياسر",
         level: 1,
         xp: 0,
         protein: 0,
@@ -550,15 +663,15 @@
       };
     }
 
-    function calcLevelFromXp(xp) {
-      return Math.floor(xp / 100) + 1;
+    function calcLevel(xp) {
+      return Math.floor((xp || 0) / 100) + 1;
     }
 
-    function calcLevelProgress(xp) {
-      return xp % 100;
+    function calcProgress(xp) {
+      return (xp || 0) % 100;
     }
 
-    function calcAntiAgingScore(data) {
+    function calcAntiAging(data) {
       let score = 60;
       if ((data.protein || 0) >= (data.proteinGoal || 160)) score += 15;
       if ((data.workouts || 0) >= 1) score += 10;
@@ -566,42 +679,45 @@
       return Math.min(score, 100);
     }
 
-    function render(data) {
-      const level = calcLevelFromXp(data.xp || 0);
-      const levelProgress = calcLevelProgress(data.xp || 0);
+    function coachMessage(data) {
       const protein = data.protein || 0;
       const proteinGoal = data.proteinGoal || 160;
-      const calories = data.calories || 0;
       const workouts = data.workouts || 0;
-      const antiAging = calcAntiAgingScore(data);
 
-      els.userNameHero.textContent = `${data.name || "Captain Yasser"} 🚀`;
-      els.xpHero.textContent = data.xp ?? 0;
-      els.levelValue.textContent = level;
-      els.proteinValue.textContent = `${protein} / ${proteinGoal}`;
-      els.levelProgressText.textContent = `${levelProgress} / 100`;
-      els.levelProgressBar.style.width = `${levelProgress}%`;
-
-      els.caloriesChip.textContent = calories;
-      els.proteinChip.textContent = protein;
-      els.workoutsChip.textContent = workouts;
-      els.antiAgingText.textContent = `Anti-Aging Score: ${antiAging}`;
-
-      let coach = "AI Coach: ابدأ أول تمرين لك اليوم وارفَع البروتين.";
-      if (workouts >= 1 && protein < proteinGoal) {
-        coach = `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول للهدف.`;
-      } else if (workouts >= 1 && protein >= proteinGoal) {
-        coach = "AI Coach: أداء ممتاز جدًا 🔥 أنت قريب من يوم مثالي للبناء العضلي.";
-      } else if (protein >= proteinGoal) {
-        coach = "AI Coach: تغذيتك ممتازة، حاول تضيف تمرين اليوم لرفع التقدم أكثر.";
+      if (workouts >= 1 && protein >= proteinGoal) {
+        return "AI Coach: يوم ممتاز جدًا 🔥 أنت قريب من تحقيق يوم مثالي لبناء العضلات.";
       }
+      if (workouts >= 1 && protein < proteinGoal) {
+        return `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول لهدفك اليومي.`;
+      }
+      if (protein >= proteinGoal) {
+        return "AI Coach: تغذيتك ممتازة، أضف تمرين اليوم لرفع التقدم أكثر.";
+      }
+      return "AI Coach: ابدأ بالتمرين ثم ارفع بروتينك اليومي للوصول لهدفك العضلي.";
+    }
 
-      els.aiCoachBox.textContent = coach;
+    function render(data) {
+      const level = calcLevel(data.xp);
+      const progress = calcProgress(data.xp);
+      const antiAging = calcAntiAging(data);
 
-      els.profileName.textContent = data.name || "-";
+      els.heroName.textContent = `${data.name || "الكابتن ياسر"} 🚀`;
+      els.heroXp.textContent = data.xp ?? 0;
+      els.levelMain.textContent = level;
+      els.proteinMain.textContent = `${data.protein || 0} / ${data.proteinGoal || 160}`;
+      els.levelProgressText.textContent = `${progress} / 100`;
+      els.levelProgressBar.style.width = `${progress}%`;
+
+      els.caloriesChip.textContent = data.calories || 0;
+      els.proteinChip.textContent = data.protein || 0;
+      els.workoutsChip.textContent = data.workouts || 0;
+      els.antiAgingText.textContent = `مؤشر الحيوية: ${antiAging}`;
+      els.coachBox.textContent = coachMessage(data);
+
       els.profileDocId.textContent = currentDocId || "-";
-      els.profileLevel.textContent = level;
+      els.profileName.textContent = data.name || "-";
       els.profileXp.textContent = data.xp ?? 0;
+      els.profileLevel.textContent = level;
     }
 
     async function loadUser() {
@@ -610,10 +726,10 @@
         const snapshot = await getDocs(collection(db, "users"));
 
         if (snapshot.empty) {
-          const newUser = defaultUser();
-          const created = await addDoc(collection(db, "users"), newUser);
+          const user = defaultUser();
+          const created = await addDoc(collection(db, "users"), user);
           currentDocId = created.id;
-          currentData = newUser;
+          currentData = user;
         } else {
           const firstDoc = snapshot.docs.find(d => {
             const x = d.data();
@@ -625,9 +741,9 @@
         }
 
         render(currentData);
-        els.cloudStatus.textContent = "☁️ متصل بالسحابة ✅";
-      } catch (err) {
-        console.error(err);
+        els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
+      } catch (e) {
+        console.error(e);
         els.cloudStatus.textContent = "☁️ فشل الاتصال بالسحابة ❌";
         els.cloudStatus.classList.add("danger");
       }
@@ -637,28 +753,28 @@
       if (!currentDocId) return;
 
       currentData = { ...currentData, ...partial };
-      currentData.level = calcLevelFromXp(currentData.xp || 0);
-      currentData.antiAgingScore = calcAntiAgingScore(currentData);
+      currentData.level = calcLevel(currentData.xp);
+      currentData.antiAgingScore = calcAntiAging(currentData);
 
       try {
         const ref = doc(db, "users", currentDocId);
         await updateDoc(ref, currentData);
         render(currentData);
         els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.error(e);
         els.cloudStatus.textContent = "☁️ فشل الحفظ ❌";
       }
     }
 
-    document.getElementById("btnWorkoutXp").addEventListener("click", async () => {
+    document.getElementById("btnQuickWorkout").addEventListener("click", async () => {
       await saveUser({
         xp: (currentData.xp || 0) + 20,
         workouts: (currentData.workouts || 0) + 1
       });
     });
 
-    document.getElementById("btnProteinXp").addEventListener("click", async () => {
+    document.getElementById("btnQuickProtein").addEventListener("click", async () => {
       await saveUser({
         xp: (currentData.xp || 0) + 10,
         protein: (currentData.protein || 0) + 30
@@ -672,7 +788,7 @@
       });
     });
 
-    document.getElementById("btnResetWorkouts").addEventListener("click", async () => {
+    document.getElementById("btnResetWorkout").addEventListener("click", async () => {
       await saveUser({
         workouts: 0
       });
@@ -699,8 +815,9 @@
         btn.classList.add("active");
 
         document.getElementById("screen-dashboard").classList.add("hidden");
-        document.getElementById("screen-workout").classList.add("hidden");
-        document.getElementById("screen-nutrition").classList.add("hidden");
+        document.getElementById("screen-workouts").classList.add("hidden");
+        document.getElementById("screen-meals").classList.add("hidden");
+        document.getElementById("screen-supplements").classList.add("hidden");
         document.getElementById("screen-profile").classList.add("hidden");
 
         document.getElementById(`screen-${screen}`).classList.remove("hidden");
