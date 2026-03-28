@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Captain Yasser App</title>
 </head>
-
-<body style="font-family: Arial; text-align:center; padding:50px;">
+<body>
 
   <h1>🚀 Captain Yasser App</h1>
-  <p id="status">جاري الاتصال بالسحابة...</p>
+
+  <h2 id="name">Loading...</h2>
+  <p id="level"></p>
+  <p id="xp"></p>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
@@ -25,34 +25,21 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
 
-    async function start() {
-      try {
-        const result = await signInAnonymously(auth);
-        const uid = result.user.uid;
+    async function loadData() {
+      const querySnapshot = await getDocs(collection(db, "users"));
 
-        const ref = doc(db, "users", uid);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
 
-        await setDoc(ref, {
-          name: "Captain Yasser",
-          time: Date.now()
-        });
-
-        document.getElementById("status").innerText =
-          "✅ تم الاتصال بالسحابة بنجاح";
-        
-        console.log("🔥 Firebase connected:", uid);
-
-      } catch (error) {
-        document.getElementById("status").innerText =
-          "❌ فشل الاتصال";
-        console.error(error);
-      }
+        document.getElementById("name").innerText = data.name;
+        document.getElementById("level").innerText = "Level: " + data.level;
+        document.getElementById("xp").innerText = "XP: " + data.xp;
+      });
     }
 
-    start();
+    loadData();
   </script>
 
 </body>
