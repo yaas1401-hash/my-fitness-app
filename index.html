@@ -1,830 +1,419 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>كابتن ياسر</title>
-  <style>
-    :root{
-      --bg:#0a0a0f;
-      --bg-soft:#12121a;
-      --card:#151520;
-      --card-soft:#1b1b27;
-      --line:#2b2b39;
-      --text:#f5f7fb;
-      --muted:#a8adbb;
-      --red:#ef4444;
-      --red-dark:#dc2626;
-      --yellow:#f6c344;
-      --green:#22c55e;
-      --green-soft:#102116;
-      --green-line:#21452c;
-      --shadow:0 18px 40px rgba(0,0,0,.28);
-      --radius:24px;
-    }
+import React, { useEffect, useMemo, useState } from "react"; import { initializeApp } from "firebase/app"; import { getAuth, signInAnonymously } from "firebase/auth"; import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"; import { motion } from "framer-motion"; import { Flame, Dumbbell, Moon, UtensilsCrossed, Play, Footprints, Trophy, Brain, ShieldCheck, ChevronRight, Timer, CheckCircle2, } from "lucide-react"; import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { Progress } from "@/components/ui/progress";
 
-    *{box-sizing:border-box}
+const STORAGE_KEY = "captain-yasser-app-state";
 
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top, rgba(239,68,68,.10), transparent 24%),
-        linear-gradient(180deg, #09090d 0%, #111118 100%);
-    }
+// ===================== Firebase Setup ===================== const firebaseConfig = { apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4", authDomain: "captain-yasser-pro.firebaseapp.com", projectId: "captain-yasser-pro", storageBucket: "captain-yasser-pro.firebasestorage.app", messagingSenderId: "1025929025248", appId: "1:1025929025248:web:86bb9469f4a5cd90356285", };
 
-    .app{
-      max-width:480px;
-      margin:0 auto;
-      min-height:100vh;
-      padding:16px 16px 96px;
-    }
+const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const CLOUD_DOC_KEY = "captain-yasser-user-state";
 
-    .status-badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background:#101018;
-      border:1px solid var(--line);
-      color:var(--muted);
-      padding:10px 14px;
-      border-radius:16px;
-      font-size:13px;
-      margin-bottom:14px;
-    }
+type AppState = { calories: number; calorieGoal: number; protein: number; proteinGoal: number; carbs: number; fats: number; steps: number; antiAgingScore: number; points: number; workoutDone: boolean; streak: number; level: number; achievements: string[]; lastActiveDate: string; };
 
-    .danger{
-      color:#ffd3d3;
-      background:#251517;
-      border-color:#4a2528;
-    }
+const defaultState: AppState = { calories: 1820, calorieGoal: 2200, protein: 128, proteinGoal: 160, carbs: 155, fats: 58, steps: 6240, antiAgingScore: 84, points: 45, workoutDone: false, streak: 0, level: 1, achievements: [], lastActiveDate: "", };
 
-    .hero{
-      background:linear-gradient(135deg,#171722 0%, #26161b 100%);
-      border:1px solid var(--line);
-      border-radius:28px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      margin-bottom:14px;
-    }
+function Ring({ label, value, icon: Icon, subtitle }: any) { const circumference = 2 * Math.PI * 34; const offset = circumference - (value / 100) * circumference; return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl shadow-2xl"> <CardContent className="p-5 flex flex-col items-center gap-3"> <div className="relative h-24 w-24"> <svg className="h-24 w-24 -rotate-90" viewBox="0 0 84 84"> <circle cx="42" cy="42" r="34" stroke="currentColor" strokeWidth="8" fill="none" className="text-zinc-800" /> <circle
+cx="42"
+cy="42"
+r="34"
+stroke="currentColor"
+strokeWidth="8"
+fill="none"
+strokeLinecap="round"
+strokeDasharray={circumference}
+strokeDashoffset={offset}
+className="text-red-500 transition-all duration-500"
+/> </svg> <div className="absolute inset-0 flex flex-col items-center justify-center text-center"> <Icon className="h-4 w-4 text-yellow-400 mb-1" /> <div className="text-lg font-bold text-white">{value}%</div> </div> </div> <div className="text-center"> <div className="text-sm font-semibold text-white">{label}</div> <div className="text-xs text-zinc-400">{subtitle}</div> </div> </CardContent> </Card> ); }
 
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
+function StatCard({ label, value, unit, icon: Icon }: any) { return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 flex items-center gap-3"> <div className="h-11 w-11 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20"> <Icon className="h-5 w-5 text-red-400" /> </div> <div> <div className="text-xs text-zinc-400">{label}</div> <div className="text-lg font-bold text-white"> {value} <span className="text-sm font-medium text-zinc-400">{unit}</span> </div> </div> </CardContent> </Card> ); }
 
-    .title{
-      margin:4px 0 8px;
-      font-size:31px;
-      font-weight:900;
-      line-height:1.2;
-    }
+function MiniTask({ title, points, done = false }: any) { return ( <div className={flex items-center justify-between rounded-2xl border px-4 py-3 ${done ? "bg-yellow-400/10 border-yellow-400/20" : "bg-zinc-900 border-zinc-800"}}> <div> <div className="text-sm font-medium text-white">{title}</div> <div className="text-xs text-zinc-400">{points}</div> </div> <div className={h-3 w-3 rounded-full ${done ? "bg-yellow-400" : "bg-zinc-700"}} /> </div> ); }
 
-    .sub{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.8;
-    }
+function Dashboard({ appState, setTab }: { appState: AppState; setTab: (tab: string) => void }) { const level = appState.level || Math.floor(appState.points / 100) + 1; const levelProgress = appState.points % 100; const proteinPct = Math.min(100, Math.round((appState.protein / appState.proteinGoal) * 100)); const caloriePct = Math.min(100, Math.round((appState.calories / appState.calorieGoal) * 100)); const badges = [ { label: "أول تمرين", active: appState.achievements.includes("first_workout") }, { label: "بروتين مكتمل", active: appState.achievements.includes("protein_goal") }, { label: "سلسلة نارية", active: appState.achievements.includes("hot_streak") || appState.streak >= 3 }, ];
 
-    .xp-box{
-      min-width:102px;
-      text-align:center;
-      background:rgba(246,195,68,.08);
-      border:1px solid rgba(246,195,68,.18);
-      color:var(--yellow);
-      border-radius:20px;
-      padding:12px;
-    }
+return ( <div className="space-y-5"> <div className="rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950 to-red-950/30 p-5 shadow-2xl"> <div className="flex items-start justify-between gap-4"> <div> <div className="text-sm text-zinc-400">صباح الخير</div> <h1 className="mt-1 text-2xl font-bold tracking-tight">كابتن ياسر 🔥</h1> <p className="mt-2 text-sm text-zinc-300">جاهز تبني عضل وتحافظ على صحتك اليوم؟</p> </div> <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-right"> <div className="text-xs text-yellow-300">النقاط</div> <div className="text-xl font-bold text-yellow-400">{appState.points}</div> </div> </div>
 
-    .xp-box .num{
-      margin-top:6px;
-      font-size:30px;
-      font-weight:900;
-    }
-
-    .grid-2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-      margin-top:14px;
-    }
-
-    .grid-3{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:16px;
-    }
-
-    .card h3{
-      margin:0 0 8px;
-      font-size:14px;
-      font-weight:700;
-      color:var(--muted);
-    }
-
-    .big{
-      margin:0;
-      font-size:27px;
-      font-weight:900;
-    }
-
-    .small{
-      margin-top:8px;
-      font-size:13px;
-      line-height:1.7;
-      color:var(--muted);
-    }
-
-    .section{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:16px;
-      margin-top:14px;
-    }
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:14px;
-    }
-
-    .section-title h2{
-      margin:0;
-      font-size:20px;
-      font-weight:900;
-    }
-
-    .muted{
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .label-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      margin-top:10px;
-      font-size:14px;
-    }
-
-    .bar{
-      width:100%;
-      height:12px;
-      margin-top:8px;
-      overflow:hidden;
-      border-radius:999px;
-      background:#262636;
-    }
-
-    .bar > span{
-      display:block;
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background:linear-gradient(90deg,var(--red), var(--yellow));
-      transition:.25s ease;
-    }
-
-    .chip{
-      background:var(--card-soft);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:14px 8px;
-      text-align:center;
-    }
-
-    .chip strong{
-      display:block;
-      margin-top:8px;
-      font-size:22px;
-      font-weight:900;
-    }
-
-    .coach{
-      margin-top:12px;
-      padding:14px;
-      border-radius:18px;
-      background:var(--green-soft);
-      border:1px solid var(--green-line);
-      color:#d4ffe1;
-      font-size:14px;
-      line-height:1.8;
-    }
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .item{
-      background:var(--card-soft);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:14px;
-    }
-
-    .item-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:8px;
-    }
-
-    .item h4{
-      margin:0;
-      font-size:16px;
-      font-weight:800;
-    }
-
-    .item p{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.7;
-    }
-
-    .item ul{
-      margin:8px 0 0;
-      padding:0 18px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.8;
-    }
-
-    button{
-      border:none;
-      cursor:pointer;
-      border-radius:16px;
-      padding:13px 14px;
-      font-size:14px;
-      font-weight:800;
-      transition:.2s ease;
-    }
-
-    button:active{transform:scale(.98)}
-
-    .btn-red{
-      background:var(--red);
-      color:#fff;
-    }
-
-    .btn-red:hover{
-      background:var(--red-dark);
-    }
-
-    .btn-dark{
-      background:#252536;
-      color:#fff;
-      border:1px solid var(--line);
-    }
-
-    .btn-green{
-      background:#173020;
-      color:#c4f7d2;
-      border:1px solid #29503a;
-    }
-
-    .profile-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .footer{
-      position:fixed;
-      right:0;
-      left:0;
-      bottom:0;
-      z-index:20;
-      display:flex;
-      justify-content:center;
-      padding:10px 10px max(10px, env(safe-area-inset-bottom));
-      background:#111118;
-      border-top:1px solid var(--line);
-    }
-
-    .footer-inner{
-      width:min(480px,100%);
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:8px;
-    }
-
-    .nav-btn{
-      background:#1b1b27;
-      border:1px solid var(--line);
-      color:var(--muted);
-      border-radius:16px;
-      padding:12px 8px;
-      font-size:13px;
-      font-weight:800;
-    }
-
-    .nav-btn.active{
-      background:#272738;
-      color:#fff;
-      border-color:#3a3a4f;
-    }
-
-    .hidden{display:none !important}
-  </style>
-</head>
-<body>
-  <div class="app">
-    <div class="status-badge" id="cloudStatus">☁️ جاري الاتصال بالسحابة...</div>
-
-    <!-- الرئيسية -->
-    <div id="screen-dashboard">
-      <div class="hero">
-        <div class="row">
-          <div>
-            <div class="sub">لوحتك الشخصية</div>
-            <div class="title" id="heroName">الكابتن ياسر 🚀</div>
-            <div class="sub">نظامك الذكي لبناء العضلات، رفع الطاقة، وتحسين صحتك بشكل شامل.</div>
-          </div>
-
-          <div class="xp-box">
-            <div>XP</div>
-            <div class="num" id="heroXp">0</div>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <h3>البروتين اليومي</h3>
-            <p class="big" id="proteinMain">0 / 160</p>
-            <div class="small">هدفك اليومي لدعم بناء العضلات والاستشفاء.</div>
-          </div>
-
-          <div class="card">
-            <h3>المستوى الحالي</h3>
-            <p class="big" id="levelMain">1</p>
-            <div class="small">يرتفع تلقائيًا حسب نقاط الخبرة داخل التطبيق.</div>
-          </div>
-        </div>
-
-        <div class="label-row">
-          <span id="levelProgressText">0 / 100</span>
-          <span>تقدم المستوى</span>
-        </div>
-        <div class="bar">
-          <span id="levelProgressBar"></span>
-        </div>
-
-        <div class="grid-2" style="margin-top:14px;">
-          <button class="btn-dark" id="btnQuickProtein">🥤 أضف بروتين (+10 XP)</button>
-          <button class="btn-red" id="btnQuickWorkout">💪 سجّل تمرينًا (+20 XP)</button>
-        </div>
+<div className="mt-4 rounded-2xl border border-zinc-800 bg-black/30 p-4">
+      <div className="flex items-center justify-between text-sm">
+        <span className="text-zinc-300">Level {level} 🔥</span>
+        <span className="text-yellow-400 font-bold">{levelProgress}/100</span>
       </div>
-
-      <div class="section">
-        <div class="section-title">
-          <h2>ملخص اليوم</h2>
-          <span class="muted" id="antiAgingText">مؤشر الحيوية: 0</span>
-        </div>
-
-        <div class="grid-3">
-          <div class="chip">
-            السعرات
-            <strong id="caloriesChip">0</strong>
-          </div>
-          <div class="chip">
-            البروتين
-            <strong id="proteinChip">0</strong>
-          </div>
-          <div class="chip">
-            التمارين
-            <strong id="workoutsChip">0</strong>
-          </div>
-        </div>
-
-        <div class="coach" id="coachBox">AI Coach: جاهز لتحليل بياناتك وتقديم توصية يومية.</div>
+      <Progress value={levelProgress} className="mt-3 h-2 bg-zinc-800" />
+      <div className="mt-3 flex items-center justify-between text-xs">
+        <span className="text-zinc-400">Streak</span>
+        <span className="font-bold text-red-400">{appState.streak} أيام 🔥</span>
       </div>
     </div>
 
-    <!-- التمارين -->
-    <div id="screen-workouts" class="hidden">
-      <div class="section">
-        <div class="section-title">
-          <h2>التمارين</h2>
-          <span class="muted">ربط مباشر مع Firebase</span>
-        </div>
-
-        <div class="list">
-          <div class="item">
-            <div class="item-top">
-              <h4>تسجيل تمرين كامل</h4>
-              <button class="btn-red" id="btnWorkoutFull">+20 نقطة خبرة</button>
-            </div>
-            <p>يسجل تمرينك، ويرفع نقاط الخبرة، ويحدث مستواك تلقائيًا.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>إعادة ضبط التمارين</h4>
-              <button class="btn-dark" id="btnResetWorkout">إعادة</button>
-            </div>
-            <p>يصفّر عدد التمارين إذا رغبت تبدأ من جديد.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>برنامجك الأسبوعي المقترح</h4>
-            </div>
-            <ul>
-              <li>اليوم 1: صدر + ترايسبس</li>
-              <li>اليوم 2: ظهر + بايسبس</li>
-              <li>اليوم 3: أرجل + بطن</li>
-              <li>اليوم 4: أكتاف + كارديو خفيف</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <div className="mt-5 grid grid-cols-3 gap-3">
+      <Ring label="التمرين" value={appState.workoutDone ? 100 : 72} icon={Dumbbell} subtitle={appState.workoutDone ? "أُنجز اليوم" : "جاهز تقريبًا"} />
+      <Ring label="التغذية" value={proteinPct} icon={UtensilsCrossed} subtitle={proteinPct >= 100 ? "بروتين مكتمل" : "ناقص بروتين"} />
+      <Ring label="النوم" value={81} icon={Moon} subtitle="نوم جيد" />
     </div>
 
-    <!-- الوجبات -->
-    <div id="screen-meals" class="hidden">
-      <div class="section">
-        <div class="section-title">
-          <h2>الوجبات والتغذية</h2>
-          <span class="muted">تحديث فوري على السحابة</span>
-        </div>
-
-        <div class="list">
-          <div class="item">
-            <div class="item-top">
-              <h4>إضافة 30 جم بروتين</h4>
-              <button class="btn-red" id="btnAddProtein">إضافة</button>
-            </div>
-            <p>يرفع البروتين اليومي، ويزيد XP، ويساعدك على الاقتراب من هدفك.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>إضافة 400 سعرة</h4>
-              <button class="btn-dark" id="btnAddCalories">إضافة</button>
-            </div>
-            <p>تفيد في تتبع الطاقة والسعرات اليومية بشكل سريع.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>وجبات مقترحة</h4>
-            </div>
-            <ul>
-              <li>فطور: بيض + شوفان + زبادي يوناني</li>
-              <li>غداء: دجاج + رز + خضار</li>
-              <li>سناك: واي بروتين + موز</li>
-              <li>عشاء: تونة + خبز أسمر + سلطة</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- المكملات -->
-    <div id="screen-supplements" class="hidden">
-      <div class="section">
-        <div class="section-title">
-          <h2>المكملات والفيتامينات</h2>
-          <span class="muted">خطة أساسية مقترحة</span>
-        </div>
-
-        <div class="list">
-          <div class="item">
-            <div class="item-top">
-              <h4>ADAM Multi-Vitamin</h4>
-              <button class="btn-green">أساسي</button>
-            </div>
-            <p>مرة يوميًا بعد الأكل لدعم الصحة العامة والطاقة.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>الزنك</h4>
-              <button class="btn-green">أساسي</button>
-            </div>
-            <p>يفضل حسب الجرعة المكتوبة على العبوة أو توجيه المختص.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>واي بروتين</h4>
-              <button class="btn-green">مهم</button>
-            </div>
-            <p>بعد التمرين أو عند صعوبة الوصول لاحتياجك من البروتين.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>فيتامين د</h4>
-              <button class="btn-dark">اختياري</button>
-            </div>
-            <p>يفضل حسب التحاليل أو توصية الطبيب.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>أوميغا 3</h4>
-              <button class="btn-dark">اختياري</button>
-            </div>
-            <p>مفيد للصحة العامة ودعم المفاصل والقلب.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>المغنيسيوم</h4>
-              <button class="btn-dark">اختياري</button>
-            </div>
-            <p>يفضل مساءً، وقد يساعد على الاسترخاء وتحسين النوم.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- الملف الشخصي -->
-    <div id="screen-profile" class="hidden">
-      <div class="section">
-        <div class="section-title">
-          <h2>الملف الشخصي</h2>
-          <span class="muted">من قاعدة البيانات مباشرة</span>
-        </div>
-
-        <div class="profile-grid">
-          <div class="card">
-            <h3>المعرّف</h3>
-            <p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">-</p>
-          </div>
-
-          <div class="card">
-            <h3>الاسم</h3>
-            <p class="big" id="profileName">-</p>
-          </div>
-
-          <div class="card">
-            <h3>XP</h3>
-            <p class="big" id="profileXp">-</p>
-          </div>
-
-          <div class="card">
-            <h3>المستوى</h3>
-            <p class="big" id="profileLevel">-</p>
-          </div>
-        </div>
-
-        <div class="coach">
-          إذا ظهرت لك هذه البيانات، فهذا يعني أن التطبيق الكامل مرتبط بـ Firebase بشكل صحيح.
-        </div>
-      </div>
-    </div>
+    <Button onClick={() => setTab("workout")} className="mt-5 h-14 w-full rounded-2xl bg-red-600 text-base font-bold hover:bg-red-500">
+      <Play className="ml-2 h-5 w-5" /> ابدأ تمرين اليوم
+    </Button>
   </div>
 
-  <div class="footer">
-    <div class="footer-inner">
-      <button class="nav-btn active" data-screen="dashboard">الرئيسية</button>
-      <button class="nav-btn" data-screen="workouts">التمارين</button>
-      <button class="nav-btn" data-screen="meals">الوجبات</button>
-      <button class="nav-btn" data-screen="supplements">المكملات</button>
-      <button class="nav-btn" data-screen="profile">الملف</button>
-    </div>
+  <div className="grid grid-cols-2 gap-3">
+    <StatCard label="السعرات" value={`${appState.calories} / ${appState.calorieGoal}`} unit="سعرة" icon={Flame} />
+    <StatCard label="البروتين" value={`${appState.protein} / ${appState.proteinGoal}`} unit="جم" icon={Dumbbell} />
+    <StatCard label="الخطوات" value={appState.steps.toLocaleString()} unit="خطوة" icon={Footprints} />
+    <StatCard label="Anti-Aging" value={`${appState.antiAgingScore}`} unit="/ 100" icon={ShieldCheck} />
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      doc,
-      updateDoc,
-      addDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl overflow-hidden">
+    <CardHeader className="pb-3">
+      <div className="flex items-center justify-between">
+        <CardTitle className="text-lg">تسلسل التمرين اليوم</CardTitle>
+        <span className="text-xs text-zinc-400">مضاد للإصابة</span>
+      </div>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      <div>
+        <div className="mb-2 flex items-center justify-between text-sm">
+          <span className="text-zinc-300">التسخين قبل التمرين</span>
+          <span className="text-yellow-400 font-semibold">5–7 دقائق</span>
+        </div>
+        <Progress value={100} className="h-2 bg-zinc-800" />
+      </div>
+      <div>
+        <div className="mb-2 flex items-center justify-between text-sm">
+          <span className="text-zinc-300">التمرين الأساسي</span>
+          <span className="text-red-400 font-semibold">45–60 دقيقة</span>
+        </div>
+        <Progress value={appState.workoutDone ? 100 : 68} className="h-2 bg-zinc-800" />
+      </div>
+      <div>
+        <div className="mb-2 flex items-center justify-between text-sm">
+          <span className="text-zinc-300">الإطالة بعد التمرين</span>
+          <span className="text-yellow-400 font-semibold">5–10 دقائق</span>
+        </div>
+        <Progress value={appState.workoutDone ? 100 : 25} className="h-2 bg-zinc-800" />
+      </div>
+    </CardContent>
+  </Card>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
-      authDomain: "captain-yasser-pro.firebaseapp.com",
-      projectId: "captain-yasser-pro",
-      storageBucket: "captain-yasser-pro.firebasestorage.app",
-      messagingSenderId: "1025929025248",
-      appId: "1:1025929025248:web:86bb9469f4a5cd90356285"
-    };
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardHeader className="pb-3">
+      <div className="flex items-center justify-between">
+        <CardTitle className="text-lg">تحديات هذا الأسبوع</CardTitle>
+        <div className="flex items-center gap-1 text-yellow-400 text-sm font-medium">
+          <Trophy className="h-4 w-4" /> 2 / 4
+        </div>
+      </div>
+    </CardHeader>
+    <CardContent className="space-y-3">
+      <MiniTask title="4 أيام تمرين" points="+20 نقطة" done={appState.workoutDone} />
+      <MiniTask title="إكمال التسخين قبل كل تمرين" points="+10 نقاط" done={appState.workoutDone} />
+      <MiniTask title="160 جم بروتين 5 أيام" points="+15 نقطة" done={proteinPct >= 100} />
+      <MiniTask title="نوم 7 ساعات أو أكثر" points="+15 نقطة" />
+    </CardContent>
+  </Card>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardHeader className="pb-3">
+      <CardTitle className="text-lg">الشارات والإنجازات</CardTitle>
+    </CardHeader>
+    <CardContent className="grid grid-cols-3 gap-3">
+      {badges.map((badge) => (
+        <div key={badge.label} className={`rounded-2xl border p-3 text-center ${badge.active ? "border-yellow-500/30 bg-yellow-500/10" : "border-zinc-800 bg-zinc-900"}`}>
+          <div className="text-lg mb-1">{badge.active ? "🏆" : "🔒"}</div>
+          <div className={`text-xs font-medium ${badge.active ? "text-yellow-300" : "text-zinc-500"}`}>{badge.label}</div>
+        </div>
+      ))}
+    </CardContent>
+  </Card>
 
-    let currentDocId = null;
-    let currentData = null;
+  <Card className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-zinc-950 to-red-950/20">
+    <CardContent className="p-5">
+      <div className="flex items-start gap-3">
+        <div className="h-12 w-12 rounded-2xl border border-red-500/20 bg-red-500/10 flex items-center justify-center shrink-0">
+          <Brain className="h-6 w-6 text-red-400" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-lg font-bold">AI Coach</h3>
+            <Button variant="ghost" className="text-zinc-300 hover:text-white hover:bg-white/5 rounded-xl px-2">
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-zinc-300">
+            {appState.workoutDone
+              ? "أداء ممتاز اليوم 🔥 حافظ على الإطالة وخذ وجبة بروتين بعد التمرين."
+              : `نومك جيد اليوم، لكن باقي لك ${Math.max(appState.proteinGoal - appState.protein, 0)} جم بروتين. خذ وجبة عالية البروتين بعد التمرين وابدأ بالأجهزة ثم أضف الأوزان الحرة تدريجيًا.`}
+          </p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
 
-    const els = {
-      cloudStatus: document.getElementById("cloudStatus"),
-      heroName: document.getElementById("heroName"),
-      heroXp: document.getElementById("heroXp"),
-      levelMain: document.getElementById("levelMain"),
-      proteinMain: document.getElementById("proteinMain"),
-      levelProgressText: document.getElementById("levelProgressText"),
-      levelProgressBar: document.getElementById("levelProgressBar"),
-      caloriesChip: document.getElementById("caloriesChip"),
-      proteinChip: document.getElementById("proteinChip"),
-      workoutsChip: document.getElementById("workoutsChip"),
-      antiAgingText: document.getElementById("antiAgingText"),
-      coachBox: document.getElementById("coachBox"),
-      profileDocId: document.getElementById("profileDocId"),
-      profileName: document.getElementById("profileName"),
-      profileXp: document.getElementById("profileXp"),
-      profileLevel: document.getElementById("profileLevel")
-    };
+); }
 
-    function defaultUser() {
-      return {
-        name: "الكابتن ياسر",
-        level: 1,
-        xp: 0,
-        protein: 0,
-        proteinGoal: 160,
-        calories: 0,
-        workouts: 0,
-        antiAgingScore: 60
-      };
-    }
+function RestTimer({ seconds = 60 }: { seconds?: number }) { const [time, setTime] = useState(seconds);
 
-    function calcLevel(xp) {
-      return Math.floor((xp || 0) / 100) + 1;
-    }
+useEffect(() => { if (time <= 0) return; const timer = setTimeout(() => setTime(time - 1), 1000); return () => clearTimeout(timer); }, [time]);
 
-    function calcProgress(xp) {
-      return (xp || 0) % 100;
-    }
+return <div className="text-center text-yellow-400 font-bold">راحة: {time}s</div>; }
 
-    function calcAntiAging(data) {
-      let score = 60;
-      if ((data.protein || 0) >= (data.proteinGoal || 160)) score += 15;
-      if ((data.workouts || 0) >= 1) score += 10;
-      if ((data.calories || 0) >= 400) score += 5;
-      return Math.min(score, 100);
-    }
+function ExerciseCard({ name, sets, reps }: any) { const [doneSets, setDoneSets] = useState(0); const [resting, setResting] = useState(false);
 
-    function coachMessage(data) {
-      const protein = data.protein || 0;
-      const proteinGoal = data.proteinGoal || 160;
-      const workouts = data.workouts || 0;
+return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 space-y-3"> <div className="flex items-center justify-between"> <div> <div className="text-white font-bold">{name}</div> <div className="text-xs text-zinc-400">{sets} × {reps}</div> </div> <div className="text-yellow-400 text-sm">{doneSets}/{sets}</div> </div>
 
-      if (workouts >= 1 && protein >= proteinGoal) {
-        return "AI Coach: يوم ممتاز جدًا 🔥 أنت قريب من تحقيق يوم مثالي لبناء العضلات.";
+{resting && <RestTimer />}
+
+    <div className="flex gap-2">
+      <Button
+        onClick={() => {
+          setDoneSets(Math.min(doneSets + 1, sets));
+          setResting(true);
+          setTimeout(() => setResting(false), 60000);
+        }}
+        className="flex-1 bg-red-600 hover:bg-red-500"
+      >
+        تمت الجولة
+      </Button>
+      <Button variant="outline" className="border-zinc-700 text-zinc-300">وزن</Button>
+    </div>
+
+    <div className="text-xs text-zinc-500">💡 نصيحة: ركّز على الأداء الصحيح قبل زيادة الوزن</div>
+  </CardContent>
+</Card>
+
+); }
+
+function WorkoutScreen({ setAppState }: { setAppState: React.Dispatch<React.SetStateAction<AppState>> }) { const [completedWarmup, setCompletedWarmup] = useState(false); const [completedStretch, setCompletedStretch] = useState(false);
+
+return ( <div className="space-y-5"> <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-5"> <div className="flex items-center justify-between"> <div> <div className="text-sm text-zinc-400">تمرين اليوم</div> <div className="text-xl font-bold">صدر + ترايسبس 💪</div> </div> <div className="text-red-400 text-sm">60 دقيقة</div> </div>
+
+<Button onClick={() => setCompletedWarmup(true)} className="mt-4 w-full h-12 bg-red-600 hover:bg-red-500 rounded-2xl">
+        <Timer className="ml-2 h-4 w-4" /> {completedWarmup ? "تم التسخين ✅" : "ابدأ التسخين"}
+      </Button>
+    </CardContent>
+  </Card>
+
+  <ExerciseCard name="Bench Press" sets={4} reps={8} />
+  <ExerciseCard name="Incline Dumbbell Press" sets={3} reps={10} />
+  <ExerciseCard name="Chest Fly" sets={3} reps={12} />
+
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardContent className="p-5 text-center">
+      <div className="text-yellow-400 mb-2">الإطالة بعد التمرين</div>
+      <div className="mb-3 text-xs text-zinc-400">5–10 دقائق لتقليل الشد العضلي وتحسين الاستشفاء</div>
+      <Button
+        onClick={() => {
+          setCompletedStretch(true);
+          setAppState((prev) => {
+            const achievements = new Set(prev.achievements);
+            achievements.add("first_workout");
+            return {
+              ...prev,
+              workoutDone: true,
+              points: prev.points + 20,
+              achievements: Array.from(achievements),
+            };
+          });
+        }}
+        className="w-full bg-yellow-500 text-black hover:bg-yellow-400"
+      >
+        <CheckCircle2 className="ml-2 h-4 w-4" /> {completedStretch ? "تم إنهاء التمرين ✅" : "إنهاء التمرين"}
+      </Button>
+    </CardContent>
+  </Card>
+</div>
+
+); }
+
+function MacroCard({ label, value, target, unit, accent }: any) { const pct = Math.min(100, Math.round((value / target) * 100)); return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 space-y-3"> <div className="flex items-center justify-between"> <div className="text-sm text-zinc-300">{label}</div> <div className={text-sm font-bold ${accent}}>{pct}%</div> </div> <div className="text-xl font-bold text-white"> {value} <span className="text-sm text-zinc-400">/ {target} {unit}</span> </div> <Progress value={pct} className="h-2 bg-zinc-800" /> </CardContent> </Card> ); }
+
+function QuickMeal({ title, subtitle, protein, calories, onAdd }: any) { return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4 flex items-center justify-between gap-3"> <div> <div className="text-white font-semibold">{title}</div> <div className="text-xs text-zinc-400 mt-1">{subtitle}</div> <div className="text-xs text-yellow-400 mt-2">{protein} بروتين • {calories} سعرة</div> </div> <Button onClick={onAdd} className="bg-red-600 hover:bg-red-500 rounded-2xl px-4">إضافة</Button> </CardContent> </Card> ); }
+
+function NutritionScreen({ appState, setAppState }: { appState: AppState; setAppState: React.Dispatch<React.SetStateAction<AppState>> }) { const remainingProtein = Math.max(appState.proteinGoal - appState.protein, 0);
+
+const addMeal = ({ calories, protein }: { calories: number; protein: number }) => { setAppState((prev) => { const nextProtein = prev.protein + protein; const achievements = new Set(prev.achievements); if (nextProtein >= prev.proteinGoal) achievements.add("protein_goal"); return { ...prev, calories: prev.calories + calories, protein: nextProtein, points: prev.points + 5, achievements: Array.from(achievements), }; }); };
+
+return ( <div className="space-y-5"> <Card className="rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950 to-red-950/30 p-1 shadow-2xl"> <CardContent className="p-5"> <div className="flex items-center justify-between"> <div> <div className="text-sm text-zinc-400">نظام التغذية الذكي</div> <h2 className="mt-1 text-2xl font-bold">تابع أكلك باحتراف 🔥</h2> <p className="mt-2 text-sm text-zinc-300">هدفك اليوم: بناء عضل نظيف + رفع البروتين</p> </div> <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-right"> <div className="text-xs text-yellow-300">Clean Score</div> <div className="text-xl font-bold text-yellow-400">88</div> </div> </div> </CardContent> </Card>
+
+<div className="grid grid-cols-2 gap-3">
+    <MacroCard label="السعرات" value={appState.calories} target={appState.calorieGoal} unit="سعرة" accent="text-red-400" />
+    <MacroCard label="البروتين" value={appState.protein} target={appState.proteinGoal} unit="جم" accent="text-yellow-400" />
+    <MacroCard label="الكربوهيدرات" value={appState.carbs} target={220} unit="جم" accent="text-red-400" />
+    <MacroCard label="الدهون" value={appState.fats} target={70} unit="جم" accent="text-yellow-400" />
+  </div>
+
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardHeader className="pb-3">
+      <CardTitle className="text-lg">إضافة سريعة</CardTitle>
+    </CardHeader>
+    <CardContent className="grid grid-cols-3 gap-3">
+      <Button className="h-16 rounded-2xl bg-red-600 hover:bg-red-500 text-sm">📷 تصوير الوجبة</Button>
+      <Button variant="outline" className="h-16 rounded-2xl border-zinc-700 text-zinc-200 text-sm">📦 مسح باركود</Button>
+      <Button variant="outline" className="h-16 rounded-2xl border-zinc-700 text-zinc-200 text-sm">✍️ إضافة يدوية</Button>
+    </CardContent>
+  </Card>
+
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardHeader className="pb-3">
+      <div className="flex items-center justify-between">
+        <CardTitle className="text-lg">اقتراحات سريعة لك</CardTitle>
+        <span className="text-xs text-zinc-400">عالية البروتين</span>
+      </div>
+    </CardHeader>
+    <CardContent className="space-y-3">
+      <QuickMeal title="فطور عضلي" subtitle="بيض + شوفان + زبادي يوناني" protein="35 جم" calories="520" onAdd={() => addMeal({ calories: 520, protein: 35 })} />
+      <QuickMeal title="غداء نظيف" subtitle="دجاج + رز + خضار" protein="48 جم" calories="690" onAdd={() => addMeal({ calories: 690, protein: 48 })} />
+      <QuickMeal title="سناك ذكي" subtitle="واي بروتين + موز" protein="27 جم" calories="210" onAdd={() => addMeal({ calories: 210, protein: 27 })} />
+    </CardContent>
+  </Card>
+
+  <Card className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-zinc-950 to-red-950/20">
+    <CardContent className="p-5">
+      <div className="flex items-start gap-3">
+        <div className="h-12 w-12 rounded-2xl border border-red-500/20 bg-red-500/10 flex items-center justify-center shrink-0">
+          <Brain className="h-6 w-6 text-red-400" />
+        </div>
+        <div className="flex-1">
+          <div className="text-lg font-bold">AI Nutrition Coach</div>
+          <p className="mt-2 text-sm leading-6 text-zinc-300">
+            باقي لك {remainingProtein} جم بروتين اليوم. أفضل خيار الآن: واي بروتين بعد التمرين أو وجبة دجاج خفيفة. أكلك جيد، لكن لا تنس المالتي فيتامين ADAM والزنك في وقتهما.
+          </p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+
+); }
+
+function MetricCard({ label, value, unit, change }: any) { return ( <Card className="bg-zinc-950 border-zinc-800 rounded-3xl"> <CardContent className="p-4"> <div className="text-xs text-zinc-400">{label}</div> <div className="text-xl font-bold text-white mt-1"> {value} <span className="text-sm text-zinc-400">{unit}</span> </div> <div className={text-xs mt-1 ${change > 0 ? "text-green-400" : "text-red-400"}}> {change > 0 ? "+" : ""}{change}% هذا الأسبوع </div> </CardContent> </Card> ); }
+
+function BodyAnalyticsScreen({ appState }: { appState: AppState }) { const bodyStatus = useMemo(() => { if (appState.antiAgingScore >= 85) return "ممتاز"; if (appState.antiAgingScore >= 70) return "جيد جدًا"; return "يحتاج تحسين"; }, [appState.antiAgingScore]);
+
+const muscleScore = useMemo(() => { let score = 50; if (appState.protein >= appState.proteinGoal) score += 20; if (appState.workoutDone) score += 20; if (appState.steps >= 6000) score += 10; return Math.min(score, 100); }, [appState]);
+
+return ( <div className="space-y-5"> <Card className="rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950 to-red-950/30 p-5 shadow-2xl"> <div className="flex items-center justify-between"> <div> <div className="text-sm text-zinc-400">تحليل جسمك</div> <h2 className="text-2xl font-bold mt-1">تقدمك الحقيقي 🔥</h2> <p className="text-sm text-zinc-300 mt-2">تابع التغيير في جسمك وليس فقط الوزن — الحالة الحالية: {bodyStatus}</p> </div> <div className="text-yellow-400 font-bold text-xl">{appState.antiAgingScore}</div> </div> </Card>
+
+<div className="grid grid-cols-2 gap-3">
+    <MetricCard label="الوزن" value="77" unit="كجم" change={-1.2} />
+    <MetricCard label="نسبة الدهون" value="21" unit="%" change={-2.1} />
+    <MetricCard label="الكتلة العضلية" value={Math.round(muscleScore / 3)} unit="كجم" change={1.5} />
+    <MetricCard label="محيط الخصر" value="88" unit="سم" change={-1.8} />
+  </div>
+
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardHeader>
+      <CardTitle className="text-lg">تقدمك الأسبوعي</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="text-sm text-zinc-400">📉 الوزن: {appState.calories <= appState.calorieGoal ? "ضمن الهدف بشكل ممتاز" : "أعلى من الهدف اليوم"}</div>
+      <div className="text-sm text-zinc-400 mt-2">📈 الكتلة العضلية: {appState.protein >= appState.proteinGoal ? "مرشحة للارتفاع 👏" : "تحتاج بروتين أعلى"}</div>
+      <div className="text-sm text-zinc-400 mt-2">🧬 Anti-Aging Score: {appState.antiAgingScore}/100</div>
+    </CardContent>
+  </Card>
+
+  <Card className="bg-zinc-950 border-zinc-800 rounded-3xl">
+    <CardHeader>
+      <CardTitle className="text-lg">صور التقدم</CardTitle>
+    </CardHeader>
+    <CardContent className="grid grid-cols-2 gap-3">
+      <div className="h-32 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-400">قبل</div>
+      <div className="h-32 bg-zinc-800 rounded-xl flex items-center justify-center text-zinc-400">بعد</div>
+    </CardContent>
+  </Card>
+
+  <Card className="rounded-3xl border border-red-500/20 bg-gradient-to-br from-zinc-950 to-red-950/20">
+    <CardContent className="p-5">
+      <div className="flex items-start gap-3">
+        <div className="h-12 w-12 rounded-2xl border border-red-500/20 bg-red-500/10 flex items-center justify-center">
+          <Brain className="h-6 w-6 text-red-400" />
+        </div>
+        <div>
+          <div className="font-bold text-lg">AI Body Coach</div>
+          <p className="text-sm text-zinc-300 mt-2">
+            {appState.protein >= appState.proteinGoal
+              ? "تقدمك ممتاز 🔥 البروتين اليوم مكتمل تقريبًا، واستمرارك على التمرين سيدعم زيادة الكتلة العضلية."
+              : "أداؤك جيد، لكن تحتاج ترفع البروتين قليلاً لزيادة الكتلة العضلية بشكل أسرع."}
+          </p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+
+); }
+
+export default function CaptainYasserApp() { const [cloudReady, setCloudReady] = useState(false); const [cloudStatus, setCloudStatus] = useState("محلي فقط"); const [cloudUid, setCloudUid] = useState(""); const [tab, setTab] = useState("dashboard"); const [appState, setAppState] = useState<AppState>(() => { if (typeof window !== "undefined") { const saved = window.localStorage.getItem(STORAGE_KEY); if (saved) { try { return { ...defaultState, ...JSON.parse(saved) }; } catch { return defaultState; } } } return defaultState; });
+
+useEffect(() => { setAppState((prev) => { let score = 60; if (prev.protein >= prev.proteinGoal) score += 15; if (prev.calories <= prev.calorieGoal) score += 10; if (prev.steps >= 6000) score += 5; if (prev.workoutDone) score += 10; score = Math.min(score, 100);
+
+const today = new Date().toISOString().split("T")[0];
+  const didQualifyToday = prev.workoutDone || prev.protein >= prev.proteinGoal || prev.steps >= 6000;
+  let streak = prev.streak;
+  if (didQualifyToday && prev.lastActiveDate !== today) streak += 1;
+
+  const achievements = new Set(prev.achievements);
+  if (prev.workoutDone) achievements.add("first_workout");
+  if (prev.protein >= prev.proteinGoal) achievements.add("protein_goal");
+  if (streak >= 3) achievements.add("hot_streak");
+
+  const level = Math.floor(prev.points / 100) + 1;
+  const nextState = {
+    ...prev,
+    antiAgingScore: score,
+    streak,
+    level,
+    achievements: Array.from(achievements),
+    lastActiveDate: didQualifyToday ? today : prev.lastActiveDate,
+  };
+
+  if (JSON.stringify(nextState) === JSON.stringify(prev)) return prev;
+  return nextState;
+});
+
+}, [appState.protein, appState.proteinGoal, appState.calories, appState.calorieGoal, appState.steps, appState.workoutDone, appState.points]);
+
+useEffect(() => { if (typeof window !== "undefined") { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(appState)); } }, [appState]);
+
+// ===================== Firebase Sync ===================== useEffect(() => { async function initCloud() { try { const result = await signInAnonymously(auth); const uid = result.user.uid; setCloudUid(uid);
+
+const ref = doc(db, "users", uid, "app", CLOUD_DOC_KEY);
+    const snapshot = await getDoc(ref);
+
+    if (snapshot.exists()) {
+      const cloudData = snapshot.data()?.state;
+      if (cloudData) {
+        setAppState((prev) => ({ ...prev, ...cloudData }));
       }
-      if (workouts >= 1 && protein < proteinGoal) {
-        return `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول لهدفك اليومي.`;
-      }
-      if (protein >= proteinGoal) {
-        return "AI Coach: تغذيتك ممتازة، أضف تمرين اليوم لرفع التقدم أكثر.";
-      }
-      return "AI Coach: ابدأ بالتمرين ثم ارفع بروتينك اليومي للوصول لهدفك العضلي.";
+    } else {
+      await setDoc(ref, { state: defaultState, updatedAt: Date.now() });
     }
 
-    function render(data) {
-      const level = calcLevel(data.xp);
-      const progress = calcProgress(data.xp);
-      const antiAging = calcAntiAging(data);
+    setCloudReady(true);
+    setCloudStatus("متصل بالسحابة ✅");
+  } catch (error) {
+    console.error("Firebase init failed", error);
+    setCloudStatus("فشل الربط بالسحابة");
+  }
+}
 
-      els.heroName.textContent = `${data.name || "الكابتن ياسر"} 🚀`;
-      els.heroXp.textContent = data.xp ?? 0;
-      els.levelMain.textContent = level;
-      els.proteinMain.textContent = `${data.protein || 0} / ${data.proteinGoal || 160}`;
-      els.levelProgressText.textContent = `${progress} / 100`;
-      els.levelProgressBar.style.width = `${progress}%`;
+initCloud();
 
-      els.caloriesChip.textContent = data.calories || 0;
-      els.proteinChip.textContent = data.protein || 0;
-      els.workoutsChip.textContent = data.workouts || 0;
-      els.antiAgingText.textContent = `مؤشر الحيوية: ${antiAging}`;
-      els.coachBox.textContent = coachMessage(data);
+}, []);
 
-      els.profileDocId.textContent = currentDocId || "-";
-      els.profileName.textContent = data.name || "-";
-      els.profileXp.textContent = data.xp ?? 0;
-      els.profileLevel.textContent = level;
-    }
+useEffect(() => { async function syncCloud() { if (!cloudReady || !auth.currentUser) return; try { const ref = doc(db, "users", auth.currentUser.uid, "app", CLOUD_DOC_KEY); await setDoc(ref, { state: appState, updatedAt: Date.now() }); } catch (error) { console.error("Cloud sync failed", error); } }
 
-    async function loadUser() {
-      try {
-        els.cloudStatus.textContent = "☁️ جاري قراءة البيانات من Firebase...";
-        const snapshot = await getDocs(collection(db, "users"));
+syncCloud();
 
-        if (snapshot.empty) {
-          const user = defaultUser();
-          const created = await addDoc(collection(db, "users"), user);
-          currentDocId = created.id;
-          currentData = user;
-        } else {
-          const firstDoc = snapshot.docs.find(d => {
-            const x = d.data();
-            return x.name !== undefined;
-          }) || snapshot.docs[0];
+}, [appState, cloudReady]);
 
-          currentDocId = firstDoc.id;
-          currentData = { ...defaultUser(), ...firstDoc.data() };
-        }
+return ( <div className="min-h-screen bg-black text-white"> <div className="mx-auto max-w-md px-4 pb-24 pt-6"> <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}> <div className="mb-4 rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-xs text-zinc-300"> حالة الحفظ: <span className="font-bold text-yellow-400">{cloudStatus}</span>{cloudUid ? <span className="mr-2 text-zinc-500">• UID: {cloudUid.slice(0, 8)}...</span> : null} </div> {tab === "dashboard" && <Dashboard appState={appState} setTab={setTab} />} {tab === "workout" && <WorkoutScreen setAppState={setAppState} />} {tab === "nutrition" && <NutritionScreen appState={appState} setAppState={setAppState} />} {tab === "body" && <BodyAnalyticsScreen appState={appState} />} </motion.div> </div>
 
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
-      } catch (e) {
-        console.error(e);
-        els.cloudStatus.textContent = "☁️ فشل الاتصال بالسحابة ❌";
-        els.cloudStatus.classList.add("danger");
-      }
-    }
+<div className="fixed bottom-0 left-0 right-0 border-t border-zinc-800 bg-zinc-950 p-3 flex justify-around">
+    <button onClick={() => setTab("dashboard")} className={`text-sm ${tab === "dashboard" ? "text-yellow-400" : "text-zinc-400"}`}>🏠</button>
+    <button onClick={() => setTab("workout")} className={`text-sm ${tab === "workout" ? "text-red-400" : "text-zinc-400"}`}>💪</button>
+    <button onClick={() => setTab("nutrition")} className={`text-sm ${tab === "nutrition" ? "text-yellow-400" : "text-zinc-400"}`}>🥗</button>
+    <button onClick={() => setTab("body")} className={`text-sm ${tab === "body" ? "text-yellow-400" : "text-zinc-400"}`}>📊</button>
+  </div>
+</div>
 
-    async function saveUser(partial) {
-      if (!currentDocId) return;
-
-      currentData = { ...currentData, ...partial };
-      currentData.level = calcLevel(currentData.xp);
-      currentData.antiAgingScore = calcAntiAging(currentData);
-
-      try {
-        const ref = doc(db, "users", currentDocId);
-        await updateDoc(ref, currentData);
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
-      } catch (e) {
-        console.error(e);
-        els.cloudStatus.textContent = "☁️ فشل الحفظ ❌";
-      }
-    }
-
-    document.getElementById("btnQuickWorkout").addEventListener("click", async () => {
-      await saveUser({
-        xp: (currentData.xp || 0) + 20,
-        workouts: (currentData.workouts || 0) + 1
-      });
-    });
-
-    document.getElementById("btnQuickProtein").addEventListener("click", async () => {
-      await saveUser({
-        xp: (currentData.xp || 0) + 10,
-        protein: (currentData.protein || 0) + 30
-      });
-    });
-
-    document.getElementById("btnWorkoutFull").addEventListener("click", async () => {
-      await saveUser({
-        xp: (currentData.xp || 0) + 20,
-        workouts: (currentData.workouts || 0) + 1
-      });
-    });
-
-    document.getElementById("btnResetWorkout").addEventListener("click", async () => {
-      await saveUser({
-        workouts: 0
-      });
-    });
-
-    document.getElementById("btnAddProtein").addEventListener("click", async () => {
-      await saveUser({
-        protein: (currentData.protein || 0) + 30,
-        xp: (currentData.xp || 0) + 10
-      });
-    });
-
-    document.getElementById("btnAddCalories").addEventListener("click", async () => {
-      await saveUser({
-        calories: (currentData.calories || 0) + 400
-      });
-    });
-
-    document.querySelectorAll(".nav-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const screen = btn.dataset.screen;
-
-        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        document.getElementById("screen-dashboard").classList.add("hidden");
-        document.getElementById("screen-workouts").classList.add("hidden");
-        document.getElementById("screen-meals").classList.add("hidden");
-        document.getElementById("screen-supplements").classList.add("hidden");
-        document.getElementById("screen-profile").classList.add("hidden");
-
-        document.getElementById(`screen-${screen}`).classList.remove("hidden");
-      });
-    });
-
-    loadUser();
-  </script>
-</body>
-</html>
+); }
