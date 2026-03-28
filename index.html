@@ -1,19 +1,507 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-  <title>Captain Yasser App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>كابتن ياسر</title>
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --card:#15151d;
+      --card-2:#1b1b25;
+      --line:#2a2a37;
+      --text:#f4f4f7;
+      --muted:#a6a6b3;
+      --red:#e53935;
+      --yellow:#f6c344;
+      --green:#22c55e;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      background:linear-gradient(180deg,#09090d 0%, #101018 100%);
+      color:var(--text);
+    }
+
+    .app{
+      max-width:460px;
+      margin:0 auto;
+      min-height:100vh;
+      padding:16px 16px 90px;
+    }
+
+    .top-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#111118;
+      border:1px solid var(--line);
+      color:var(--muted);
+      padding:10px 14px;
+      border-radius:16px;
+      font-size:13px;
+      margin-bottom:14px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#161620 0%, #231418 100%);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      margin-bottom:14px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .title{
+      font-size:28px;
+      font-weight:800;
+      margin:4px 0 8px;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .points-box{
+      min-width:96px;
+      text-align:center;
+      background:rgba(246,195,68,.08);
+      border:1px solid rgba(246,195,68,.18);
+      color:var(--yellow);
+      border-radius:18px;
+      padding:10px 12px;
+    }
+
+    .points-box .num{
+      font-size:24px;
+      font-weight:800;
+      margin-top:4px;
+    }
+
+    .cards-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin:14px 0;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+    }
+
+    .card h3{
+      margin:0 0 6px;
+      font-size:15px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .big{
+      font-size:26px;
+      font-weight:800;
+      margin:0;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .section{
+      margin-top:14px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:18px;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .progress-wrap{
+      margin-top:10px;
+    }
+
+    .progress-label{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:14px;
+      margin-bottom:6px;
+    }
+
+    .bar{
+      height:10px;
+      width:100%;
+      background:#242432;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .bar > span{
+      display:block;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--red), var(--yellow));
+      width:0%;
+      transition:.25s ease;
+    }
+
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    button{
+      border:none;
+      cursor:pointer;
+      border-radius:16px;
+      padding:14px 14px;
+      font-size:15px;
+      font-weight:700;
+      transition:.2s ease;
+    }
+
+    button:active{transform:scale(.98)}
+
+    .btn-primary{
+      background:var(--red);
+      color:white;
+    }
+
+    .btn-secondary{
+      background:#232330;
+      color:#f3f3f6;
+      border:1px solid var(--line);
+    }
+
+    .chips{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+    }
+
+    .chip{
+      background:var(--card-2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 10px;
+      text-align:center;
+    }
+
+    .chip strong{
+      display:block;
+      margin-top:8px;
+      font-size:18px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .list-item{
+      background:var(--card-2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .list-item .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .list-item h4{
+      margin:0;
+      font-size:15px;
+    }
+
+    .list-item p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .footer-nav{
+      position:fixed;
+      right:0;
+      left:0;
+      bottom:0;
+      background:#111118;
+      border-top:1px solid var(--line);
+      padding:10px 10px max(10px, env(safe-area-inset-bottom));
+      display:flex;
+      justify-content:center;
+      z-index:10;
+    }
+
+    .footer-inner{
+      width:min(460px,100%);
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+    }
+
+    .nav-btn{
+      background:#171722;
+      color:var(--muted);
+      border:1px solid var(--line);
+      padding:12px 8px;
+      border-radius:16px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .nav-btn.active{
+      color:#fff;
+      border-color:#3a3a4b;
+      background:#242432;
+    }
+
+    .hidden{display:none !important}
+
+    .notice{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#141a16;
+      border:1px solid #243427;
+      color:#bdf0c7;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .danger{
+      background:#241516;
+      border-color:#4a2426;
+      color:#ffc8c8;
+    }
+
+    .profile-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+  </style>
 </head>
 <body>
+  <div class="app">
+    <div class="top-badge" id="cloudStatus">☁️ جاري الاتصال بالسحابة...</div>
 
-  <h1>🚀 Captain Yasser App</h1>
+    <div id="screen-dashboard">
+      <div class="hero">
+        <div class="row">
+          <div>
+            <div class="sub">أهلاً بك</div>
+            <div class="title" id="userNameHero">كابتن ياسر 🚀</div>
+            <div class="sub">تطبيقك الرياضي الذكي لبناء العضلات، الطاقة، والصحة العامة.</div>
+          </div>
 
-  <h2 id="name">Loading...</h2>
-  <p id="level"></p>
-  <p id="xp"></p>
+          <div class="points-box">
+            <div>XP</div>
+            <div class="num" id="xpHero">0</div>
+          </div>
+        </div>
+
+        <div class="cards-2">
+          <div class="card">
+            <h3>المستوى الحالي</h3>
+            <p class="big" id="levelValue">1</p>
+            <div class="small">يتحدث تلقائيًا من Firebase</div>
+          </div>
+
+          <div class="card">
+            <h3>حالة البروتين</h3>
+            <p class="big" id="proteinValue">0 / 160</p>
+            <div class="small">هدفك اليومي لبناء العضلات</div>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>تقدم المستوى</span>
+            <span id="levelProgressText">0 / 100</span>
+          </div>
+          <div class="bar"><span id="levelProgressBar"></span></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" id="btnWorkoutXp">💪 سجّل تمرين (+20 XP)</button>
+          <button class="btn-secondary" id="btnProteinXp">🥤 أضف بروتين (+10 XP)</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h2>ملخص اليوم</h2>
+          <span class="muted" id="antiAgingText">Anti-Aging Score: 0</span>
+        </div>
+
+        <div class="chips">
+          <div class="chip">
+            السعرات
+            <strong id="caloriesChip">0</strong>
+          </div>
+          <div class="chip">
+            البروتين
+            <strong id="proteinChip">0</strong>
+          </div>
+          <div class="chip">
+            التمارين
+            <strong id="workoutsChip">0</strong>
+          </div>
+        </div>
+
+        <div class="notice" id="aiCoachBox">
+          AI Coach: جاهز لتحليل بياناتك...
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-workout" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>التمارين</h2>
+          <span class="muted">ربط مباشر مع Firebase</span>
+        </div>
+
+        <div class="list">
+          <div class="list-item">
+            <div class="top">
+              <h4>سجّل تمرين كامل</h4>
+              <button class="btn-primary" id="btnWorkoutFull">+20 XP</button>
+            </div>
+            <p>يضيف تمرين جديد، يرفع XP، ويحدّث المستوى تلقائيًا.</p>
+          </div>
+
+          <div class="list-item">
+            <div class="top">
+              <h4>إعادة تعيين التمارين</h4>
+              <button class="btn-secondary" id="btnResetWorkouts">إعادة</button>
+            </div>
+            <p>يصفّر عدد التمارين إذا احتجت تبدأ من جديد.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-nutrition" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>التغذية</h2>
+          <span class="muted">تحديث فوري على السحابة</span>
+        </div>
+
+        <div class="list">
+          <div class="list-item">
+            <div class="top">
+              <h4>إضافة 30 جم بروتين</h4>
+              <button class="btn-primary" id="btnAddProtein">إضافة</button>
+            </div>
+            <p>يرفع البروتين، يزيد XP، ويعدل توصية AI Coach.</p>
+          </div>
+
+          <div class="list-item">
+            <div class="top">
+              <h4>إضافة 400 سعرة</h4>
+              <button class="btn-secondary" id="btnAddCalories">إضافة</button>
+            </div>
+            <p>مفيدة عند تجربة تتبع الأكل والطاقة داخل التطبيق.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-profile" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>الملف الشخصي</h2>
+          <span class="muted">من قاعدة البيانات مباشرة</span>
+        </div>
+
+        <div class="profile-grid">
+          <div class="card">
+            <h3>الاسم</h3>
+            <p class="big" id="profileName">-</p>
+          </div>
+          <div class="card">
+            <h3>المعرف</h3>
+            <p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">-</p>
+          </div>
+          <div class="card">
+            <h3>المستوى</h3>
+            <p class="big" id="profileLevel">-</p>
+          </div>
+          <div class="card">
+            <h3>XP</h3>
+            <p class="big" id="profileXp">-</p>
+          </div>
+        </div>
+
+        <div class="notice" style="margin-top:12px;">
+          إذا شفت هذه البيانات، فهذا يعني أن التطبيق الكامل صار مربوط بـ Firebase بشكل صحيح.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-nav">
+    <div class="footer-inner">
+      <button class="nav-btn active" data-screen="dashboard">الرئيسية</button>
+      <button class="nav-btn" data-screen="workout">التمارين</button>
+      <button class="nav-btn" data-screen="nutrition">التغذية</button>
+      <button class="nav-btn" data-screen="profile">الملف</button>
+    </div>
+  </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      updateDoc,
+      addDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
@@ -27,20 +515,199 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    async function loadData() {
-      const querySnapshot = await getDocs(collection(db, "users"));
+    let currentDocId = null;
+    let currentData = null;
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
+    const els = {
+      cloudStatus: document.getElementById("cloudStatus"),
+      userNameHero: document.getElementById("userNameHero"),
+      xpHero: document.getElementById("xpHero"),
+      levelValue: document.getElementById("levelValue"),
+      proteinValue: document.getElementById("proteinValue"),
+      levelProgressText: document.getElementById("levelProgressText"),
+      levelProgressBar: document.getElementById("levelProgressBar"),
+      caloriesChip: document.getElementById("caloriesChip"),
+      proteinChip: document.getElementById("proteinChip"),
+      workoutsChip: document.getElementById("workoutsChip"),
+      antiAgingText: document.getElementById("antiAgingText"),
+      aiCoachBox: document.getElementById("aiCoachBox"),
+      profileName: document.getElementById("profileName"),
+      profileDocId: document.getElementById("profileDocId"),
+      profileLevel: document.getElementById("profileLevel"),
+      profileXp: document.getElementById("profileXp")
+    };
 
-        document.getElementById("name").innerText = data.name;
-        document.getElementById("level").innerText = "Level: " + data.level;
-        document.getElementById("xp").innerText = "XP: " + data.xp;
-      });
+    function defaultUser() {
+      return {
+        name: "Captain Yasser",
+        level: 1,
+        xp: 0,
+        protein: 0,
+        proteinGoal: 160,
+        calories: 0,
+        workouts: 0,
+        antiAgingScore: 60
+      };
     }
 
-    loadData();
-  </script>
+    function calcLevelFromXp(xp) {
+      return Math.floor(xp / 100) + 1;
+    }
 
+    function calcLevelProgress(xp) {
+      return xp % 100;
+    }
+
+    function calcAntiAgingScore(data) {
+      let score = 60;
+      if ((data.protein || 0) >= (data.proteinGoal || 160)) score += 15;
+      if ((data.workouts || 0) >= 1) score += 10;
+      if ((data.calories || 0) >= 400) score += 5;
+      return Math.min(score, 100);
+    }
+
+    function render(data) {
+      const level = calcLevelFromXp(data.xp || 0);
+      const levelProgress = calcLevelProgress(data.xp || 0);
+      const protein = data.protein || 0;
+      const proteinGoal = data.proteinGoal || 160;
+      const calories = data.calories || 0;
+      const workouts = data.workouts || 0;
+      const antiAging = calcAntiAgingScore(data);
+
+      els.userNameHero.textContent = `${data.name || "Captain Yasser"} 🚀`;
+      els.xpHero.textContent = data.xp ?? 0;
+      els.levelValue.textContent = level;
+      els.proteinValue.textContent = `${protein} / ${proteinGoal}`;
+      els.levelProgressText.textContent = `${levelProgress} / 100`;
+      els.levelProgressBar.style.width = `${levelProgress}%`;
+
+      els.caloriesChip.textContent = calories;
+      els.proteinChip.textContent = protein;
+      els.workoutsChip.textContent = workouts;
+      els.antiAgingText.textContent = `Anti-Aging Score: ${antiAging}`;
+
+      let coach = "AI Coach: ابدأ أول تمرين لك اليوم وارفَع البروتين.";
+      if (workouts >= 1 && protein < proteinGoal) {
+        coach = `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول للهدف.`;
+      } else if (workouts >= 1 && protein >= proteinGoal) {
+        coach = "AI Coach: أداء ممتاز جدًا 🔥 أنت قريب من يوم مثالي للبناء العضلي.";
+      } else if (protein >= proteinGoal) {
+        coach = "AI Coach: تغذيتك ممتازة، حاول تضيف تمرين اليوم لرفع التقدم أكثر.";
+      }
+
+      els.aiCoachBox.textContent = coach;
+
+      els.profileName.textContent = data.name || "-";
+      els.profileDocId.textContent = currentDocId || "-";
+      els.profileLevel.textContent = level;
+      els.profileXp.textContent = data.xp ?? 0;
+    }
+
+    async function loadUser() {
+      try {
+        els.cloudStatus.textContent = "☁️ جاري قراءة البيانات من Firebase...";
+        const snapshot = await getDocs(collection(db, "users"));
+
+        if (snapshot.empty) {
+          const newUser = defaultUser();
+          const created = await addDoc(collection(db, "users"), newUser);
+          currentDocId = created.id;
+          currentData = newUser;
+        } else {
+          const firstDoc = snapshot.docs.find(d => {
+            const x = d.data();
+            return x.name !== undefined;
+          }) || snapshot.docs[0];
+
+          currentDocId = firstDoc.id;
+          currentData = { ...defaultUser(), ...firstDoc.data() };
+        }
+
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ متصل بالسحابة ✅";
+      } catch (err) {
+        console.error(err);
+        els.cloudStatus.textContent = "☁️ فشل الاتصال بالسحابة ❌";
+        els.cloudStatus.classList.add("danger");
+      }
+    }
+
+    async function saveUser(partial) {
+      if (!currentDocId) return;
+
+      currentData = { ...currentData, ...partial };
+      currentData.level = calcLevelFromXp(currentData.xp || 0);
+      currentData.antiAgingScore = calcAntiAgingScore(currentData);
+
+      try {
+        const ref = doc(db, "users", currentDocId);
+        await updateDoc(ref, currentData);
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
+      } catch (err) {
+        console.error(err);
+        els.cloudStatus.textContent = "☁️ فشل الحفظ ❌";
+      }
+    }
+
+    document.getElementById("btnWorkoutXp").addEventListener("click", async () => {
+      await saveUser({
+        xp: (currentData.xp || 0) + 20,
+        workouts: (currentData.workouts || 0) + 1
+      });
+    });
+
+    document.getElementById("btnProteinXp").addEventListener("click", async () => {
+      await saveUser({
+        xp: (currentData.xp || 0) + 10,
+        protein: (currentData.protein || 0) + 30
+      });
+    });
+
+    document.getElementById("btnWorkoutFull").addEventListener("click", async () => {
+      await saveUser({
+        xp: (currentData.xp || 0) + 20,
+        workouts: (currentData.workouts || 0) + 1
+      });
+    });
+
+    document.getElementById("btnResetWorkouts").addEventListener("click", async () => {
+      await saveUser({
+        workouts: 0
+      });
+    });
+
+    document.getElementById("btnAddProtein").addEventListener("click", async () => {
+      await saveUser({
+        protein: (currentData.protein || 0) + 30,
+        xp: (currentData.xp || 0) + 10
+      });
+    });
+
+    document.getElementById("btnAddCalories").addEventListener("click", async () => {
+      await saveUser({
+        calories: (currentData.calories || 0) + 400
+      });
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const screen = btn.dataset.screen;
+
+        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        document.getElementById("screen-dashboard").classList.add("hidden");
+        document.getElementById("screen-workout").classList.add("hidden");
+        document.getElementById("screen-nutrition").classList.add("hidden");
+        document.getElementById("screen-profile").classList.add("hidden");
+
+        document.getElementById(`screen-${screen}`).classList.remove("hidden");
+      });
+    });
+
+    loadUser();
+  </script>
 </body>
 </html>
