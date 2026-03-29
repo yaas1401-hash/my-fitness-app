@@ -1,58 +1,1293 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>كابتن ياسر</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>كابتن ياسر</title>
+  <style>
+    :root{
+      --bg:#0a0a0f;
+      --bg-soft:#111118;
+      --card:#151520;
+      --card-soft:#1b1b27;
+      --line:#2b2b39;
+      --text:#f5f7fb;
+      --muted:#a8adbb;
+      --red:#ef4444;
+      --red-dark:#dc2626;
+      --yellow:#f6c344;
+      --green:#22c55e;
+      --green-soft:#102116;
+      --green-line:#21452c;
+      --blue:#60a5fa;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
+      --radius:24px;
+    }
 
-<style>
-body {
-  font-family: Arial;
-  background: #0f0f1a;
-  color: white;
-  text-align: center;
-}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(239,68,68,.10), transparent 24%),
+        linear-gradient(180deg, #09090d 0%, #111118 100%);
+    }
 
-.card {
-  background: #1c1c2e;
-  margin: 10px;
-  padding: 15px;
-  border-radius: 10px;
-}
+    a{color:inherit;text-decoration:none}
 
-button {
-  padding: 10px;
-  margin-top: 10px;
-  background: red;
-  color: white;
-  border: none;
-  border-radius: 10px;
-}
-</style>
+    .app{
+      max-width:480px;
+      margin:0 auto;
+      min-height:100vh;
+      padding:16px 16px 110px;
+    }
 
+    .hidden{display:none !important}
+
+    .splash{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(246,195,68,.18), transparent 25%),
+        radial-gradient(circle at 70% 10%, rgba(239,68,68,.18), transparent 25%),
+        linear-gradient(180deg,#08080c 0%, #12121a 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.45s ease;
+    }
+
+    .splash.fade-out{
+      opacity:0;
+      pointer-events:none;
+      transform:scale(1.02);
+    }
+
+    .splash-card{
+      width:min(360px,92vw);
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(17,17,24,.85);
+      backdrop-filter: blur(10px);
+      border-radius:30px;
+      padding:28px 22px;
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    .splash-logo{
+      font-size:48px;
+      margin-bottom:12px;
+    }
+
+    .splash-title{
+      margin:0;
+      font-size:32px;
+      font-weight:900;
+    }
+
+    .splash-sub{
+      color:var(--muted);
+      margin:12px 0 0;
+      line-height:1.8;
+      font-size:14px;
+    }
+
+    .loading-dots{
+      margin-top:18px;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .loading-dots span{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:var(--yellow);
+      animation:bounce 1s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(2){animation-delay:.15s}
+    .loading-dots span:nth-child(3){animation-delay:.3s}
+
+    @keyframes bounce{
+      0%,80%,100%{transform:translateY(0);opacity:.5}
+      40%{transform:translateY(-8px);opacity:1}
+    }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#101018;
+      border:1px solid var(--line);
+      color:var(--muted);
+      padding:10px 14px;
+      border-radius:16px;
+      font-size:13px;
+      margin-bottom:14px;
+    }
+
+    .status-error{
+      color:#ffd3d3;
+      background:#251517;
+      border-color:#4a2528;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#171722 0%, #26161b 100%);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .title{
+      margin:4px 0 8px;
+      font-size:31px;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .xp-box{
+      min-width:102px;
+      text-align:center;
+      background:rgba(246,195,68,.08);
+      border:1px solid rgba(246,195,68,.18);
+      color:var(--yellow);
+      border-radius:20px;
+      padding:12px;
+    }
+
+    .xp-box .num{
+      margin-top:6px;
+      font-size:30px;
+      font-weight:900;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+    }
+
+    .card h3{
+      margin:0 0 8px;
+      font-size:14px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .big{
+      margin:0;
+      font-size:27px;
+      font-weight:900;
+    }
+
+    .small{
+      margin-top:8px;
+      font-size:13px;
+      line-height:1.7;
+      color:var(--muted);
+    }
+
+    .section{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+      margin-top:14px;
+    }
+
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .label-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+      font-size:14px;
+    }
+
+    .bar{
+      width:100%;
+      height:12px;
+      margin-top:8px;
+      overflow:hidden;
+      border-radius:999px;
+      background:#262636;
+    }
+
+    .bar > span{
+      display:block;
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--red), var(--yellow));
+      transition:.25s ease;
+    }
+
+    .chip{
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 8px;
+      text-align:center;
+    }
+
+    .chip strong{
+      display:block;
+      margin-top:8px;
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .coach{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      background:var(--green-soft);
+      border:1px solid var(--green-line);
+      color:#d4ffe1;
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .item{
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:14px;
+    }
+
+    .item-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+    }
+
+    .item h4{
+      margin:0;
+      font-size:16px;
+      font-weight:800;
+    }
+
+    .item p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .item ul{
+      margin:8px 0 0;
+      padding:0 18px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    .check-grid{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .check-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .check-item label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      cursor:pointer;
+      flex:1;
+    }
+
+    .check-item input[type="checkbox"]{
+      width:20px;
+      height:20px;
+      accent-color:var(--red);
+    }
+
+    .metric-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .metric-box{
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+    }
+
+    .metric-box label{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:8px;
+    }
+
+    .metric-box input,
+    .metric-box select{
+      width:100%;
+      border:none;
+      outline:none;
+      background:#111119;
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+    }
+
+    .exercise-card{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:12px;
+      align-items:center;
+      background:var(--card-soft);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:12px;
+    }
+
+    .exercise-thumb{
+      width:110px;
+      height:110px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#101018;
+    }
+
+    .exercise-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .exercise-body h4{
+      margin:0 0 8px;
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .exercise-meta{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+      margin-bottom:10px;
+    }
+
+    .exercise-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    button{
+      border:none;
+      cursor:pointer;
+      border-radius:16px;
+      padding:13px 14px;
+      font-size:14px;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    button:active{transform:scale(.98)}
+
+    .btn-red{
+      background:var(--red);
+      color:#fff;
+    }
+
+    .btn-red:hover{background:var(--red-dark)}
+
+    .btn-dark{
+      background:#252536;
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .btn-green{
+      background:#173020;
+      color:#c4f7d2;
+      border:1px solid #29503a;
+    }
+
+    .btn-link{
+      background:#0f172a;
+      color:#cbe2ff;
+      border:1px solid #263146;
+    }
+
+    .profile-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .footer{
+      position:fixed;
+      right:0;
+      left:0;
+      bottom:0;
+      z-index:20;
+      display:flex;
+      justify-content:center;
+      padding:10px 10px max(10px, env(safe-area-inset-bottom));
+      background:#111118;
+      border-top:1px solid var(--line);
+    }
+
+    .footer-inner{
+      width:min(480px,100%);
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:8px;
+    }
+
+    .nav-btn{
+      background:#1b1b27;
+      border:1px solid var(--line);
+      color:var(--muted);
+      border-radius:16px;
+      padding:12px 8px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .nav-btn.active{
+      background:#272738;
+      color:#fff;
+      border-color:#3a3a4f;
+    }
+
+    @media (max-width:420px){
+      .exercise-card{grid-template-columns:1fr}
+      .exercise-thumb{width:100%;height:160px}
+      .footer-inner{grid-template-columns:repeat(3,1fr)}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="splash" id="splash">
+    <div class="splash-card">
+      <div class="splash-logo">🚀</div>
+      <h1 class="splash-title">كابتن ياسر</h1>
+      <p class="splash-sub">نسختك الرياضية الاحترافية: تمارين، تغذية، مكملات، وتحليل نتائج — مع حفظ مباشر على السحابة.</p>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
 
-<h1>🔥 كابتن ياسر</h1>
+  <div class="app">
+    <div class="status-badge" id="cloudStatus">☁️ جاري الاتصال بالسحابة...</div>
 
-<div class="card">
-  <h2>XP</h2>
-  <p id="xp">50</p>
-</div>
+    <div id="screen-dashboard">
+      <div class="hero">
+        <div class="row">
+          <div>
+            <div class="sub">لوحتك الشخصية</div>
+            <div class="title" id="heroName">الكابتن ياسر 🚀</div>
+            <div class="sub">نظامك الذكي لبناء العضلات، رفع الطاقة، وتحسين صحتك بشكل شامل.</div>
+          </div>
 
-<div class="card">
-  <h2>تمرين الصدر</h2>
-  <img src="https://i.imgur.com/5b6XG6R.jpg" width="100%">
-  <br>
-  <button onclick="window.open('https://www.youtube.com/watch?v=rT7DgCr-3pg')">
-    مشاهدة التمرين
-  </button>
-</div>
+          <div class="xp-box">
+            <div>XP</div>
+            <div class="num" id="heroXp">0</div>
+          </div>
+        </div>
 
-<script>
-console.log("التطبيق يعمل");
-</script>
+        <div class="grid-2">
+          <div class="card">
+            <h3>البروتين اليومي</h3>
+            <p class="big" id="proteinMain">0 / 160</p>
+            <div class="small">هدفك اليومي لدعم بناء العضلات والاستشفاء.</div>
+          </div>
 
+          <div class="card">
+            <h3>المستوى الحالي</h3>
+            <p class="big" id="levelMain">1</p>
+            <div class="small">يرتفع تلقائيًا حسب نقاط الخبرة داخل التطبيق.</div>
+          </div>
+        </div>
+
+        <div class="label-row">
+          <span id="levelProgressText">0 / 100</span>
+          <span>تقدم المستوى</span>
+        </div>
+        <div class="bar">
+          <span id="levelProgressBar"></span>
+        </div>
+
+        <div class="grid-2" style="margin-top:14px;">
+          <button class="btn-dark" id="btnQuickProtein">🥤 أضف بروتين (+10 XP)</button>
+          <button class="btn-red" id="btnQuickWorkout">💪 سجّل تمرينًا (+20 XP)</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h2>ملخص اليوم</h2>
+          <span class="muted" id="vitalityText">مؤشر الحيوية: 0</span>
+        </div>
+
+        <div class="grid-3">
+          <div class="chip">
+            السعرات
+            <strong id="caloriesChip">0</strong>
+          </div>
+          <div class="chip">
+            البروتين
+            <strong id="proteinChip">0</strong>
+          </div>
+          <div class="chip">
+            التمارين
+            <strong id="workoutsChip">0</strong>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-box">
+            <label for="sleepHours">ساعات النوم</label>
+            <input id="sleepHours" type="number" min="0" max="14" step="0.5" placeholder="مثال: 7.5">
+          </div>
+          <div class="metric-box">
+            <label for="energyLevel">مستوى الطاقة</label>
+            <select id="energyLevel">
+              <option value="3">منخفض</option>
+              <option value="6">متوسط</option>
+              <option value="8">جيد</option>
+              <option value="10">ممتاز</option>
+            </select>
+          </div>
+          <div class="metric-box">
+            <label for="painLevel">مستوى الألم</label>
+            <select id="painLevel">
+              <option value="0">0</option>
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="check-grid">
+          <div class="check-item">
+            <label><input type="checkbox" id="checkProteinDone"> حققت هدف البروتين اليوم</label>
+          </div>
+          <div class="check-item">
+            <label><input type="checkbox" id="checkCreatine"> أخذت الكرياتين اليوم</label>
+          </div>
+          <div class="check-item">
+            <label><input type="checkbox" id="checkVitamins"> أخذت الفيتامينات اليوم</label>
+          </div>
+          <div class="check-item">
+            <label><input type="checkbox" id="checkOmega3"> أخذت أوميغا 3 اليوم</label>
+          </div>
+          <div class="check-item">
+            <label><input type="checkbox" id="checkMagnesium"> أخذت المغنيسيوم اليوم</label>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <button class="btn-red" id="btnUpdateAdvice">تحديث النصيحة</button>
+          <button class="btn-dark" id="btnSaveDaily">حفظ بيانات اليوم</button>
+        </div>
+
+        <div class="coach" id="coachBox">AI Coach: جاهز لتحليل بياناتك وتقديم توصية يومية.</div>
+      </div>
+    </div>
+
+    <div id="screen-workouts" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>التمارين</h2>
+          <span class="muted">صور + روابط شرح + حفظ مباشر</span>
+        </div>
+
+        <div class="list" id="exerciseList"></div>
+
+        <div class="section" style="margin-top:14px;">
+          <div class="section-title">
+            <h2>مؤقت الراحة</h2>
+            <span class="muted">بين الجولات</span>
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <h3>الوقت المتبقي</h3>
+              <p class="big" id="restTimer">60</p>
+              <div class="small">ثانية</div>
+            </div>
+            <div class="card">
+              <h3>التحكم</h3>
+              <div class="grid-2" style="margin-top:0;">
+                <button class="btn-red" id="btnStartRest">ابدأ</button>
+                <button class="btn-dark" id="btnResetRest">إعادة</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-meals" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>الوجبات والتغذية</h2>
+          <span class="muted">تحديث فوري على السحابة</span>
+        </div>
+
+        <div class="list">
+          <div class="item">
+            <div class="item-top">
+              <h4>إضافة 30 جم بروتين</h4>
+              <button class="btn-red" id="btnAddProtein">إضافة</button>
+            </div>
+            <p>يرفع البروتين اليومي، ويزيد XP، ويساعدك على الاقتراب من هدفك.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>إضافة 400 سعرة</h4>
+              <button class="btn-dark" id="btnAddCalories">إضافة</button>
+            </div>
+            <p>تفيد في تتبع الطاقة والسعرات اليومية بشكل سريع.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>خطة وجبات مقترحة</h4>
+            </div>
+            <ul>
+              <li>الفطور: 2 بيض + 50 جم شوفان + موزة</li>
+              <li>قبل التمرين: 2 تمر + قهوة</li>
+              <li>بعد التمرين: سكوب واي بروتين</li>
+              <li>الغداء: 120 جم دجاج أو تونة + رز + سلطة</li>
+              <li>العشاء: زبادي يوناني + 20 جم مكسرات أو جبن قريش + توست</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-supplements" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>المكملات والفيتامينات</h2>
+          <span class="muted">خطة المكملات</span>
+        </div>
+
+        <div class="list">
+          <div class="item">
+            <div class="item-top">
+              <h4>فيتامينات متعددة من آدم</h4>
+              <button class="btn-green">أساسي</button>
+            </div>
+            <p>مرة يوميًا بعد الأكل لدعم الصحة العامة والطاقة.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>زنك</h4>
+              <button class="btn-green">أساسي</button>
+            </div>
+            <p>يفضل حسب الجرعة المكتوبة على العبوة أو توجيه المختص.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>واي بروتين</h4>
+              <button class="btn-green">مهم</button>
+            </div>
+            <p>بعد التمرين أو عند صعوبة الوصول لاحتياجك اليومي من البروتين.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>فيتامين د</h4>
+              <button class="btn-dark">اختياري</button>
+            </div>
+            <p>يفضل حسب التحاليل أو وصفة الطبيب.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>أوميغا 3</h4>
+              <button class="btn-dark">اختياري</button>
+            </div>
+            <p>مفيد للصحة العامة ودعم القلب والمفاصل.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>مغنيسيوم</h4>
+              <button class="btn-dark">اختياري</button>
+            </div>
+            <p>يفضل مساءً، وقد يساعد على الاسترخاء وتحسين النوم.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-analysis" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>تحليل النتائج</h2>
+          <span class="muted">قراءة سريعة لتقدمك</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>عدد التمارين</h3>
+            <p class="big" id="analysisWorkouts">0</p>
+            <div class="small">كل مرة تضغط تسجيل تمرين يتم تحديثه هنا.</div>
+          </div>
+          <div class="card">
+            <h3>البروتين المجموع</h3>
+            <p class="big" id="analysisProtein">0</p>
+            <div class="small">كل إضافة بروتين تنعكس هنا مباشرة.</div>
+          </div>
+          <div class="card">
+            <h3>السعرات المضافة</h3>
+            <p class="big" id="analysisCalories">0</p>
+            <div class="small">تقدير يومي للطاقة الداخلة.</div>
+          </div>
+          <div class="card">
+            <h3>مؤشر الالتزام</h3>
+            <p class="big" id="analysisCommitment">0%</p>
+            <div class="small">يعتمد على النوم والتمرين والبروتين والعادات.</div>
+          </div>
+        </div>
+
+        <div class="coach" id="analysisNote">تحليل النتائج سيظهر هنا بعد تحميل بياناتك.</div>
+      </div>
+    </div>
+
+    <div id="screen-profile" class="hidden">
+      <div class="section">
+        <div class="section-title">
+          <h2>الملف الشخصي</h2>
+          <span class="muted">من قاعدة البيانات مباشرة</span>
+        </div>
+
+        <div class="profile-grid">
+          <div class="card">
+            <h3>المعرّف</h3>
+            <p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">-</p>
+          </div>
+
+          <div class="card">
+            <h3>الاسم</h3>
+            <p class="big" id="profileName">-</p>
+          </div>
+
+          <div class="card">
+            <h3>XP</h3>
+            <p class="big" id="profileXp">-</p>
+          </div>
+
+          <div class="card">
+            <h3>المستوى</h3>
+            <p class="big" id="profileLevel">-</p>
+          </div>
+        </div>
+
+        <div class="coach">
+          إذا ظهرت لك هذه البيانات، فهذا يعني أن التطبيق الكامل مرتبط بـ Firebase بشكل صحيح.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-inner">
+      <button class="nav-btn active" data-screen="dashboard">الرئيسية</button>
+      <button class="nav-btn" data-screen="workouts">التمارين</button>
+      <button class="nav-btn" data-screen="meals">الوجبات</button>
+      <button class="nav-btn" data-screen="supplements">المكملات</button>
+      <button class="nav-btn" data-screen="analysis">التحليل</button>
+      <button class="nav-btn" data-screen="profile">الملف</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
+      authDomain: "captain-yasser-pro.firebaseapp.com",
+      projectId: "captain-yasser-pro",
+      storageBucket: "captain-yasser-pro.firebasestorage.app",
+      messagingSenderId: "1025929025248",
+      appId: "1:1025929025248:web:86bb9469f4a5cd90356285"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function svgThumb(title, emoji){
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#1a1a26"/>
+              <stop offset="100%" stop-color="#321820"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" rx="28" fill="url(#g)"/>
+          <circle cx="320" cy="80" r="52" fill="rgba(246,195,68,.15)"/>
+          <text x="50%" y="42%" dominant-baseline="middle" text-anchor="middle" font-size="90">${emoji}</text>
+          <text x="50%" y="73%" dominant-baseline="middle" text-anchor="middle" font-size="34" font-family="Arial" fill="#ffffff" font-weight="700">${title}</text>
+          <text x="50%" y="84%" dominant-baseline="middle" text-anchor="middle" font-size="20" font-family="Arial" fill="#f6c344">فتح فيديو الشرح</text>
+        </svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    const EXERCISES = [
+      {
+        title: "بنش برس",
+        day: "اليوم 1: صدر + ترايسبس",
+        sets: "4 جولات × 8-12 عدة",
+        youtube: "https://www.youtube.com/results?search_query=bench+press+proper+form",
+        image: svgThumb("بنش برس","💪")
+      },
+      {
+        title: "سحب أرضي",
+        day: "اليوم 2: ظهر + بايسبس",
+        sets: "4 جولات × 10-12 عدة",
+        youtube: "https://www.youtube.com/results?search_query=seated+row+proper+form",
+        image: svgThumb("سحب أرضي","🏋️")
+      },
+      {
+        title: "سكوات",
+        day: "اليوم 3: أرجل + بطن",
+        sets: "4 جولات × 8-12 عدة",
+        youtube: "https://www.youtube.com/results?search_query=squat+proper+form",
+        image: svgThumb("سكوات","🦵")
+      },
+      {
+        title: "ضغط كتف",
+        day: "اليوم 4: أكتاف + كارديو",
+        sets: "4 جولات × 10 عدات",
+        youtube: "https://www.youtube.com/results?search_query=shoulder+press+proper+form",
+        image: svgThumb("ضغط كتف","🔥")
+      }
+    ];
+
+    let currentDocId = null;
+    let currentData = null;
+    let restInterval = null;
+    let restSeconds = 60;
+
+    const els = {
+      splash: document.getElementById("splash"),
+      cloudStatus: document.getElementById("cloudStatus"),
+      heroName: document.getElementById("heroName"),
+      heroXp: document.getElementById("heroXp"),
+      levelMain: document.getElementById("levelMain"),
+      proteinMain: document.getElementById("proteinMain"),
+      levelProgressText: document.getElementById("levelProgressText"),
+      levelProgressBar: document.getElementById("levelProgressBar"),
+      caloriesChip: document.getElementById("caloriesChip"),
+      proteinChip: document.getElementById("proteinChip"),
+      workoutsChip: document.getElementById("workoutsChip"),
+      vitalityText: document.getElementById("vitalityText"),
+      coachBox: document.getElementById("coachBox"),
+      profileDocId: document.getElementById("profileDocId"),
+      profileName: document.getElementById("profileName"),
+      profileXp: document.getElementById("profileXp"),
+      profileLevel: document.getElementById("profileLevel"),
+      analysisWorkouts: document.getElementById("analysisWorkouts"),
+      analysisProtein: document.getElementById("analysisProtein"),
+      analysisCalories: document.getElementById("analysisCalories"),
+      analysisCommitment: document.getElementById("analysisCommitment"),
+      analysisNote: document.getElementById("analysisNote"),
+      exerciseList: document.getElementById("exerciseList"),
+      restTimer: document.getElementById("restTimer"),
+      sleepHours: document.getElementById("sleepHours"),
+      energyLevel: document.getElementById("energyLevel"),
+      painLevel: document.getElementById("painLevel"),
+      checkProteinDone: document.getElementById("checkProteinDone"),
+      checkCreatine: document.getElementById("checkCreatine"),
+      checkVitamins: document.getElementById("checkVitamins"),
+      checkOmega3: document.getElementById("checkOmega3"),
+      checkMagnesium: document.getElementById("checkMagnesium")
+    };
+
+    function defaultUser() {
+      return {
+        name: "الكابتن ياسر",
+        level: 1,
+        xp: 0,
+        protein: 0,
+        proteinGoal: 160,
+        calories: 0,
+        workouts: 0,
+        vitalityScore: 60,
+        sleepHours: 0,
+        energyLevel: 6,
+        painLevel: 0,
+        habits: {
+          proteinDone: false,
+          creatine: false,
+          vitamins: false,
+          omega3: false,
+          magnesium: false
+        }
+      };
+    }
+
+    function calcLevel(xp) {
+      return Math.floor((xp || 0) / 100) + 1;
+    }
+
+    function calcProgress(xp) {
+      return (xp || 0) % 100;
+    }
+
+    function calcVitality(data) {
+      let score = 50;
+      if ((data.protein || 0) >= (data.proteinGoal || 160)) score += 15;
+      if ((data.workouts || 0) >= 1) score += 10;
+      if ((data.calories || 0) >= 400) score += 5;
+      if ((data.sleepHours || 0) >= 7) score += 10;
+      if ((data.energyLevel || 0) >= 8) score += 5;
+      if ((data.painLevel || 0) >= 6) score -= 10;
+      return Math.max(0, Math.min(score, 100));
+    }
+
+    function commitmentPercent(data){
+      let score = 0;
+      if ((data.workouts || 0) > 0) score += 25;
+      if ((data.protein || 0) >= 120) score += 25;
+      if ((data.sleepHours || 0) >= 7) score += 20;
+      if (data.habits?.vitamins) score += 10;
+      if (data.habits?.omega3) score += 10;
+      if (data.habits?.magnesium) score += 10;
+      return Math.min(score, 100);
+    }
+
+    function coachMessage(data) {
+      const protein = data.protein || 0;
+      const proteinGoal = data.proteinGoal || 160;
+      const workouts = data.workouts || 0;
+      const sleep = data.sleepHours || 0;
+      const pain = data.painLevel || 0;
+
+      if (pain >= 6) {
+        return "AI Coach: عندك مستوى ألم مرتفع نسبيًا اليوم. خفف الشدة وركز على الاستشفاء.";
+      }
+      if (workouts >= 1 && protein >= proteinGoal && sleep >= 7) {
+        return "AI Coach: يوم ممتاز جدًا 🔥 تمرين وبروتين ونوم جيد — استمر بنفس الإيقاع.";
+      }
+      if (workouts >= 1 && protein < proteinGoal) {
+        return `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول لهدفك اليومي.`;
+      }
+      if (sleep < 6) {
+        return "AI Coach: حاول ترفع ساعات النوم الليلة، لأن الاستشفاء مهم جدًا لبناء العضلات والطاقة.";
+      }
+      return "AI Coach: ابدأ بالتمرين ثم ارفع بروتينك اليومي، وبعدها حدّث بيانات اليوم لتحصل على توصية أدق.";
+    }
+
+    function renderExercises(){
+      els.exerciseList.innerHTML = EXERCISES.map((ex, idx) => `
+        <div class="exercise-card">
+          <div class="exercise-thumb"><img src="${ex.image}" alt="${ex.title}"></div>
+          <div class="exercise-body">
+            <h4>${ex.title}</h4>
+            <div class="exercise-meta">${ex.day}<br>${ex.sets}</div>
+            <div class="exercise-actions">
+              <a class="btn-link" href="${ex.youtube}" target="_blank" rel="noopener noreferrer">🎥 فتح فيديو الشرح</a>
+              <button class="btn-red" data-exercise-xp="${idx}">✅ تم الإنجاز (+5 XP)</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-exercise-xp]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await saveUser({ xp: (currentData.xp || 0) + 5 });
+        });
+      });
+    }
+
+    function renderDailyInputs(data){
+      els.sleepHours.value = data.sleepHours ?? 0;
+      els.energyLevel.value = data.energyLevel ?? 6;
+      els.painLevel.value = data.painLevel ?? 0;
+      els.checkProteinDone.checked = !!data.habits?.proteinDone;
+      els.checkCreatine.checked = !!data.habits?.creatine;
+      els.checkVitamins.checked = !!data.habits?.vitamins;
+      els.checkOmega3.checked = !!data.habits?.omega3;
+      els.checkMagnesium.checked = !!data.habits?.magnesium;
+    }
+
+    function render(data) {
+      const level = calcLevel(data.xp);
+      const progress = calcProgress(data.xp);
+      const vitality = calcVitality(data);
+      const commitment = commitmentPercent(data);
+
+      els.heroName.textContent = `${data.name || "الكابتن ياسر"} 🚀`;
+      els.heroXp.textContent = data.xp ?? 0;
+      els.levelMain.textContent = level;
+      els.proteinMain.textContent = `${data.protein || 0} / ${data.proteinGoal || 160}`;
+      els.levelProgressText.textContent = `${progress} / 100`;
+      els.levelProgressBar.style.width = `${progress}%`;
+
+      els.caloriesChip.textContent = data.calories || 0;
+      els.proteinChip.textContent = data.protein || 0;
+      els.workoutsChip.textContent = data.workouts || 0;
+      els.vitalityText.textContent = `مؤشر الحيوية: ${vitality}`;
+      els.coachBox.textContent = coachMessage(data);
+
+      els.profileDocId.textContent = currentDocId || "-";
+      els.profileName.textContent = data.name || "-";
+      els.profileXp.textContent = data.xp ?? 0;
+      els.profileLevel.textContent = level;
+
+      els.analysisWorkouts.textContent = data.workouts || 0;
+      els.analysisProtein.textContent = data.protein || 0;
+      els.analysisCalories.textContent = data.calories || 0;
+      els.analysisCommitment.textContent = `${commitment}%`;
+      els.analysisNote.textContent = commitment >= 70
+        ? "تحليلك ممتاز: التزامك اليومي جيد، وبياناتك تشير إلى تقدم واضح."
+        : "تحليلك الحالي: ارفع الالتزام بالنوم والتمرين والبروتين لتحسين نتائجك بسرعة.";
+
+      renderDailyInputs(data);
+    }
+
+    async function loadUser() {
+      try {
+        els.cloudStatus.textContent = "☁️ جاري قراءة البيانات من Firebase...";
+        const snapshot = await getDocs(collection(db, "users"));
+
+        if (snapshot.empty) {
+          const user = defaultUser();
+          const created = await addDoc(collection(db, "users"), user);
+          currentDocId = created.id;
+          currentData = user;
+        } else {
+          const firstDoc = snapshot.docs.find(d => {
+            const x = d.data();
+            return x.name !== undefined;
+          }) || snapshot.docs[0];
+
+          currentDocId = firstDoc.id;
+          currentData = { ...defaultUser(), ...firstDoc.data() };
+        }
+
+        render(currentData);
+        renderExercises();
+        els.cloudStatus.textContent = "☁️ متصل بالسحابة ✅";
+      } catch (e) {
+        console.error(e);
+        els.cloudStatus.textContent = "☁️ فشل الاتصال بالسحابة ❌";
+        els.cloudStatus.classList.add("status-error");
+      }
+    }
+
+    async function saveUser(partial) {
+      if (!currentDocId) return;
+
+      currentData = { ...currentData, ...partial };
+      currentData.level = calcLevel(currentData.xp);
+      currentData.vitalityScore = calcVitality(currentData);
+
+      try {
+        const ref = doc(db, "users", currentDocId);
+        await updateDoc(ref, currentData);
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
+      } catch (e) {
+        console.error(e);
+        els.cloudStatus.textContent = "☁️ فشل الحفظ ❌";
+      }
+    }
+
+    function collectHabits(){
+      return {
+        proteinDone: els.checkProteinDone.checked,
+        creatine: els.checkCreatine.checked,
+        vitamins: els.checkVitamins.checked,
+        omega3: els.checkOmega3.checked,
+        magnesium: els.checkMagnesium.checked
+      };
+    }
+
+    document.getElementById("btnQuickWorkout").addEventListener("click", async () => {
+      await saveUser({
+        xp: (currentData.xp || 0) + 20,
+        workouts: (currentData.workouts || 0) + 1
+      });
+    });
+
+    document.getElementById("btnQuickProtein").addEventListener("click", async () => {
+      await saveUser({
+        xp: (currentData.xp || 0) + 10,
+        protein: (currentData.protein || 0) + 30
+      });
+    });
+
+    document.getElementById("btnWorkoutFull").addEventListener("click", async () => {
+      await saveUser({
+        xp: (currentData.xp || 0) + 20,
+        workouts: (currentData.workouts || 0) + 1
+      });
+    });
+
+    document.getElementById("btnResetWorkout").addEventListener("click", async () => {
+      await saveUser({ workouts: 0 });
+    });
+
+    document.getElementById("btnAddProtein").addEventListener("click", async () => {
+      await saveUser({
+        protein: (currentData.protein || 0) + 30,
+        xp: (currentData.xp || 0) + 10
+      });
+    });
+
+    document.getElementById("btnAddCalories").addEventListener("click", async () => {
+      await saveUser({ calories: (currentData.calories || 0) + 400 });
+    });
+
+    document.getElementById("btnUpdateAdvice").addEventListener("click", () => {
+      currentData = {
+        ...currentData,
+        sleepHours: Number(els.sleepHours.value || 0),
+        energyLevel: Number(els.energyLevel.value || 0),
+        painLevel: Number(els.painLevel.value || 0),
+        habits: collectHabits()
+      };
+      render(currentData);
+    });
+
+    document.getElementById("btnSaveDaily").addEventListener("click", async () => {
+      await saveUser({
+        sleepHours: Number(els.sleepHours.value || 0),
+        energyLevel: Number(els.energyLevel.value || 0),
+        painLevel: Number(els.painLevel.value || 0),
+        habits: collectHabits()
+      });
+    });
+
+    document.getElementById("btnStartRest").addEventListener("click", () => {
+      clearInterval(restInterval);
+      restInterval = setInterval(() => {
+        restSeconds -= 1;
+        if (restSeconds <= 0) {
+          clearInterval(restInterval);
+          restSeconds = 0;
+        }
+        els.restTimer.textContent = restSeconds;
+      }, 1000);
+    });
+
+    document.getElementById("btnResetRest").addEventListener("click", () => {
+      clearInterval(restInterval);
+      restSeconds = 60;
+      els.restTimer.textContent = restSeconds;
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const screen = btn.dataset.screen;
+
+        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        document.getElementById("screen-dashboard").classList.add("hidden");
+        document.getElementById("screen-workouts").classList.add("hidden");
+        document.getElementById("screen-meals").classList.add("hidden");
+        document.getElementById("screen-supplements").classList.add("hidden");
+        document.getElementById("screen-analysis").classList.add("hidden");
+        document.getElementById("screen-profile").classList.add("hidden");
+
+        document.getElementById(`screen-${screen}`).classList.remove("hidden");
+      });
+    });
+
+    setTimeout(() => {
+      els.splash.classList.add("fade-out");
+      setTimeout(() => els.splash.remove(), 500);
+    }, 1700);
+
+    loadUser();
+  </script>
 </body>
-</html>
+              </html>
