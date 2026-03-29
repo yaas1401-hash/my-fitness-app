@@ -7,7 +7,6 @@
   <style>
     :root{
       --bg:#0a0a0f;
-      --bg-soft:#111118;
       --card:#151520;
       --card-soft:#1b1b27;
       --line:#2b2b39;
@@ -36,6 +35,7 @@
     }
 
     a{color:inherit;text-decoration:none}
+    .hidden{display:none !important}
 
     .app{
       max-width:480px;
@@ -43,8 +43,6 @@
       min-height:100vh;
       padding:16px 16px 110px;
     }
-
-    .hidden{display:none !important}
 
     .splash{
       position:fixed;
@@ -58,12 +56,20 @@
       align-items:center;
       justify-content:center;
       transition:.45s ease;
+      animation:splashAutoHide 2.4s ease forwards;
     }
 
     .splash.fade-out{
       opacity:0;
+      visibility:hidden;
       pointer-events:none;
       transform:scale(1.02);
+    }
+
+    @keyframes splashAutoHide{
+      0%{opacity:1;visibility:visible}
+      85%{opacity:1;visibility:visible}
+      100%{opacity:0;visibility:hidden;pointer-events:none}
     }
 
     .splash-card{
@@ -77,23 +83,9 @@
       box-shadow:0 20px 60px rgba(0,0,0,.35);
     }
 
-    .splash-logo{
-      font-size:48px;
-      margin-bottom:12px;
-    }
-
-    .splash-title{
-      margin:0;
-      font-size:32px;
-      font-weight:900;
-    }
-
-    .splash-sub{
-      color:var(--muted);
-      margin:12px 0 0;
-      line-height:1.8;
-      font-size:14px;
-    }
+    .splash-logo{font-size:48px;margin-bottom:12px}
+    .splash-title{margin:0;font-size:32px;font-weight:900}
+    .splash-sub{color:var(--muted);margin:12px 0 0;line-height:1.8;font-size:14px}
 
     .loading-dots{
       margin-top:18px;
@@ -135,6 +127,12 @@
       color:#ffd3d3;
       background:#251517;
       border-color:#4a2528;
+    }
+
+    .status-ok{
+      color:#d4ffe1;
+      background:#102116;
+      border-color:#21452c;
     }
 
     .hero{
@@ -491,6 +489,13 @@
       background:#0f172a;
       color:#cbe2ff;
       border:1px solid #263146;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:13px 14px;
+      border-radius:16px;
+      font-size:14px;
+      font-weight:800;
     }
 
     .profile-grid{
@@ -543,7 +548,7 @@
   </style>
 </head>
 <body>
-  <div class="splash" id="splash">
+  <div class="splash" id="splash" onclick="this.classList.add('fade-out')">
     <div class="splash-card">
       <div class="splash-logo">🚀</div>
       <h1 class="splash-title">كابتن ياسر</h1>
@@ -885,20 +890,10 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
-      authDomain: "captain-yasser-pro.firebaseapp.com",
-      projectId: "captain-yasser-pro",
-      storageBucket: "captain-yasser-pro.firebasestorage.app",
-      messagingSenderId: "1025929025248",
-      appId: "1:1025929025248:web:86bb9469f4a5cd90356285"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const splash = document.getElementById("splash");
+    setTimeout(() => {
+      splash.classList.add("fade-out");
+    }, 2200);
 
     function svgThumb(title, emoji){
       const svg = `
@@ -953,9 +948,10 @@
     let currentData = null;
     let restInterval = null;
     let restSeconds = 60;
+    let db = null;
+    let firestoreReady = false;
 
     const els = {
-      splash: document.getElementById("splash"),
       cloudStatus: document.getElementById("cloudStatus"),
       heroName: document.getElementById("heroName"),
       heroXp: document.getElementById("heroXp"),
@@ -1116,7 +1112,7 @@
       els.vitalityText.textContent = `مؤشر الحيوية: ${vitality}`;
       els.coachBox.textContent = coachMessage(data);
 
-      els.profileDocId.textContent = currentDocId || "-";
+      els.profileDocId.textContent = currentDocId || "محلي";
       els.profileName.textContent = data.name || "-";
       els.profileXp.textContent = data.xp ?? 0;
       els.profileLevel.textContent = level;
@@ -1132,9 +1128,74 @@
       renderDailyInputs(data);
     }
 
+    function collectHabits(){
+      return {
+        proteinDone: els.checkProteinDone.checked,
+        creatine: els.checkCreatine.checked,
+        vitamins: els.checkVitamins.checked,
+        omega3: els.checkOmega3.checked,
+        magnesium: els.checkMagnesium.checked
+      };
+    }
+
+    function loadLocalUser(){
+      try{
+        const raw = localStorage.getItem("captain-yasser-local");
+        if(raw){
+          return { ...defaultUser(), ...JSON.parse(raw) };
+        }
+      }catch(e){}
+      return defaultUser();
+    }
+
+    function saveLocalUser(data){
+      try{
+        localStorage.setItem("captain-yasser-local", JSON.stringify(data));
+      }catch(e){}
+    }
+
+    async function initFirebase(){
+      try{
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+        const { getFirestore, collection, getDocs, doc, updateDoc, addDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+        window._fb = { collection, getDocs, doc, updateDoc, addDoc };
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
+          authDomain: "captain-yasser-pro.firebaseapp.com",
+          projectId: "captain-yasser-pro",
+          storageBucket: "captain-yasser-pro.firebasestorage.app",
+          messagingSenderId: "1025929025248",
+          appId: "1:1025929025248:web:86bb9469f4a5cd90356285"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        firestoreReady = true;
+        return true;
+      }catch(e){
+        console.error("Firebase init failed", e);
+        firestoreReady = false;
+        return false;
+      }
+    }
+
     async function loadUser() {
+      const localFallback = loadLocalUser();
+
+      if (!firestoreReady) {
+        currentDocId = "محلي";
+        currentData = localFallback;
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ يعمل محليًا على الجهاز";
+        els.cloudStatus.classList.add("status-ok");
+        return;
+      }
+
       try {
         els.cloudStatus.textContent = "☁️ جاري قراءة البيانات من Firebase...";
+        const { collection, getDocs, addDoc } = window._fb;
         const snapshot = await getDocs(collection(db, "users"));
 
         if (snapshot.empty) {
@@ -1153,41 +1214,42 @@
         }
 
         render(currentData);
-        renderExercises();
+        saveLocalUser(currentData);
         els.cloudStatus.textContent = "☁️ متصل بالسحابة ✅";
+        els.cloudStatus.classList.add("status-ok");
       } catch (e) {
         console.error(e);
-        els.cloudStatus.textContent = "☁️ فشل الاتصال بالسحابة ❌";
+        currentDocId = "محلي";
+        currentData = localFallback;
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ تعذر Firebase — يعمل محليًا";
         els.cloudStatus.classList.add("status-error");
       }
     }
 
     async function saveUser(partial) {
-      if (!currentDocId) return;
-
       currentData = { ...currentData, ...partial };
       currentData.level = calcLevel(currentData.xp);
       currentData.vitalityScore = calcVitality(currentData);
+      saveLocalUser(currentData);
+
+      if (!firestoreReady || currentDocId === "محلي" || !db) {
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ تم الحفظ محليًا ✅";
+        return;
+      }
 
       try {
+        const { doc, updateDoc } = window._fb;
         const ref = doc(db, "users", currentDocId);
         await updateDoc(ref, currentData);
         render(currentData);
         els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
       } catch (e) {
         console.error(e);
-        els.cloudStatus.textContent = "☁️ فشل الحفظ ❌";
+        render(currentData);
+        els.cloudStatus.textContent = "☁️ تم الحفظ محليًا بسبب تعذر السحابة";
       }
-    }
-
-    function collectHabits(){
-      return {
-        proteinDone: els.checkProteinDone.checked,
-        creatine: els.checkCreatine.checked,
-        vitamins: els.checkVitamins.checked,
-        omega3: els.checkOmega3.checked,
-        magnesium: els.checkMagnesium.checked
-      };
     }
 
     document.getElementById("btnQuickWorkout").addEventListener("click", async () => {
@@ -1204,17 +1266,6 @@
       });
     });
 
-    document.getElementById("btnWorkoutFull").addEventListener("click", async () => {
-      await saveUser({
-        xp: (currentData.xp || 0) + 20,
-        workouts: (currentData.workouts || 0) + 1
-      });
-    });
-
-    document.getElementById("btnResetWorkout").addEventListener("click", async () => {
-      await saveUser({ workouts: 0 });
-    });
-
     document.getElementById("btnAddProtein").addEventListener("click", async () => {
       await saveUser({
         protein: (currentData.protein || 0) + 30,
@@ -1223,7 +1274,9 @@
     });
 
     document.getElementById("btnAddCalories").addEventListener("click", async () => {
-      await saveUser({ calories: (currentData.calories || 0) + 400 });
+      await saveUser({
+        calories: (currentData.calories || 0) + 400
+      });
     });
 
     document.getElementById("btnUpdateAdvice").addEventListener("click", () => {
@@ -1282,12 +1335,13 @@
       });
     });
 
-    setTimeout(() => {
-      els.splash.classList.add("fade-out");
-      setTimeout(() => els.splash.remove(), 500);
-    }, 1700);
+    async function startApp(){
+      renderExercises();
+      await initFirebase();
+      await loadUser();
+    }
 
-    loadUser();
+    startApp();
   </script>
 </body>
-              </html>
+</html>
