@@ -6,21 +6,21 @@
   <title>كابتن ياسر</title>
   <style>
     :root{
-      --bg:#0a0a0f;
+      --bg:#0b0b12;
       --card:#151520;
-      --card-soft:#1b1b27;
-      --line:#2b2b39;
+      --card2:#1b1b28;
+      --line:#2c2c3b;
       --text:#f5f7fb;
-      --muted:#a8adbb;
+      --muted:#a7adba;
       --red:#ef4444;
-      --red-dark:#dc2626;
+      --red2:#dc2626;
       --yellow:#f6c344;
-      --green:#22c55e;
-      --green-soft:#102116;
-      --green-line:#21452c;
+      --green:#16a34a;
+      --greenBg:#102116;
+      --greenLine:#21452c;
       --blue:#60a5fa;
-      --shadow:0 18px 40px rgba(0,0,0,.28);
       --radius:24px;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
     }
 
     *{box-sizing:border-box}
@@ -30,24 +30,18 @@
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top, rgba(239,68,68,.10), transparent 24%),
+        radial-gradient(circle at 20% 0%, rgba(246,195,68,.10), transparent 25%),
+        radial-gradient(circle at 80% 0%, rgba(239,68,68,.10), transparent 25%),
         linear-gradient(180deg, #09090d 0%, #111118 100%);
     }
 
-    a{color:inherit;text-decoration:none}
+    a{text-decoration:none;color:inherit}
     .hidden{display:none !important}
-
-    .app{
-      max-width:480px;
-      margin:0 auto;
-      min-height:100vh;
-      padding:16px 16px 110px;
-    }
 
     .splash{
       position:fixed;
       inset:0;
-      z-index:100;
+      z-index:999;
       background:
         radial-gradient(circle at 30% 20%, rgba(246,195,68,.18), transparent 25%),
         radial-gradient(circle at 70% 10%, rgba(239,68,68,.18), transparent 25%),
@@ -56,27 +50,18 @@
       align-items:center;
       justify-content:center;
       transition:.45s ease;
-      animation:splashAutoHide 2.4s ease forwards;
     }
 
     .splash.fade-out{
       opacity:0;
       visibility:hidden;
       pointer-events:none;
-      transform:scale(1.02);
-    }
-
-    @keyframes splashAutoHide{
-      0%{opacity:1;visibility:visible}
-      85%{opacity:1;visibility:visible}
-      100%{opacity:0;visibility:hidden;pointer-events:none}
     }
 
     .splash-card{
       width:min(360px,92vw);
       border:1px solid rgba(255,255,255,.08);
-      background:rgba(17,17,24,.85);
-      backdrop-filter: blur(10px);
+      background:rgba(17,17,24,.92);
       border-radius:30px;
       padding:28px 22px;
       text-align:center;
@@ -110,6 +95,13 @@
       40%{transform:translateY(-8px);opacity:1}
     }
 
+    .app{
+      max-width:480px;
+      margin:0 auto;
+      min-height:100vh;
+      padding:16px 16px 110px;
+    }
+
     .status-badge{
       display:inline-flex;
       align-items:center;
@@ -123,14 +115,8 @@
       margin-bottom:14px;
     }
 
-    .status-error{
-      color:#ffd3d3;
-      background:#251517;
-      border-color:#4a2528;
-    }
-
     .status-ok{
-      color:#d4ffe1;
+      color:#d8ffe3;
       background:#102116;
       border-color:#21452c;
     }
@@ -275,7 +261,7 @@
     }
 
     .chip{
-      background:var(--card-soft);
+      background:var(--card2);
       border:1px solid var(--line);
       border-radius:18px;
       padding:14px 8px;
@@ -293,8 +279,8 @@
       margin-top:12px;
       padding:14px;
       border-radius:18px;
-      background:var(--green-soft);
-      border:1px solid var(--green-line);
+      background:var(--greenBg);
+      border:1px solid var(--greenLine);
       color:#d4ffe1;
       font-size:14px;
       line-height:1.8;
@@ -307,7 +293,7 @@
     }
 
     .item{
-      background:var(--card-soft);
+      background:var(--card2);
       border:1px solid var(--line);
       border-radius:20px;
       padding:14px;
@@ -339,7 +325,18 @@
       padding:0 18px 0 0;
       color:var(--muted);
       font-size:13px;
-      line-height:1.8;
+      line-height:1.9;
+    }
+
+    .day-tag{
+      background:#173020;
+      color:#c4f7d2;
+      border:1px solid #29503a;
+      border-radius:14px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
     }
 
     .check-grid{
@@ -353,7 +350,7 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      background:var(--card-soft);
+      background:var(--card2);
       border:1px solid var(--line);
       border-radius:18px;
       padding:14px;
@@ -382,7 +379,7 @@
     }
 
     .metric-box{
-      background:var(--card-soft);
+      background:var(--card2);
       border:1px solid var(--line);
       border-radius:18px;
       padding:12px;
@@ -413,7 +410,7 @@
       grid-template-columns:110px 1fr;
       gap:12px;
       align-items:center;
-      background:var(--card-soft);
+      background:var(--card2);
       border:1px solid var(--line);
       border-radius:20px;
       padding:12px;
@@ -471,18 +468,12 @@
       color:#fff;
     }
 
-    .btn-red:hover{background:var(--red-dark)}
+    .btn-red:hover{background:var(--red2)}
 
     .btn-dark{
       background:#252536;
       color:#fff;
       border:1px solid var(--line);
-    }
-
-    .btn-green{
-      background:#173020;
-      color:#c4f7d2;
-      border:1px solid #29503a;
     }
 
     .btn-link{
@@ -496,6 +487,12 @@
       border-radius:16px;
       font-size:14px;
       font-weight:800;
+    }
+
+    .btn-green{
+      background:#173020;
+      color:#c4f7d2;
+      border:1px solid #29503a;
     }
 
     .profile-grid{
@@ -544,21 +541,24 @@
       .exercise-card{grid-template-columns:1fr}
       .exercise-thumb{width:100%;height:160px}
       .footer-inner{grid-template-columns:repeat(3,1fr)}
+      .metric-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr 1fr 1fr}
+      .row{align-items:flex-start}
     }
   </style>
 </head>
 <body>
-  <div class="splash" id="splash" onclick="this.classList.add('fade-out')">
+  <div class="splash" id="splash">
     <div class="splash-card">
       <div class="splash-logo">🚀</div>
       <h1 class="splash-title">كابتن ياسر</h1>
-      <p class="splash-sub">نسختك الرياضية الاحترافية: تمارين، تغذية، مكملات، وتحليل نتائج — مع حفظ مباشر على السحابة.</p>
+      <p class="splash-sub">نسختك الرياضية الاحترافية: تمارين، تغذية، مكملات، وتحليل نتائج — محفوظة محليًا بشكل ثابت.</p>
       <div class="loading-dots"><span></span><span></span><span></span></div>
     </div>
   </div>
 
   <div class="app">
-    <div class="status-badge" id="cloudStatus">☁️ جاري الاتصال بالسحابة...</div>
+    <div class="status-badge status-ok">📱 التطبيق يعمل بثبات على جهازك</div>
 
     <div id="screen-dashboard">
       <div class="hero">
@@ -651,21 +651,11 @@
         </div>
 
         <div class="check-grid">
-          <div class="check-item">
-            <label><input type="checkbox" id="checkProteinDone"> حققت هدف البروتين اليوم</label>
-          </div>
-          <div class="check-item">
-            <label><input type="checkbox" id="checkCreatine"> أخذت الكرياتين اليوم</label>
-          </div>
-          <div class="check-item">
-            <label><input type="checkbox" id="checkVitamins"> أخذت الفيتامينات اليوم</label>
-          </div>
-          <div class="check-item">
-            <label><input type="checkbox" id="checkOmega3"> أخذت أوميغا 3 اليوم</label>
-          </div>
-          <div class="check-item">
-            <label><input type="checkbox" id="checkMagnesium"> أخذت المغنيسيوم اليوم</label>
-          </div>
+          <div class="check-item"><label><input type="checkbox" id="checkProteinDone"> حققت هدف البروتين اليوم</label></div>
+          <div class="check-item"><label><input type="checkbox" id="checkCreatine"> أخذت الكرياتين اليوم</label></div>
+          <div class="check-item"><label><input type="checkbox" id="checkVitamins"> أخذت الفيتامينات اليوم</label></div>
+          <div class="check-item"><label><input type="checkbox" id="checkOmega3"> أخذت أوميغا 3 اليوم</label></div>
+          <div class="check-item"><label><input type="checkbox" id="checkMagnesium"> أخذت المغنيسيوم اليوم</label></div>
         </div>
 
         <div class="grid-2">
@@ -680,29 +670,105 @@
     <div id="screen-workouts" class="hidden">
       <div class="section">
         <div class="section-title">
-          <h2>التمارين</h2>
-          <span class="muted">صور + روابط شرح + حفظ مباشر</span>
+          <h2>البرنامج التدريبي الأسبوعي</h2>
+          <span class="muted">تقسيم الأيام + جدول واضح</span>
         </div>
 
-        <div class="list" id="exerciseList"></div>
-
-        <div class="section" style="margin-top:14px;">
-          <div class="section-title">
-            <h2>مؤقت الراحة</h2>
-            <span class="muted">بين الجولات</span>
-          </div>
-          <div class="grid-2">
-            <div class="card">
-              <h3>الوقت المتبقي</h3>
-              <p class="big" id="restTimer">60</p>
-              <div class="small">ثانية</div>
+        <div class="list">
+          <div class="item">
+            <div class="item-top">
+              <h4>اليوم 1: صدر + ترايسبس</h4>
+              <span class="day-tag">قوة ودفع</span>
             </div>
-            <div class="card">
-              <h3>التحكم</h3>
-              <div class="grid-2" style="margin-top:0;">
-                <button class="btn-red" id="btnStartRest">ابدأ</button>
-                <button class="btn-dark" id="btnResetRest">إعادة</button>
-              </div>
+            <ul>
+              <li>بنش برس — 4 × 8-12</li>
+              <li>بنش مائل دمبل — 3 × 10</li>
+              <li>تفتيح صدر — 3 × 12</li>
+              <li>ترايسبس كيبل — 3 × 12</li>
+              <li>ترايسبس خلف الرأس — 3 × 10</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>اليوم 2: ظهر + بايسبس</h4>
+              <span class="day-tag">سحب وبناء</span>
+            </div>
+            <ul>
+              <li>سحب أرضي — 4 × 10-12</li>
+              <li>سحب علوي — 4 × 10</li>
+              <li>بار منحني — 3 × 10</li>
+              <li>بايسبس بار — 3 × 12</li>
+              <li>بايسبس دمبل — 3 × 10</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>اليوم 3: أرجل + بطن</h4>
+              <span class="day-tag">قوة وتحمل</span>
+            </div>
+            <ul>
+              <li>سكوات — 4 × 8-12</li>
+              <li>ليج برس — 4 × 12</li>
+              <li>لانجز — 3 × 12</li>
+              <li>ليج كورل — 3 × 12</li>
+              <li>كرنش + بلانك — 3 جولات</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>اليوم 4: أكتاف + كارديو</h4>
+              <span class="day-tag">ثبات ولياقة</span>
+            </div>
+            <ul>
+              <li>ضغط كتف — 4 × 10</li>
+              <li>رفرفة جانبية — 3 × 15</li>
+              <li>رفرفة أمامية — 3 × 12</li>
+              <li>رفرفة خلفية — 3 × 15</li>
+              <li>مشي سريع أو دراجة — 15 إلى 20 دقيقة</li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="item-top">
+              <h4>اليوم 5: راحة أو مشي خفيف</h4>
+              <span class="day-tag">استشفاء</span>
+            </div>
+            <ul>
+              <li>مشي خفيف 20 إلى 30 دقيقة</li>
+              <li>تمطيط بسيط للمفاصل والعضلات</li>
+              <li>تركيز على النوم، الماء، والاستشفاء</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h2>التمارين بالصور</h2>
+          <span class="muted">صور + روابط شرح + تسجيل إنجاز</span>
+        </div>
+        <div class="list" id="exerciseList"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <h2>مؤقت الراحة</h2>
+          <span class="muted">بين الجولات</span>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>الوقت المتبقي</h3>
+            <p class="big" id="restTimer">60</p>
+            <div class="small">ثانية</div>
+          </div>
+          <div class="card">
+            <h3>التحكم</h3>
+            <div class="grid-2" style="margin-top:0;">
+              <button class="btn-red" id="btnStartRest">ابدأ</button>
+              <button class="btn-dark" id="btnResetRest">إعادة</button>
             </div>
           </div>
         </div>
@@ -713,7 +779,7 @@
       <div class="section">
         <div class="section-title">
           <h2>الوجبات والتغذية</h2>
-          <span class="muted">تحديث فوري على السحابة</span>
+          <span class="muted">خطة يومية مقترحة</span>
         </div>
 
         <div class="list">
@@ -734,9 +800,7 @@
           </div>
 
           <div class="item">
-            <div class="item-top">
-              <h4>خطة وجبات مقترحة</h4>
-            </div>
+            <div class="item-top"><h4>خطة وجبات مقترحة</h4></div>
             <ul>
               <li>الفطور: 2 بيض + 50 جم شوفان + موزة</li>
               <li>قبل التمرين: 2 تمر + قهوة</li>
@@ -757,53 +821,12 @@
         </div>
 
         <div class="list">
-          <div class="item">
-            <div class="item-top">
-              <h4>فيتامينات متعددة من آدم</h4>
-              <button class="btn-green">أساسي</button>
-            </div>
-            <p>مرة يوميًا بعد الأكل لدعم الصحة العامة والطاقة.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>زنك</h4>
-              <button class="btn-green">أساسي</button>
-            </div>
-            <p>يفضل حسب الجرعة المكتوبة على العبوة أو توجيه المختص.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>واي بروتين</h4>
-              <button class="btn-green">مهم</button>
-            </div>
-            <p>بعد التمرين أو عند صعوبة الوصول لاحتياجك اليومي من البروتين.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>فيتامين د</h4>
-              <button class="btn-dark">اختياري</button>
-            </div>
-            <p>يفضل حسب التحاليل أو وصفة الطبيب.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>أوميغا 3</h4>
-              <button class="btn-dark">اختياري</button>
-            </div>
-            <p>مفيد للصحة العامة ودعم القلب والمفاصل.</p>
-          </div>
-
-          <div class="item">
-            <div class="item-top">
-              <h4>مغنيسيوم</h4>
-              <button class="btn-dark">اختياري</button>
-            </div>
-            <p>يفضل مساءً، وقد يساعد على الاسترخاء وتحسين النوم.</p>
-          </div>
+          <div class="item"><div class="item-top"><h4>فيتامينات متعددة من آدم</h4><button class="btn-green">أساسي</button></div><p>مرة يوميًا بعد الأكل لدعم الصحة العامة والطاقة.</p></div>
+          <div class="item"><div class="item-top"><h4>زنك</h4><button class="btn-green">أساسي</button></div><p>يفضل حسب الجرعة المكتوبة على العبوة أو توجيه المختص.</p></div>
+          <div class="item"><div class="item-top"><h4>واي بروتين</h4><button class="btn-green">مهم</button></div><p>بعد التمرين أو عند صعوبة الوصول لاحتياجك اليومي من البروتين.</p></div>
+          <div class="item"><div class="item-top"><h4>فيتامين د</h4><button class="btn-dark">اختياري</button></div><p>يفضل حسب التحاليل أو وصفة الطبيب.</p></div>
+          <div class="item"><div class="item-top"><h4>أوميغا 3</h4><button class="btn-dark">اختياري</button></div><p>مفيد للصحة العامة ودعم القلب والمفاصل.</p></div>
+          <div class="item"><div class="item-top"><h4>مغنيسيوم</h4><button class="btn-dark">اختياري</button></div><p>يفضل مساءً، وقد يساعد على الاسترخاء وتحسين النوم.</p></div>
         </div>
       </div>
     </div>
@@ -816,26 +839,10 @@
         </div>
 
         <div class="grid-2">
-          <div class="card">
-            <h3>عدد التمارين</h3>
-            <p class="big" id="analysisWorkouts">0</p>
-            <div class="small">كل مرة تضغط تسجيل تمرين يتم تحديثه هنا.</div>
-          </div>
-          <div class="card">
-            <h3>البروتين المجموع</h3>
-            <p class="big" id="analysisProtein">0</p>
-            <div class="small">كل إضافة بروتين تنعكس هنا مباشرة.</div>
-          </div>
-          <div class="card">
-            <h3>السعرات المضافة</h3>
-            <p class="big" id="analysisCalories">0</p>
-            <div class="small">تقدير يومي للطاقة الداخلة.</div>
-          </div>
-          <div class="card">
-            <h3>مؤشر الالتزام</h3>
-            <p class="big" id="analysisCommitment">0%</p>
-            <div class="small">يعتمد على النوم والتمرين والبروتين والعادات.</div>
-          </div>
+          <div class="card"><h3>عدد التمارين</h3><p class="big" id="analysisWorkouts">0</p><div class="small">كل مرة تضغط تسجيل تمرين يتم تحديثه هنا.</div></div>
+          <div class="card"><h3>البروتين المجموع</h3><p class="big" id="analysisProtein">0</p><div class="small">كل إضافة بروتين تنعكس هنا مباشرة.</div></div>
+          <div class="card"><h3>السعرات المضافة</h3><p class="big" id="analysisCalories">0</p><div class="small">تقدير يومي للطاقة الداخلة.</div></div>
+          <div class="card"><h3>مؤشر الالتزام</h3><p class="big" id="analysisCommitment">0%</p><div class="small">يعتمد على النوم والتمرين والبروتين والعادات.</div></div>
         </div>
 
         <div class="coach" id="analysisNote">تحليل النتائج سيظهر هنا بعد تحميل بياناتك.</div>
@@ -846,34 +853,17 @@
       <div class="section">
         <div class="section-title">
           <h2>الملف الشخصي</h2>
-          <span class="muted">من قاعدة البيانات مباشرة</span>
+          <span class="muted">محفوظ على هذا الجهاز</span>
         </div>
 
         <div class="profile-grid">
-          <div class="card">
-            <h3>المعرّف</h3>
-            <p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">-</p>
-          </div>
-
-          <div class="card">
-            <h3>الاسم</h3>
-            <p class="big" id="profileName">-</p>
-          </div>
-
-          <div class="card">
-            <h3>XP</h3>
-            <p class="big" id="profileXp">-</p>
-          </div>
-
-          <div class="card">
-            <h3>المستوى</h3>
-            <p class="big" id="profileLevel">-</p>
-          </div>
+          <div class="card"><h3>المعرّف</h3><p class="big" id="profileDocId" style="font-size:14px;word-break:break-all;">محلي</p></div>
+          <div class="card"><h3>الاسم</h3><p class="big" id="profileName">-</p></div>
+          <div class="card"><h3>XP</h3><p class="big" id="profileXp">-</p></div>
+          <div class="card"><h3>المستوى</h3><p class="big" id="profileLevel">-</p></div>
         </div>
 
-        <div class="coach">
-          إذا ظهرت لك هذه البيانات، فهذا يعني أن التطبيق الكامل مرتبط بـ Firebase بشكل صحيح.
-        </div>
+        <div class="coach">هذه النسخة تعمل محليًا بثبات. بعد ذلك نضيف تسجيل المستخدمين بشكل نظيف فوقها.</div>
       </div>
     </div>
   </div>
@@ -889,11 +879,8 @@
     </div>
   </div>
 
-  <script type="module">
-    const splash = document.getElementById("splash");
-    setTimeout(() => {
-      splash.classList.add("fade-out");
-    }, 2200);
+  <script>
+    const STORAGE_KEY = "captain-yasser-local-v3";
 
     function svgThumb(title, emoji){
       const svg = `
@@ -922,11 +909,25 @@
         image: svgThumb("بنش برس","💪")
       },
       {
+        title: "بنش مائل دمبل",
+        day: "اليوم 1: صدر + ترايسبس",
+        sets: "3 جولات × 10 عدات",
+        youtube: "https://www.youtube.com/results?search_query=incline+dumbbell+press+proper+form",
+        image: svgThumb("بنش مائل","🏋️")
+      },
+      {
         title: "سحب أرضي",
         day: "اليوم 2: ظهر + بايسبس",
         sets: "4 جولات × 10-12 عدة",
         youtube: "https://www.youtube.com/results?search_query=seated+row+proper+form",
-        image: svgThumb("سحب أرضي","🏋️")
+        image: svgThumb("سحب أرضي","🚣")
+      },
+      {
+        title: "سحب علوي",
+        day: "اليوم 2: ظهر + بايسبس",
+        sets: "4 جولات × 10 عدات",
+        youtube: "https://www.youtube.com/results?search_query=lat+pulldown+proper+form",
+        image: svgThumb("سحب علوي","🧲")
       },
       {
         title: "سكوات",
@@ -936,23 +937,30 @@
         image: svgThumb("سكوات","🦵")
       },
       {
+        title: "ليج برس",
+        day: "اليوم 3: أرجل + بطن",
+        sets: "4 جولات × 12 عدة",
+        youtube: "https://www.youtube.com/results?search_query=leg+press+proper+form",
+        image: svgThumb("ليج برس","🦿")
+      },
+      {
         title: "ضغط كتف",
         day: "اليوم 4: أكتاف + كارديو",
         sets: "4 جولات × 10 عدات",
         youtube: "https://www.youtube.com/results?search_query=shoulder+press+proper+form",
         image: svgThumb("ضغط كتف","🔥")
+      },
+      {
+        title: "رفرفة جانبية",
+        day: "اليوم 4: أكتاف + كارديو",
+        sets: "3 جولات × 15 عدة",
+        youtube: "https://www.youtube.com/results?search_query=lateral+raise+proper+form",
+        image: svgThumb("رفرفة جانبية","🪽")
       }
     ];
 
-    let currentDocId = null;
-    let currentData = null;
-    let restInterval = null;
-    let restSeconds = 60;
-    let db = null;
-    let firestoreReady = false;
-
     const els = {
-      cloudStatus: document.getElementById("cloudStatus"),
+      splash: document.getElementById("splash"),
       heroName: document.getElementById("heroName"),
       heroXp: document.getElementById("heroXp"),
       levelMain: document.getElementById("levelMain"),
@@ -964,7 +972,6 @@
       workoutsChip: document.getElementById("workoutsChip"),
       vitalityText: document.getElementById("vitalityText"),
       coachBox: document.getElementById("coachBox"),
-      profileDocId: document.getElementById("profileDocId"),
       profileName: document.getElementById("profileName"),
       profileXp: document.getElementById("profileXp"),
       profileLevel: document.getElementById("profileLevel"),
@@ -984,6 +991,10 @@
       checkOmega3: document.getElementById("checkOmega3"),
       checkMagnesium: document.getElementById("checkMagnesium")
     };
+
+    let state = null;
+    let restInterval = null;
+    let restSeconds = 60;
 
     function defaultUser() {
       return {
@@ -1006,6 +1017,18 @@
           magnesium: false
         }
       };
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw) return { ...defaultUser(), ...JSON.parse(raw) };
+      }catch(e){}
+      return defaultUser();
+    }
+
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
     function calcLevel(xp) {
@@ -1045,18 +1068,10 @@
       const sleep = data.sleepHours || 0;
       const pain = data.painLevel || 0;
 
-      if (pain >= 6) {
-        return "AI Coach: عندك مستوى ألم مرتفع نسبيًا اليوم. خفف الشدة وركز على الاستشفاء.";
-      }
-      if (workouts >= 1 && protein >= proteinGoal && sleep >= 7) {
-        return "AI Coach: يوم ممتاز جدًا 🔥 تمرين وبروتين ونوم جيد — استمر بنفس الإيقاع.";
-      }
-      if (workouts >= 1 && protein < proteinGoal) {
-        return `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول لهدفك اليومي.`;
-      }
-      if (sleep < 6) {
-        return "AI Coach: حاول ترفع ساعات النوم الليلة، لأن الاستشفاء مهم جدًا لبناء العضلات والطاقة.";
-      }
+      if (pain >= 6) return "AI Coach: عندك مستوى ألم مرتفع نسبيًا اليوم. خفف الشدة وركز على الاستشفاء.";
+      if (workouts >= 1 && protein >= proteinGoal && sleep >= 7) return "AI Coach: يوم ممتاز جدًا 🔥 تمرين وبروتين ونوم جيد — استمر بنفس الإيقاع.";
+      if (workouts >= 1 && protein < proteinGoal) return `AI Coach: تمرينك ممتاز 🔥 باقي لك ${proteinGoal - protein} جم بروتين للوصول لهدفك اليومي.`;
+      if (sleep < 6) return "AI Coach: حاول ترفع ساعات النوم الليلة، لأن الاستشفاء مهم جدًا لبناء العضلات والطاقة.";
       return "AI Coach: ابدأ بالتمرين ثم ارفع بروتينك اليومي، وبعدها حدّث بيانات اليوم لتحصل على توصية أدق.";
     }
 
@@ -1076,8 +1091,9 @@
       `).join("");
 
       document.querySelectorAll("[data-exercise-xp]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          await saveUser({ xp: (currentData.xp || 0) + 5 });
+        btn.addEventListener("click", () => {
+          state.xp += 5;
+          saveAndRender();
         });
       });
     }
@@ -1093,39 +1109,46 @@
       els.checkMagnesium.checked = !!data.habits?.magnesium;
     }
 
-    function render(data) {
-      const level = calcLevel(data.xp);
-      const progress = calcProgress(data.xp);
-      const vitality = calcVitality(data);
-      const commitment = commitmentPercent(data);
+    function render() {
+      state.level = calcLevel(state.xp);
+      state.vitalityScore = calcVitality(state);
 
-      els.heroName.textContent = `${data.name || "الكابتن ياسر"} 🚀`;
-      els.heroXp.textContent = data.xp ?? 0;
+      const level = calcLevel(state.xp);
+      const progress = calcProgress(state.xp);
+      const vitality = calcVitality(state);
+      const commitment = commitmentPercent(state);
+
+      els.heroName.textContent = `${state.name || "الكابتن ياسر"} 🚀`;
+      els.heroXp.textContent = state.xp ?? 0;
       els.levelMain.textContent = level;
-      els.proteinMain.textContent = `${data.protein || 0} / ${data.proteinGoal || 160}`;
+      els.proteinMain.textContent = `${state.protein || 0} / ${state.proteinGoal || 160}`;
       els.levelProgressText.textContent = `${progress} / 100`;
       els.levelProgressBar.style.width = `${progress}%`;
 
-      els.caloriesChip.textContent = data.calories || 0;
-      els.proteinChip.textContent = data.protein || 0;
-      els.workoutsChip.textContent = data.workouts || 0;
+      els.caloriesChip.textContent = state.calories || 0;
+      els.proteinChip.textContent = state.protein || 0;
+      els.workoutsChip.textContent = state.workouts || 0;
       els.vitalityText.textContent = `مؤشر الحيوية: ${vitality}`;
-      els.coachBox.textContent = coachMessage(data);
+      els.coachBox.textContent = coachMessage(state);
 
-      els.profileDocId.textContent = currentDocId || "محلي";
-      els.profileName.textContent = data.name || "-";
-      els.profileXp.textContent = data.xp ?? 0;
+      els.profileName.textContent = state.name || "-";
+      els.profileXp.textContent = state.xp ?? 0;
       els.profileLevel.textContent = level;
 
-      els.analysisWorkouts.textContent = data.workouts || 0;
-      els.analysisProtein.textContent = data.protein || 0;
-      els.analysisCalories.textContent = data.calories || 0;
+      els.analysisWorkouts.textContent = state.workouts || 0;
+      els.analysisProtein.textContent = state.protein || 0;
+      els.analysisCalories.textContent = state.calories || 0;
       els.analysisCommitment.textContent = `${commitment}%`;
       els.analysisNote.textContent = commitment >= 70
         ? "تحليلك ممتاز: التزامك اليومي جيد، وبياناتك تشير إلى تقدم واضح."
         : "تحليلك الحالي: ارفع الالتزام بالنوم والتمرين والبروتين لتحسين نتائجك بسرعة.";
 
-      renderDailyInputs(data);
+      renderDailyInputs(state);
+    }
+
+    function saveAndRender(){
+      saveState();
+      render();
     }
 
     function collectHabits(){
@@ -1138,165 +1161,43 @@
       };
     }
 
-    function loadLocalUser(){
-      try{
-        const raw = localStorage.getItem("captain-yasser-local");
-        if(raw){
-          return { ...defaultUser(), ...JSON.parse(raw) };
-        }
-      }catch(e){}
-      return defaultUser();
-    }
-
-    function saveLocalUser(data){
-      try{
-        localStorage.setItem("captain-yasser-local", JSON.stringify(data));
-      }catch(e){}
-    }
-
-    async function initFirebase(){
-      try{
-        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-        const { getFirestore, collection, getDocs, doc, updateDoc, addDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-
-        window._fb = { collection, getDocs, doc, updateDoc, addDoc };
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9RHz58zik5mw4",
-          authDomain: "captain-yasser-pro.firebaseapp.com",
-          projectId: "captain-yasser-pro",
-          storageBucket: "captain-yasser-pro.firebasestorage.app",
-          messagingSenderId: "1025929025248",
-          appId: "1:1025929025248:web:86bb9469f4a5cd90356285"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        firestoreReady = true;
-        return true;
-      }catch(e){
-        console.error("Firebase init failed", e);
-        firestoreReady = false;
-        return false;
-      }
-    }
-
-    async function loadUser() {
-      const localFallback = loadLocalUser();
-
-      if (!firestoreReady) {
-        currentDocId = "محلي";
-        currentData = localFallback;
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ يعمل محليًا على الجهاز";
-        els.cloudStatus.classList.add("status-ok");
-        return;
-      }
-
-      try {
-        els.cloudStatus.textContent = "☁️ جاري قراءة البيانات من Firebase...";
-        const { collection, getDocs, addDoc } = window._fb;
-        const snapshot = await getDocs(collection(db, "users"));
-
-        if (snapshot.empty) {
-          const user = defaultUser();
-          const created = await addDoc(collection(db, "users"), user);
-          currentDocId = created.id;
-          currentData = user;
-        } else {
-          const firstDoc = snapshot.docs.find(d => {
-            const x = d.data();
-            return x.name !== undefined;
-          }) || snapshot.docs[0];
-
-          currentDocId = firstDoc.id;
-          currentData = { ...defaultUser(), ...firstDoc.data() };
-        }
-
-        render(currentData);
-        saveLocalUser(currentData);
-        els.cloudStatus.textContent = "☁️ متصل بالسحابة ✅";
-        els.cloudStatus.classList.add("status-ok");
-      } catch (e) {
-        console.error(e);
-        currentDocId = "محلي";
-        currentData = localFallback;
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ تعذر Firebase — يعمل محليًا";
-        els.cloudStatus.classList.add("status-error");
-      }
-    }
-
-    async function saveUser(partial) {
-      currentData = { ...currentData, ...partial };
-      currentData.level = calcLevel(currentData.xp);
-      currentData.vitalityScore = calcVitality(currentData);
-      saveLocalUser(currentData);
-
-      if (!firestoreReady || currentDocId === "محلي" || !db) {
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ تم الحفظ محليًا ✅";
-        return;
-      }
-
-      try {
-        const { doc, updateDoc } = window._fb;
-        const ref = doc(db, "users", currentDocId);
-        await updateDoc(ref, currentData);
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ تم الحفظ في Firebase ✅";
-      } catch (e) {
-        console.error(e);
-        render(currentData);
-        els.cloudStatus.textContent = "☁️ تم الحفظ محليًا بسبب تعذر السحابة";
-      }
-    }
-
-    document.getElementById("btnQuickWorkout").addEventListener("click", async () => {
-      await saveUser({
-        xp: (currentData.xp || 0) + 20,
-        workouts: (currentData.workouts || 0) + 1
-      });
+    document.getElementById("btnQuickWorkout").addEventListener("click", () => {
+      state.xp += 20;
+      state.workouts += 1;
+      saveAndRender();
     });
 
-    document.getElementById("btnQuickProtein").addEventListener("click", async () => {
-      await saveUser({
-        xp: (currentData.xp || 0) + 10,
-        protein: (currentData.protein || 0) + 30
-      });
+    document.getElementById("btnQuickProtein").addEventListener("click", () => {
+      state.xp += 10;
+      state.protein += 30;
+      saveAndRender();
     });
 
-    document.getElementById("btnAddProtein").addEventListener("click", async () => {
-      await saveUser({
-        protein: (currentData.protein || 0) + 30,
-        xp: (currentData.xp || 0) + 10
-      });
+    document.getElementById("btnAddProtein").addEventListener("click", () => {
+      state.xp += 10;
+      state.protein += 30;
+      saveAndRender();
     });
 
-    document.getElementById("btnAddCalories").addEventListener("click", async () => {
-      await saveUser({
-        calories: (currentData.calories || 0) + 400
-      });
+    document.getElementById("btnAddCalories").addEventListener("click", () => {
+      state.calories += 400;
+      saveAndRender();
     });
 
     document.getElementById("btnUpdateAdvice").addEventListener("click", () => {
-      currentData = {
-        ...currentData,
-        sleepHours: Number(els.sleepHours.value || 0),
-        energyLevel: Number(els.energyLevel.value || 0),
-        painLevel: Number(els.painLevel.value || 0),
-        habits: collectHabits()
-      };
-      render(currentData);
+      state.sleepHours = Number(els.sleepHours.value || 0);
+      state.energyLevel = Number(els.energyLevel.value || 0);
+      state.painLevel = Number(els.painLevel.value || 0);
+      state.habits = collectHabits();
+      render();
     });
 
-    document.getElementById("btnSaveDaily").addEventListener("click", async () => {
-      await saveUser({
-        sleepHours: Number(els.sleepHours.value || 0),
-        energyLevel: Number(els.energyLevel.value || 0),
-        painLevel: Number(els.painLevel.value || 0),
-        habits: collectHabits()
-      });
+    document.getElementById("btnSaveDaily").addEventListener("click", () => {
+      state.sleepHours = Number(els.sleepHours.value || 0);
+      state.energyLevel = Number(els.energyLevel.value || 0);
+      state.painLevel = Number(els.painLevel.value || 0);
+      state.habits = collectHabits();
+      saveAndRender();
     });
 
     document.getElementById("btnStartRest").addEventListener("click", () => {
@@ -1320,7 +1221,6 @@
     document.querySelectorAll(".nav-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const screen = btn.dataset.screen;
-
         document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
 
@@ -1335,13 +1235,13 @@
       });
     });
 
-    async function startApp(){
-      renderExercises();
-      await initFirebase();
-      await loadUser();
-    }
+    setTimeout(() => {
+      els.splash.classList.add("fade-out");
+    }, 1800);
 
-    startApp();
+    state = loadState();
+    renderExercises();
+    render();
   </script>
 </body>
 </html>
