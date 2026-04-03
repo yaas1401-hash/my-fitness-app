@@ -7,6 +7,7 @@
   <style>
     :root{
       --bg:#0a0c14;
+      --bg2:#111522;
       --card:#171c2b;
       --card2:#1e2437;
       --line:#2d3550;
@@ -35,13 +36,13 @@
 
     .hidden{display:none !important}
     .app{
-      max-width:520px;
+      max-width:540px;
       margin:0 auto;
       min-height:100vh;
-      padding:18px 16px 100px;
+      padding:18px 16px 110px;
     }
 
-    /* شاشة افتتاحية */
+    /* splash */
     .splash-screen{
       position:fixed;
       inset:0;
@@ -50,29 +51,26 @@
       align-items:center;
       justify-content:center;
       background:
-        linear-gradient(rgba(0,0,0,.72), rgba(0,0,0,.86)),
+        linear-gradient(rgba(0,0,0,.72), rgba(0,0,0,.88)),
         url('yasser.jpg') center/cover no-repeat;
       transition:opacity .6s ease, visibility .6s ease;
     }
-
     .splash-screen.hide{
       opacity:0;
       visibility:hidden;
       pointer-events:none;
     }
-
     .splash-content{
+      width:min(90vw,390px);
       text-align:center;
       padding:28px 24px;
-      width:min(90vw,380px);
-      background:rgba(17,21,34,.45);
+      border-radius:28px;
+      background:rgba(17,21,34,.50);
       border:1px solid rgba(255,255,255,.08);
       backdrop-filter:blur(10px);
-      border-radius:28px;
       box-shadow:0 20px 60px rgba(0,0,0,.35);
-      animation:fadeUp 1.5s ease;
+      animation:fadeUp 1.2s ease;
     }
-
     .splash-logo-wrap{
       position:relative;
       width:110px;
@@ -82,48 +80,42 @@
       align-items:center;
       justify-content:center;
     }
-
     .splash-glow{
       position:absolute;
       inset:0;
       border-radius:50%;
-      background:radial-gradient(circle, rgba(255,80,80,.22) 0%, rgba(255,200,80,.12) 45%, transparent 70%);
+      background:radial-gradient(circle, rgba(255,80,80,.25) 0%, rgba(255,200,80,.15) 45%, transparent 70%);
       animation:pulseGlow 2.2s infinite;
     }
-
     .splash-logo{
       position:relative;
       width:100px;
       height:100px;
       border-radius:50%;
       background:url('yasser.jpg') center/cover no-repeat;
-      border:3px solid rgba(255,255,255,.18);
-      box-shadow:0 0 30px rgba(255,80,80,0.4);
-      animation:floatLogo 2s ease-in-out infinite;
+      border:3px solid rgba(255,255,255,.16);
+      box-shadow:0 0 30px rgba(255,80,80,.35);
+      animation:floatLogo 2.2s ease-in-out infinite;
     }
-
     .splash-title-main{
       margin:0;
-      font-size:34px;
-      font-weight:800;
+      font-size:36px;
+      font-weight:900;
       color:#fff;
-      text-shadow:0 0 20px rgba(255,80,80,0.5);
-      animation:glowText 2s infinite alternate;
+      text-shadow:0 0 20px rgba(255,80,80,.35);
     }
-
     .splash-subtitle{
       margin:10px 0 0;
       color:#d1d6e4;
       font-size:16px;
+      line-height:1.8;
     }
-
     .splash-loader{
       display:flex;
       justify-content:center;
       gap:8px;
       margin-top:18px;
     }
-
     .splash-loader span{
       width:10px;
       height:10px;
@@ -132,7 +124,6 @@
       display:block;
       animation:bounceDots 1.2s infinite ease-in-out;
     }
-
     .splash-loader span:nth-child(2){animation-delay:.15s}
     .splash-loader span:nth-child(3){animation-delay:.3s}
 
@@ -151,10 +142,6 @@
     @keyframes fadeUp{
       0%{transform:translateY(30px);opacity:0}
       100%{transform:translateY(0);opacity:1}
-    }
-    @keyframes glowText{
-      0%{text-shadow:0 0 10px rgba(255,80,80,0.4)}
-      100%{text-shadow:0 0 25px rgba(255,80,80,0.9)}
     }
 
     .status{
@@ -179,7 +166,6 @@
       padding:18px;
       box-shadow:0 18px 42px rgba(0,0,0,.28);
     }
-
     .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .title{margin:4px 0 8px;font-size:30px;font-weight:900;line-height:1.2}
     .sub{color:var(--muted);font-size:14px;line-height:1.8}
@@ -206,7 +192,7 @@
       padding:16px;
     }
     .section{margin-top:14px}
-    .card h3{
+    .card h3,.mini-title{
       margin:0 0 8px;
       font-size:14px;
       font-weight:700;
@@ -390,11 +376,34 @@
       width:20px;height:20px;accent-color:var(--red);
     }
 
+    .day-block{
+      margin-top:14px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:16px;
+    }
+    .day-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    .day-header h3{
+      margin:0;
+      font-size:20px;
+      color:#fff;
+      font-weight:900;
+    }
+
     .exercise-card{
       background:var(--card2);
       border:1px solid var(--line);
       border-radius:20px;
       padding:14px;
+      margin-bottom:12px;
     }
     .exercise-card h4{margin:0 0 8px;font-size:18px}
     .exercise-meta{color:var(--muted);font-size:13px;line-height:1.8;margin-bottom:12px}
@@ -478,7 +487,7 @@
       border-top:1px solid var(--line);
     }
     .footer-inner{
-      width:min(520px,100%);
+      width:min(540px,100%);
       display:grid;
       grid-template-columns:repeat(6,1fr);
       gap:8px;
@@ -508,7 +517,6 @@
   </style>
 </head>
 <body>
-  <!-- شاشة البداية -->
   <div class="splash-screen" id="splashScreen">
     <div class="splash-content">
       <div class="splash-logo-wrap">
@@ -524,6 +532,7 @@
   <div class="app">
     <div class="status"><span>وضع التطبيق</span><strong>جاهز ومحفوظ محليًا</strong></div>
 
+    <!-- الرئيسية -->
     <div id="screen-dashboard">
       <div class="hero">
         <div class="row">
@@ -644,6 +653,7 @@
       </div>
     </div>
 
+    <!-- التمارين -->
     <div id="screen-workouts" class="hidden">
       <div class="section">
         <div class="section-title">
@@ -690,59 +700,228 @@
         </div>
       </div>
 
-      <div class="section">
-        <div class="section-title">
-          <h2>الإحماء والإطالة الذكية</h2>
-          <span class="muted">قبل التمرين وبعده</span>
+      <!-- يوم 1 -->
+      <div class="day-block">
+        <div class="day-header">
+          <h3>اليوم 1 — Push: صدر + ترايسبس</h3>
+          <span class="day-tag">قوة ودفع</span>
         </div>
-        <div class="list">
-          <div class="item">
-            <div class="item-top"><h4>إحماء يوم الصدر والكتف</h4><span class="day-tag">قبل Push</span></div>
-            <p>مهم جدًا لتجهيز الكتف الأمامي ومفصل الكتف قبل أي ضغط.</p>
-            <div class="video-wrap">
-              <iframe src="https://www.youtube.com/embed/2L2lnxIcNmo" title="إحماء الصدر والكتف" allowfullscreen></iframe>
-            </div>
+
+        <div class="exercise-card">
+          <h4>إحماء يوم الصدر والكتف</h4>
+          <div class="exercise-meta">قبل التمرين — تجهيز الكتف الأمامي ومفصل الكتف</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/3p8EBPVZ2Iw" title="إحماء الصدر والكتف" allowfullscreen></iframe>
           </div>
-          <div class="item">
-            <div class="item-top"><h4>إطالة الصدر والكتف</h4><span class="day-tag">بعد Push</span></div>
-            <div class="video-wrap">
-              <iframe src="https://www.youtube.com/embed/IeQ0K0m4F0g" title="إطالة الصدر والكتف" allowfullscreen></iframe>
-            </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>بنش برس</h4>
+          <div class="exercise-meta">4 × 8-12 — التمرين الرئيسي للصدر</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/rT7DgCr-3pg" title="بنش برس" allowfullscreen></iframe>
           </div>
-          <div class="item">
-            <div class="item-top"><h4>إحماء الظهر</h4><span class="day-tag">قبل Pull</span></div>
-            <div class="video-wrap">
-              <iframe src="https://www.youtube.com/embed/2L2lnxIcNmo" title="إحماء الظهر" allowfullscreen></iframe>
-            </div>
+          <div class="exercise-actions"><button class="btn-red done-btn" data-add="5">✅ تم الإنجاز (+5 XP)</button></div>
+          <div class="exercise-controls">
+            <input class="weight-input" type="number" data-ex="bench" placeholder="أدخل الوزن الحالي">
+            <input class="goal-input" type="number" data-goal="bench" placeholder="أدخل الهدف المستهدف">
           </div>
-          <div class="item">
-            <div class="item-top"><h4>إطالة الظهر</h4><span class="day-tag">بعد Pull</span></div>
-            <div class="video-wrap">
-              <iframe src="https://www.youtube.com/embed/sTxC3J3gQEU" title="إطالة الظهر" allowfullscreen></iframe>
-            </div>
+          <div class="goal-text" id="benchGoal"></div>
+          <div class="progress-text" id="benchProgress"></div>
+          <div class="chart-wrap"><canvas id="benchChart" width="600" height="220"></canvas></div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>بنش مائل دمبل</h4>
+          <div class="exercise-meta">3 × 10</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" title="بنش مائل دمبل" allowfullscreen></iframe>
           </div>
-          <div class="item">
-            <div class="item-top"><h4>إحماء الأرجل</h4><span class="day-tag">قبل Legs</span></div>
-            <div class="video-wrap">
-              <iframe src="https://www.youtube.com/embed/2L2lnxIcNmo" title="إحماء الأرجل" allowfullscreen></iframe>
-            </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>تفتيح صدر</h4>
+          <div class="exercise-meta">3 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/eozdVDA78K0" title="تفتيح صدر" allowfullscreen></iframe>
           </div>
-          <div class="item">
-            <div class="item-top"><h4>إطالة الأرجل</h4><span class="day-tag">بعد Legs</span></div>
-            <div class="video-wrap">
-              <iframe src="https://www.youtube.com/embed/v7AYKMP6rOE" title="إطالة الأرجل" allowfullscreen></iframe>
-            </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>ترايسبس كيبل</h4>
+          <div class="exercise-meta">3 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/2-LAMcpzODU" title="ترايسبس كيبل" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>إطالة الصدر والكتف</h4>
+          <div class="exercise-meta">بعد التمرين</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/qULTwquOuT4" title="إطالة الصدر والكتف" allowfullscreen></iframe>
           </div>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section-title">
-          <h2>التمارين الرجالية بالشرح والتتبع</h2>
-          <span class="muted">فيديو + وزن + هدف + رسم بياني</span>
+      <!-- يوم 2 -->
+      <div class="day-block">
+        <div class="day-header">
+          <h3>اليوم 2 — Pull: ظهر + بايسبس</h3>
+          <span class="day-tag">سحب وبناء</span>
         </div>
-        <div class="list" id="exerciseList"></div>
-        <div class="coach" id="smartCoachWorkout">سجّل وزنين على الأقل لكل تمرين حتى يبدأ التحليل الذكي.</div>
+
+        <div class="exercise-card">
+          <h4>إحماء الظهر</h4>
+          <div class="exercise-meta">قبل التمرين</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/3p8EBPVZ2Iw" title="إحماء الظهر" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>سحب أرضي</h4>
+          <div class="exercise-meta">4 × 10-12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/GZbfZ033f74" title="سحب أرضي" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>سحب علوي</h4>
+          <div class="exercise-meta">4 × 10</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" title="سحب علوي" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>فيس بول</h4>
+          <div class="exercise-meta">3 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/rep-qVOkqgk" title="فيس بول" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>بايسبس دمبل</h4>
+          <div class="exercise-meta">3 × 10</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" title="بايسبس دمبل" allowfullscreen></iframe>
+          </div>
+          <div class="exercise-actions"><button class="btn-red done-btn" data-add="5">✅ تم الإنجاز (+5 XP)</button></div>
+          <div class="exercise-controls">
+            <input class="weight-input" type="number" data-ex="biceps" placeholder="أدخل الوزن الحالي">
+            <input class="goal-input" type="number" data-goal="biceps" placeholder="أدخل الهدف المستهدف">
+          </div>
+          <div class="goal-text" id="bicepsGoal"></div>
+          <div class="progress-text" id="bicepsProgress"></div>
+          <div class="chart-wrap"><canvas id="bicepsChart" width="600" height="220"></canvas></div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>إطالة الظهر والذراع</h4>
+          <div class="exercise-meta">بعد التمرين</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/g-7ZWPCWv0U" title="إطالة الظهر" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- يوم 3 -->
+      <div class="day-block">
+        <div class="day-header">
+          <h3>اليوم 3 — Legs: أرجل + بطن</h3>
+          <span class="day-tag">قوة وتحمل</span>
+        </div>
+
+        <div class="exercise-card">
+          <h4>إحماء الأرجل</h4>
+          <div class="exercise-meta">قبل التمرين</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/3p8EBPVZ2Iw" title="إحماء الأرجل" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>سكوات</h4>
+          <div class="exercise-meta">4 × 8-12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/SW_C1A-rejs" title="سكوات" allowfullscreen></iframe>
+          </div>
+          <div class="exercise-actions"><button class="btn-red done-btn" data-add="5">✅ تم الإنجاز (+5 XP)</button></div>
+          <div class="exercise-controls">
+            <input class="weight-input" type="number" data-ex="squat" placeholder="أدخل الوزن الحالي">
+            <input class="goal-input" type="number" data-goal="squat" placeholder="أدخل الهدف المستهدف">
+          </div>
+          <div class="goal-text" id="squatGoal"></div>
+          <div class="progress-text" id="squatProgress"></div>
+          <div class="chart-wrap"><canvas id="squatChart" width="600" height="220"></canvas></div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>ليج برس</h4>
+          <div class="exercise-meta">4 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" title="ليج برس" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>ليج كورل</h4>
+          <div class="exercise-meta">3 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/1Tq3QdYUuHs" title="ليج كورل" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>كرنش + بلانك</h4>
+          <div class="exercise-meta">3 جولات</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/Xyd_fa5zoEU" title="كرنش بلانك" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>إطالة الأرجل</h4>
+          <div class="exercise-meta">بعد التمرين</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/L_xrDAtykMI" title="إطالة الأرجل" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- يوم 4 -->
+      <div class="day-block">
+        <div class="day-header">
+          <h3>اليوم 4 — Upper Pump: صدر + ظهر + أكتاف</h3>
+          <span class="day-tag">ضخ دم وشكل</span>
+        </div>
+
+        <div class="exercise-card">
+          <h4>إنكلين صدر خفيف</h4>
+          <div class="exercise-meta">3 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" title="إنكلين صدر خفيف" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>سحب علوي خفيف</h4>
+          <div class="exercise-meta">3 × 12</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" title="سحب علوي خفيف" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="exercise-card">
+          <h4>رفرفة خلفية</h4>
+          <div class="exercise-meta">2 × 15</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/EA7u4Q_8HQ0" title="رفرفة خلفية" allowfullscreen></iframe>
+          </div>
+        </div>
       </div>
 
       <div class="section">
@@ -751,23 +930,16 @@
           <span class="muted">مراقبة الحمل التدريبي</span>
         </div>
         <div class="grid-2">
-          <div class="card"><h3>فوليوم الصدر</h3><p class="big" id="volumeChest">0</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
-          <div class="card"><h3>فوليوم الظهر</h3><p class="big" id="volumeBack">0</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
-          <div class="card"><h3>فوليوم الأرجل</h3><p class="big" id="volumeLegs">0</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
-          <div class="card"><h3>فوليوم الأكتاف</h3><p class="big" id="volumeShoulders">0</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
+          <div class="card"><h3>فوليوم الصدر</h3><p class="big" id="volumeChest">10</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
+          <div class="card"><h3>فوليوم الظهر</h3><p class="big" id="volumeBack">11</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
+          <div class="card"><h3>فوليوم الأرجل</h3><p class="big" id="volumeLegs">11</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
+          <div class="card"><h3>فوليوم الأكتاف</h3><p class="big" id="volumeShoulders">8</p><div class="small">الجولات المباشرة أسبوعيًا</div></div>
         </div>
-        <div class="warning-box" id="volumeWarning">الفوليوم داخل النطاق المناسب حاليًا.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><h2>مؤقت الراحة</h2><span class="muted">بين الجولات</span></div>
-        <div class="grid-2">
-          <div class="card"><h3>الوقت المتبقي</h3><p class="big" id="restTimer">60</p><div class="small">ثانية</div></div>
-          <div class="card"><h3>التحكم</h3><div class="grid-2" style="margin-top:0;"><button class="btn-red" id="btnStartRest">ابدأ</button><button class="btn-dark" id="btnResetRest">إعادة</button></div></div>
-        </div>
+        <div class="warning-box">الفوليوم داخل النطاق المناسب حاليًا.</div>
       </div>
     </div>
 
+    <!-- الوجبات -->
     <div id="screen-meals" class="hidden">
       <div class="section">
         <div class="section-title"><h2>الوجبات والتغذية</h2><span class="muted">خطة يومية مقترحة</span></div>
@@ -794,6 +966,7 @@
       </div>
     </div>
 
+    <!-- تصوير -->
     <div id="screen-mealai" class="hidden">
       <div class="section">
         <div class="section-title"><h2>تصوير الوجبة وتحليلها</h2><span class="muted">نسخة ذكية أولية</span></div>
@@ -837,6 +1010,7 @@
       </div>
     </div>
 
+    <!-- التحليل -->
     <div id="screen-analysis" class="hidden">
       <div class="section">
         <div class="section-title"><h2>تحليل النتائج</h2><span class="muted">قراءة سريعة لتقدمك</span></div>
@@ -850,6 +1024,7 @@
       </div>
     </div>
 
+    <!-- الملف -->
     <div id="screen-profile" class="hidden">
       <div class="section">
         <div class="section-title"><h2>الملف الشخصي</h2><span class="muted">محفوظ على هذا الجهاز</span></div>
@@ -875,24 +1050,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "captain-yasser-complete-v2";
-
-    const EXERCISES = [
-      { key:"bench", title:"بنش برس", day:"اليوم 1: Push", sets:"4 × 8-12", youtubeEmbed:"https://www.youtube.com/embed/rT7DgCr-3pg" },
-      { key:"incline", title:"بنش مائل دمبل", day:"اليوم 1: Push", sets:"3 × 10", youtubeEmbed:"https://www.youtube.com/embed/8iPEnn-ltC8" },
-      { key:"fly", title:"تفتيح صدر", day:"اليوم 1: Push", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/eozdVDA78K0" },
-      { key:"tricepspushdown", title:"ترايسبس كيبل", day:"اليوم 1: Push", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/2-LAMcpzODU" },
-      { key:"row", title:"سحب أرضي", day:"اليوم 2: Pull", sets:"4 × 10-12", youtubeEmbed:"https://www.youtube.com/embed/GZbfZ033f74" },
-      { key:"latpulldown", title:"سحب علوي", day:"اليوم 2: Pull", sets:"4 × 10", youtubeEmbed:"https://www.youtube.com/embed/CAwf7n6Luuc" },
-      { key:"facepull", title:"فيس بول", day:"اليوم 2: Pull", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/rep-qVOkqgk" },
-      { key:"biceps", title:"بايسبس دمبل", day:"اليوم 2: Pull", sets:"3 × 10", youtubeEmbed:"https://www.youtube.com/embed/ykJmrZ5v0Oo" },
-      { key:"squat", title:"سكوات", day:"اليوم 3: Legs", sets:"4 × 8-12", youtubeEmbed:"https://www.youtube.com/embed/aclHkVaku9U" },
-      { key:"legpress", title:"ليج برس", day:"اليوم 3: Legs", sets:"4 × 12", youtubeEmbed:"https://www.youtube.com/embed/IZxyjW7MPJQ" },
-      { key:"legcurl", title:"ليج كورل", day:"اليوم 3: Legs", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/1Tq3QdYUuHs" },
-      { key:"core", title:"كرنش + بلانك", day:"اليوم 3: Legs", sets:"3 جولات", youtubeEmbed:"https://www.youtube.com/embed/Xyd_fa5zoEU" },
-      { key:"inclinelight", title:"إنكلين صدر خفيف", day:"اليوم 4: Upper Pump", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/8iPEnn-ltC8" },
-      { key:"rear", title:"رفرفة خلفية", day:"اليوم 4: Upper Pump", sets:"2 × 15", youtubeEmbed:"https://www.youtube.com/embed/EA7u4Q_8HQ0" }
-    ];
+    const STORAGE_KEY = "captain-yasser-final-v1";
 
     const TRACKED_EXERCISES = ["bench","squat","biceps"];
 
@@ -905,11 +1063,9 @@
       dessert: { name:"حلى / سناك", calories:360, protein:6, carbs:42, fat:18, fiber:2, coach:"احسبها ضمن يومك ولا تدعها تزاحم البروتين الأساسي." }
     };
 
-    const VOLUMES = { chest:10, back:11, legs:11, shoulders:8 };
-
     let state = null;
-    let restInterval = null;
-    let restSeconds = 60;
+    let tracker = JSON.parse(localStorage.getItem('tracker') || '{}');
+    let goals = JSON.parse(localStorage.getItem('goals') || '{}');
 
     function defaultUser() {
       return {
@@ -941,11 +1097,15 @@
           fiber: 0,
           photo: "",
           coach: ""
-        },
-        tracker: {},
-        goals: {}
+        }
       };
     }
+
+    const names = {
+      bench:'بنش برس',
+      squat:'سكوات',
+      biceps:'بايسبس دمبل'
+    };
 
     function loadState(){
       try{
@@ -956,6 +1116,8 @@
     }
 
     function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function saveTracker(){ localStorage.setItem('tracker', JSON.stringify(tracker)); }
+    function saveGoals(){ localStorage.setItem('goals', JSON.stringify(goals)); }
     function calcLevel(xp){ return Math.floor((xp || 0) / 100) + 1; }
     function calcProgress(xp){ return (xp || 0) % 100; }
 
@@ -994,82 +1156,61 @@
       return "AI Coach: ابدأ بالتمرين ثم ارفع بروتينك اليومي، وبعدها حدّث بيانات اليوم لتحصل على توصية أدق.";
     }
 
-    function ensureTrackerArray(key){
-      if(!state.tracker[key]) state.tracker[key] = [];
+    function ensureArray(name){
+      if(!tracker[name]) tracker[name]=[];
     }
 
-    function updateProgress(key, value){
-      ensureTrackerArray(key);
-      state.tracker[key].push(value);
-      saveAndRender();
+    function updateProgress(name, value){
+      ensureArray(name);
+      tracker[name].push(value);
+      saveTracker();
+      renderAll();
     }
 
-    function setGoal(key, value){
-      state.goals[key] = value;
-      saveAndRender();
+    function setGoal(name, value){
+      goals[name] = value;
+      saveGoals();
+      renderAll();
     }
 
-    function getLatest(key){
-      const arr = state.tracker[key] || [];
-      return arr.length ? arr[arr.length - 1] : null;
+    function getLatest(name){
+      const arr = tracker[name] || [];
+      return arr.length ? arr[arr.length-1] : null;
     }
 
-    function exerciseTitle(key){
-      const found = EXERCISES.find(e => e.key === key);
-      return found ? found.title : key;
-    }
-
-    function getProgressText(key, label){
-      const arr = state.tracker[key] || [];
-      if(arr.length === 0) return `${label}: ابدأ التسجيل...`;
-      if(arr.length === 1) return `${label}: أول تسجيل ${arr[0]} كجم`;
-      const last = arr[arr.length - 1];
-      const prev = arr[arr.length - 2];
+    function getProgressText(name){
+      const arr = tracker[name] || [];
+      if(arr.length === 0) return 'ابدأ التسجيل...';
+      if(arr.length === 1) return `أول تسجيل: ${arr[0]} كجم`;
+      const last = arr[arr.length-1];
+      const prev = arr[arr.length-2];
       const diff = last - prev;
-      if(diff > 0) return `${label}: 🔥 تقدم +${diff} كجم | آخر وزن ${last} كجم`;
-      if(diff < 0) return `${label}: ⚠️ نزول ${diff} كجم | آخر وزن ${last} كجم`;
-      return `${label}: ➖ ثبات | آخر وزن ${last} كجم`;
+      if(diff > 0) return `🔥 تقدم ممتاز +${diff} كجم | آخر وزن: ${last} كجم`;
+      if(diff < 0) return `⚠️ نزول ${diff} كجم | آخر وزن: ${last} كجم`;
+      return `➖ ثبات | آخر وزن: ${last} كجم`;
     }
 
-    function getGoalText(key, label){
-      const goal = state.goals[key];
-      const latest = getLatest(key);
-      if(!goal) return `${label}: الهدف غير محدد`;
-      if(latest == null) return `${label}: الهدف ${goal} كجم`;
+    function getGoalText(name){
+      const goal = goals[name];
+      const latest = getLatest(name);
+      if(!goal) return `حدد هدف ${names[name]}`;
+      if(latest == null) return `الهدف: ${goal} كجم`;
       const remain = goal - latest;
-      if(remain > 0) return `${label}: الهدف ${goal} كجم | المتبقي ${remain} كجم`;
-      if(remain === 0) return `${label}: 🏆 وصلت للهدف`;
-      return `${label}: 🚀 تجاوزت الهدف بـ ${Math.abs(remain)} كجم`;
-    }
-
-    function getSmartCoachText(){
-      const summary = [];
-      TRACKED_EXERCISES.forEach(key => {
-        const arr = state.tracker[key] || [];
-        if(arr.length >= 2){
-          const diff = arr[arr.length - 1] - arr[arr.length - 2];
-          if(diff > 0) summary.push(`${exerciseTitle(key)} +${diff} كجم`);
-        }
-      });
-      if(TRACKED_EXERCISES.every(key => !(state.tracker[key] || []).length)) {
-        return "ابدأ بتسجيل أول أوزانك، وبعدها سيظهر التحليل الذكي.";
-      }
-      if(summary.length) return `تحليلك الحالي ممتاز: ${summary.join(" | ")}. استمر على نفس النهج.`;
-      return "فيه ثبات أو تراجع بسيط. ركز على النوم، الإحماء، وثبات التقنية قبل زيادة الوزن.";
+      if(remain > 0) return `الهدف: ${goal} كجم | المتبقي: ${remain} كجم`;
+      if(remain === 0) return `🏆 وصلت للهدف: ${goal} كجم`;
+      return `🚀 تجاوزت الهدف بمقدار ${Math.abs(remain)} كجم`;
     }
 
     function drawChart(canvasId, arr){
       const canvas = document.getElementById(canvasId);
       if(!canvas) return;
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
-
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = "#111118";
+      ctx.fillStyle = '#111118';
       ctx.fillRect(0,0,w,h);
-
-      ctx.strokeStyle = "#2a2f44";
+      ctx.strokeStyle = '#2a2f44';
       ctx.lineWidth = 1;
       for(let i=1;i<5;i++){
         const y = (h/5)*i;
@@ -1078,19 +1219,16 @@
         ctx.lineTo(w-10,y);
         ctx.stroke();
       }
-
       if(!arr || arr.length===0){
-        ctx.fillStyle = "#888";
-        ctx.font = "16px Tahoma";
-        ctx.fillText("لا توجد بيانات بعد", w/2 - 60, h/2);
+        ctx.fillStyle = '#888';
+        ctx.font = '16px Tahoma';
+        ctx.fillText('لا توجد بيانات بعد', w/2 - 60, h/2);
         return;
       }
-
       const min = Math.min(...arr);
       const max = Math.max(...arr);
       const range = max - min || 1;
-
-      ctx.strokeStyle = "#ff4b4b";
+      ctx.strokeStyle = '#ff3b3b';
       ctx.lineWidth = 3;
       ctx.beginPath();
       arr.forEach((val, idx)=>{
@@ -1099,163 +1237,57 @@
         if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
       });
       ctx.stroke();
-
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = '#fff';
       arr.forEach((val, idx)=>{
         const x = 50 + (idx * ((w-80)/Math.max(arr.length-1,1)));
         const y = h - 30 - (((val - min)/range) * (h - 60));
         ctx.beginPath();
         ctx.arc(x,y,4,0,Math.PI*2);
         ctx.fill();
-        ctx.font = "12px Tahoma";
+        ctx.font = '12px Tahoma';
         ctx.fillText(val, x-8, y-10);
       });
     }
 
-    function renderExerciseCards(){
-      const container = document.getElementById("exerciseList");
-      container.innerHTML = EXERCISES.map(ex => {
-        const tracked = TRACKED_EXERCISES.includes(ex.key);
-        return `
-          <div class="exercise-card">
-            <h4>${ex.title}</h4>
-            <div class="exercise-meta">${ex.day}<br>${ex.sets}</div>
-
-            <div class="video-wrap">
-              <iframe src="${ex.youtubeEmbed}" title="${ex.title}" allowfullscreen></iframe>
-            </div>
-
-            <div class="exercise-actions">
-              <button class="btn-red done-btn" data-xp="${ex.key}">✅ تم الإنجاز (+5 XP)</button>
-            </div>
-
-            ${
-              tracked ? `
-              <div class="exercise-controls">
-                <input class="weight-input" type="number" data-ex="${ex.key}" placeholder="أدخل الوزن الحالي">
-                <input class="goal-input" type="number" data-goal="${ex.key}" placeholder="أدخل الهدف المستهدف">
-              </div>
-              <div class="goal-text" id="${ex.key}Goal"></div>
-              <div class="progress-text" id="${ex.key}Progress"></div>
-              <div class="chart-wrap">
-                <canvas id="${ex.key}Chart" width="600" height="220"></canvas>
-              </div>
-              ` : `
-              <div class="small">هذا التمرين بدون تتبع وزن رقمي داخل الرسم البياني.</div>
-              `
-            }
-          </div>
-        `;
-      }).join("");
-
-      document.querySelectorAll(".done-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          state.xp += 5;
-          saveAndRender();
-        });
+    function getSmartCoachText(){
+      const bench = tracker.bench || [];
+      const squat = tracker.squat || [];
+      const biceps = tracker.biceps || [];
+      const totalEntries = bench.length + squat.length + biceps.length;
+      if(totalEntries === 0) return 'ابدأ بتسجيل أول أوزانك، وبعدها سيظهر التحليل الذكي.';
+      if(bench.length < 2 && squat.length < 2 && biceps.length < 2) return 'أنت على بداية ممتازة. سجّل أكثر من مرة لكل تمرين ليظهر اتجاه تقدمك.';
+      const improvements = [];
+      ['bench','squat','biceps'].forEach(name=>{
+        const arr = tracker[name] || [];
+        if(arr.length >= 2){
+          const diff = arr[arr.length-1] - arr[arr.length-2];
+          if(diff > 0) improvements.push(`${names[name]} +${diff} كجم`);
+        }
       });
-
-      document.querySelectorAll("input[data-ex]").forEach(inp => {
-        const key = inp.dataset.ex;
-        inp.addEventListener("change", () => {
-          const val = Number(inp.value);
-          if(val > 0){
-            updateProgress(key, val);
-            inp.value = "";
-          }
-        });
-      });
-
-      document.querySelectorAll("input[data-goal]").forEach(inp => {
-        const key = inp.dataset.goal;
-        inp.value = state.goals[key] || "";
-        inp.addEventListener("change", () => {
-          const val = Number(inp.value);
-          if(val > 0){
-            setGoal(key, val);
-          }
-        });
-      });
-    }
-
-    function renderDailyInputs(data){
-      document.getElementById("sleepHours").value = data.sleepHours ?? 0;
-      document.getElementById("energyLevel").value = data.energyLevel ?? 6;
-      document.getElementById("painLevel").value = data.painLevel ?? 0;
-      document.getElementById("checkProteinDone").checked = !!data.habits?.proteinDone;
-      document.getElementById("checkCreatine").checked = !!data.habits?.creatine;
-      document.getElementById("checkVitamins").checked = !!data.habits?.vitamins;
-      document.getElementById("checkOmega3").checked = !!data.habits?.omega3;
-      document.getElementById("checkMagnesium").checked = !!data.habits?.magnesium;
-    }
-
-    function renderMealAnalysis(){
-      const meal = state.mealAnalysis || defaultUser().mealAnalysis;
-      document.getElementById("mCal").textContent = meal.calories || 0;
-      document.getElementById("mPro").textContent = meal.protein || 0;
-      document.getElementById("mCarb").textContent = meal.carbs || 0;
-      document.getElementById("mFat").textContent = meal.fat || 0;
-      document.getElementById("mFib").textContent = meal.fiber || 0;
-      document.getElementById("mealStatus").textContent = meal.type ? `تم اختيار: ${meal.type}` : "لم يتم التحليل بعد";
-      document.getElementById("mealCoach").textContent = meal.type
-        ? `تقدير أولي: ${meal.type}. ${meal.coach || "يمكنك تعديل الاختيار أو إعادة التحليل."}`
-        : "ارفع صورة ثم اختر أقرب نوع وجبة لتحصل على تقدير أولي.";
-
-      const preview = document.getElementById("mealPreview");
-      if (meal.photo) {
-        preview.src = meal.photo;
-        preview.classList.remove("hidden");
-      } else {
-        preview.classList.add("hidden");
-      }
-
-      document.querySelectorAll(".mealBtn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.type === meal.key);
-      });
-    }
-
-    function renderVolumes(){
-      document.getElementById("volumeChest").textContent = VOLUMES.chest;
-      document.getElementById("volumeBack").textContent = VOLUMES.back;
-      document.getElementById("volumeLegs").textContent = VOLUMES.legs;
-      document.getElementById("volumeShoulders").textContent = VOLUMES.shoulders;
-
-      const warnings = [];
-      if (VOLUMES.chest < 4 || VOLUMES.back < 4 || VOLUMES.legs < 4 || VOLUMES.shoulders < 4) warnings.push("هناك عضلة أقل من الحد الأدنى المقترح للفوليوم.");
-      if (VOLUMES.chest > 12) warnings.push("فوليوم الصدر مرتفع حاليًا.");
-      if (VOLUMES.back > 12) warnings.push("فوليوم الظهر أعلى من المطلوب حاليًا.");
-      if (VOLUMES.legs > 12) warnings.push("فوليوم الأرجل أعلى من النطاق الذكي المقترح لك حاليًا.");
-      if (VOLUMES.shoulders > 12) warnings.push("فوليوم الأكتاف مرتفع وقد يزيد الإجهاد على الكتف الأمامي.");
-      document.getElementById("volumeWarning").textContent = warnings.length ? warnings.join(" ") : "الفوليوم داخل النطاق المناسب حاليًا.";
+      if(improvements.length) return `تحليلك الحالي ممتاز: ${improvements.join(' | ')}. استمر على نفس النهج.`;
+      return 'فيه ثبات أو تراجع بسيط. ركز على النوم، الإحماء، وثبات التقنية قبل زيادة الوزن.';
     }
 
     function renderSummary(){
-      document.getElementById("summaryBench").textContent = getProgressText("bench","بنش برس");
-      document.getElementById("summarySquat").textContent = getProgressText("squat","سكوات");
-      document.getElementById("summaryBiceps").textContent = getProgressText("biceps","بايسبس دمبل");
-
-      const goalSummary = [
-        getGoalText("bench","بنش برس"),
-        getGoalText("squat","سكوات"),
-        getGoalText("biceps","بايسبس دمبل")
-      ].join(" | ");
-      document.getElementById("goalSummaryText").textContent = goalSummary;
-
-      document.getElementById("smartCoachHome").textContent = getSmartCoachText();
-      document.getElementById("smartCoachWorkout").textContent = getSmartCoachText();
+      document.getElementById('summaryBench').innerText = `${names.bench}: ${getProgressText('bench')}`;
+      document.getElementById('summarySquat').innerText = `${names.squat}: ${getProgressText('squat')}`;
+      document.getElementById('summaryBiceps').innerText = `${names.biceps}: ${getProgressText('biceps')}`;
+      document.getElementById('goalSummaryText').innerText =
+        `بنش برس: ${goals.bench ? goals.bench + ' كجم' : 'غير محدد'} | سكوات: ${goals.squat ? goals.squat + ' كجم' : 'غير محدد'} | بايسبس: ${goals.biceps ? goals.biceps + ' كجم' : 'غير محدد'}`;
+      document.getElementById('smartCoachHome').innerText = getSmartCoachText();
     }
 
-    function renderTrackedChartsAndTexts(){
-      TRACKED_EXERCISES.forEach(key => {
-        const progressEl = document.getElementById(key + "Progress");
-        const goalEl = document.getElementById(key + "Goal");
-        if(progressEl) progressEl.textContent = getProgressText(key, exerciseTitle(key));
-        if(goalEl) goalEl.textContent = getGoalText(key, exerciseTitle(key));
-        drawChart(key + "Chart", state.tracker[key] || []);
+    function renderAll(){
+      ['bench','squat','biceps'].forEach(name=>{
+        const progressEl = document.getElementById(name + 'Progress');
+        const goalEl = document.getElementById(name + 'Goal');
+        if(progressEl) progressEl.innerText = getProgressText(name);
+        if(goalEl) goalEl.innerText = getGoalText(name);
+        drawChart(name + 'Chart', tracker[name] || []);
       });
-    }
 
-    function render(){
+      renderSummary();
+
       state.level = calcLevel(state.xp);
       state.vitalityScore = calcVitality(state);
 
@@ -1289,16 +1321,42 @@
           ? "تحليلك ممتاز: التزامك اليومي جيد، وبياناتك تشير إلى تقدم واضح."
           : "تحليلك الحالي: ارفع الالتزام بالنوم والتمرين والبروتين لتحسين نتائجك بسرعة.";
 
-      renderDailyInputs(state);
-      renderMealAnalysis();
-      renderVolumes();
-      renderSummary();
-      renderTrackedChartsAndTexts();
+      document.getElementById("sleepHours").value = state.sleepHours ?? 0;
+      document.getElementById("energyLevel").value = state.energyLevel ?? 6;
+      document.getElementById("painLevel").value = state.painLevel ?? 0;
+      document.getElementById("checkProteinDone").checked = !!state.habits?.proteinDone;
+      document.getElementById("checkCreatine").checked = !!state.habits?.creatine;
+      document.getElementById("checkVitamins").checked = !!state.habits?.vitamins;
+      document.getElementById("checkOmega3").checked = !!state.habits?.omega3;
+      document.getElementById("checkMagnesium").checked = !!state.habits?.magnesium;
+
+      const meal = state.mealAnalysis || defaultUser().mealAnalysis;
+      document.getElementById("mCal").textContent = meal.calories || 0;
+      document.getElementById("mPro").textContent = meal.protein || 0;
+      document.getElementById("mCarb").textContent = meal.carbs || 0;
+      document.getElementById("mFat").textContent = meal.fat || 0;
+      document.getElementById("mFib").textContent = meal.fiber || 0;
+      document.getElementById("mealStatus").textContent = meal.type ? `تم اختيار: ${meal.type}` : "لم يتم التحليل بعد";
+      document.getElementById("mealCoach").textContent = meal.type
+        ? `تقدير أولي: ${meal.type}. ${meal.coach || ""}`
+        : "ارفع صورة ثم اختر أقرب نوع وجبة لتحصل على تقدير أولي.";
+
+      const preview = document.getElementById("mealPreview");
+      if (meal.photo) {
+        preview.src = meal.photo;
+        preview.classList.remove("hidden");
+      } else {
+        preview.classList.add("hidden");
+      }
+
+      document.querySelectorAll(".mealBtn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.type === meal.key);
+      });
     }
 
     function saveAndRender(){
       saveState();
-      render();
+      renderAll();
     }
 
     function collectHabits(){
@@ -1326,7 +1384,7 @@
           const target = document.getElementById(`screen-${screen}`);
           if(target) target.classList.remove("hidden");
 
-          render();
+          renderAll();
         });
       });
     }
@@ -1360,7 +1418,7 @@
         state.energyLevel = Number(document.getElementById("energyLevel").value || 0);
         state.painLevel = Number(document.getElementById("painLevel").value || 0);
         state.habits = collectHabits();
-        render();
+        renderAll();
       });
 
       document.getElementById("btnSaveDaily").addEventListener("click", ()=>{
@@ -1371,22 +1429,34 @@
         saveAndRender();
       });
 
-      document.getElementById("btnStartRest").addEventListener("click", ()=>{
-        clearInterval(restInterval);
-        restInterval = setInterval(()=>{
-          restSeconds -= 1;
-          if (restSeconds <= 0) {
-            clearInterval(restInterval);
-            restSeconds = 0;
-          }
-          document.getElementById("restTimer").textContent = restSeconds;
-        },1000);
+      document.querySelectorAll(".done-btn").forEach(btn => {
+        btn.addEventListener("click", ()=>{
+          state.xp += Number(btn.dataset.add || 5);
+          state.workouts += 1;
+          saveAndRender();
+        });
       });
 
-      document.getElementById("btnResetRest").addEventListener("click", ()=>{
-        clearInterval(restInterval);
-        restSeconds = 60;
-        document.getElementById("restTimer").textContent = restSeconds;
+      document.querySelectorAll('input[data-ex]').forEach(inp=>{
+        const name = inp.dataset.ex;
+        inp.addEventListener('change', ()=>{
+          const val = Number(inp.value);
+          if(val > 0){
+            updateProgress(name, val);
+            inp.value = '';
+          }
+        });
+      });
+
+      document.querySelectorAll('input[data-goal]').forEach(inp=>{
+        const name = inp.dataset.goal;
+        inp.value = goals[name] || '';
+        inp.addEventListener('change', ()=>{
+          const val = Number(inp.value);
+          if(val > 0){
+            setGoal(name, val);
+          }
+        });
       });
     }
 
@@ -1439,26 +1509,23 @@
     }
 
     function initSplash(){
-      window.addEventListener("load", ()=>{
-        const splash = document.getElementById("splashScreen");
+      window.addEventListener('load', ()=>{
+        const splash = document.getElementById('splashScreen');
         if(!splash) return;
-        setTimeout(()=>{
-          splash.classList.add("hide");
-        }, 2200);
+        setTimeout(()=>{ splash.classList.add('hide'); }, 2200);
       });
     }
 
     function initApp(){
       state = loadState();
-      renderExerciseCards();
       initNav();
       initButtons();
       initMealAI();
       initSplash();
-      render();
+      renderAll();
     }
 
     initApp();
   </script>
 </body>
-          </html>
+  </html>
