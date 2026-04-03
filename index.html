@@ -7,7 +7,6 @@
   <style>
     :root{
       --bg:#0a0c14;
-      --bg2:#111522;
       --card:#171c2b;
       --card2:#1e2437;
       --line:#2d3550;
@@ -16,14 +15,10 @@
       --red:#ff4b4b;
       --red2:#e63737;
       --yellow:#f5c24a;
-      --green:#22c55e;
       --green-bg:#102418;
       --green-line:#29543b;
-      --blue:#60a5fa;
       --blue-bg:#102032;
       --blue-line:#294d78;
-      --radius:22px;
-      --shadow:0 18px 42px rgba(0,0,0,.28);
     }
 
     *{box-sizing:border-box}
@@ -46,42 +41,120 @@
       padding:18px 16px 100px;
     }
 
-    .splash{
+    /* شاشة افتتاحية */
+    .splash-screen{
       position:fixed;
       inset:0;
-      z-index:999;
+      z-index:9999;
       display:flex;
       align-items:center;
       justify-content:center;
       background:
-        radial-gradient(circle at 30% 20%, rgba(245,194,74,.18), transparent 24%),
-        radial-gradient(circle at 70% 15%, rgba(255,75,75,.15), transparent 24%),
-        linear-gradient(180deg,#08090d 0%, #121521 100%);
-      transition:.45s ease;
+        linear-gradient(rgba(0,0,0,.72), rgba(0,0,0,.86)),
+        url('yasser.jpg') center/cover no-repeat;
+      transition:opacity .6s ease, visibility .6s ease;
     }
-    .splash.fade-out{opacity:0;visibility:hidden;pointer-events:none}
-    .splash-card{
-      width:min(370px,92vw);
-      padding:28px 22px;
-      border-radius:30px;
-      background:rgba(16,18,28,.94);
-      border:1px solid rgba(255,255,255,.08);
+
+    .splash-screen.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .splash-content{
       text-align:center;
-      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      padding:28px 24px;
+      width:min(90vw,380px);
+      background:rgba(17,21,34,.45);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(10px);
+      border-radius:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      animation:fadeUp 1.5s ease;
     }
-    .splash-logo{font-size:48px;margin-bottom:12px}
-    .splash-title{margin:0;font-size:32px;font-weight:900}
-    .splash-sub{margin:12px 0 0;color:var(--muted);line-height:1.8;font-size:14px}
-    .loading-dots{margin-top:18px;display:flex;justify-content:center;gap:8px}
-    .loading-dots span{
-      width:10px;height:10px;border-radius:999px;background:var(--yellow);
-      animation:bounce 1s infinite ease-in-out;
+
+    .splash-logo-wrap{
+      position:relative;
+      width:110px;
+      height:110px;
+      margin:0 auto 16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
-    .loading-dots span:nth-child(2){animation-delay:.15s}
-    .loading-dots span:nth-child(3){animation-delay:.3s}
-    @keyframes bounce{
-      0%,80%,100%{transform:translateY(0);opacity:.5}
-      40%{transform:translateY(-8px);opacity:1}
+
+    .splash-glow{
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,80,80,.22) 0%, rgba(255,200,80,.12) 45%, transparent 70%);
+      animation:pulseGlow 2.2s infinite;
+    }
+
+    .splash-logo{
+      position:relative;
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      background:url('yasser.jpg') center/cover no-repeat;
+      border:3px solid rgba(255,255,255,.18);
+      box-shadow:0 0 30px rgba(255,80,80,0.4);
+      animation:floatLogo 2s ease-in-out infinite;
+    }
+
+    .splash-title-main{
+      margin:0;
+      font-size:34px;
+      font-weight:800;
+      color:#fff;
+      text-shadow:0 0 20px rgba(255,80,80,0.5);
+      animation:glowText 2s infinite alternate;
+    }
+
+    .splash-subtitle{
+      margin:10px 0 0;
+      color:#d1d6e4;
+      font-size:16px;
+    }
+
+    .splash-loader{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin-top:18px;
+    }
+
+    .splash-loader span{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(180deg,#ff5a5a,#f5c24a);
+      display:block;
+      animation:bounceDots 1.2s infinite ease-in-out;
+    }
+
+    .splash-loader span:nth-child(2){animation-delay:.15s}
+    .splash-loader span:nth-child(3){animation-delay:.3s}
+
+    @keyframes pulseGlow{
+      0%,100%{transform:scale(1);opacity:.8}
+      50%{transform:scale(1.12);opacity:1}
+    }
+    @keyframes floatLogo{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+    @keyframes bounceDots{
+      0%,80%,100%{transform:translateY(0);opacity:.45}
+      40%{transform:translateY(-7px);opacity:1}
+    }
+    @keyframes fadeUp{
+      0%{transform:translateY(30px);opacity:0}
+      100%{transform:translateY(0);opacity:1}
+    }
+    @keyframes glowText{
+      0%{text-shadow:0 0 10px rgba(255,80,80,0.4)}
+      100%{text-shadow:0 0 25px rgba(255,80,80,0.9)}
     }
 
     .status{
@@ -104,7 +177,7 @@
       border:1px solid var(--line);
       border-radius:30px;
       padding:18px;
-      box-shadow:var(--shadow);
+      box-shadow:0 18px 42px rgba(0,0,0,.28);
     }
 
     .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -122,10 +195,9 @@
     }
     .xp-box .num{font-size:30px;font-weight:900;margin-top:6px}
 
-    .grid-2,.grid-3,.grid-4{display:grid;gap:12px}
+    .grid-2,.grid-3{display:grid;gap:12px}
     .grid-2{grid-template-columns:1fr 1fr}
     .grid-3{grid-template-columns:repeat(3,1fr)}
-    .grid-4{grid-template-columns:repeat(2,1fr)}
 
     .card,.section{
       background:var(--card);
@@ -134,7 +206,7 @@
       padding:16px;
     }
     .section{margin-top:14px}
-    .card h3,.mini-title{
+    .card h3{
       margin:0 0 8px;
       font-size:14px;
       font-weight:700;
@@ -142,6 +214,7 @@
     }
     .big{margin:0;font-size:28px;font-weight:900}
     .small{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.7}
+
     .section-title{
       display:flex;
       justify-content:space-between;
@@ -201,6 +274,7 @@
       font-size:14px;
       line-height:1.8;
     }
+
     .blue-box{
       margin-top:12px;
       padding:14px;
@@ -211,6 +285,7 @@
       font-size:14px;
       line-height:1.8;
     }
+
     .warning-box{
       margin-top:12px;
       padding:14px;
@@ -279,7 +354,6 @@
     .metric-box input,
     .metric-box select,
     .meal-upload input,
-    .profile-input,
     .weight-input,
     .goal-input{
       width:100%;
@@ -392,8 +466,6 @@
     .btn-red{background:var(--red);color:#fff}
     .btn-red:hover{background:var(--red2)}
     .btn-dark{background:#252c3d;color:#fff;border:1px solid var(--line)}
-    .btn-green{background:#173020;color:#c4f7d2;border:1px solid #29503a}
-    .btn-blue{background:#142742;color:#dbeafe;border:1px solid #29507c}
 
     .footer{
       position:fixed;
@@ -430,25 +502,28 @@
       .footer-inner{grid-template-columns:repeat(3,1fr)}
       .metric-grid{grid-template-columns:1fr}
       .grid-3{grid-template-columns:1fr 1fr 1fr}
-      .grid-2,.grid-4,.exercise-controls{grid-template-columns:1fr}
+      .grid-2,.exercise-controls{grid-template-columns:1fr}
       .title{font-size:27px}
     }
   </style>
 </head>
 <body>
-  <div class="splash" id="splash">
-    <div class="splash-card">
-      <div class="splash-logo">🚀</div>
-      <h1 class="splash-title">كابتن ياسر</h1>
-      <p class="splash-sub">نسختك الرياضية الاحترافية: تمارين، تغذية، تصوير وجبة، تحليل نتائج، وتتبع ذكي للأوزان والأهداف.</p>
-      <div class="loading-dots"><span></span><span></span><span></span></div>
+  <!-- شاشة البداية -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-content">
+      <div class="splash-logo-wrap">
+        <div class="splash-glow"></div>
+        <div class="splash-logo"></div>
+      </div>
+      <h1 class="splash-title-main">كابتن ياسر</h1>
+      <p class="splash-subtitle">نظام تدريب ذكي كامل</p>
+      <div class="splash-loader"><span></span><span></span><span></span></div>
     </div>
   </div>
 
   <div class="app">
     <div class="status"><span>وضع التطبيق</span><strong>جاهز ومحفوظ محليًا</strong></div>
 
-    <!-- الرئيسية -->
     <div id="screen-dashboard">
       <div class="hero">
         <div class="row">
@@ -569,7 +644,6 @@
       </div>
     </div>
 
-    <!-- التمارين -->
     <div id="screen-workouts" class="hidden">
       <div class="section">
         <div class="section-title">
@@ -664,7 +738,7 @@
 
       <div class="section">
         <div class="section-title">
-          <h2>التمارين بالشرح والتتبع</h2>
+          <h2>التمارين الرجالية بالشرح والتتبع</h2>
           <span class="muted">فيديو + وزن + هدف + رسم بياني</span>
         </div>
         <div class="list" id="exerciseList"></div>
@@ -694,7 +768,6 @@
       </div>
     </div>
 
-    <!-- الوجبات -->
     <div id="screen-meals" class="hidden">
       <div class="section">
         <div class="section-title"><h2>الوجبات والتغذية</h2><span class="muted">خطة يومية مقترحة</span></div>
@@ -721,7 +794,6 @@
       </div>
     </div>
 
-    <!-- تصوير -->
     <div id="screen-mealai" class="hidden">
       <div class="section">
         <div class="section-title"><h2>تصوير الوجبة وتحليلها</h2><span class="muted">نسخة ذكية أولية</span></div>
@@ -765,7 +837,6 @@
       </div>
     </div>
 
-    <!-- التحليل -->
     <div id="screen-analysis" class="hidden">
       <div class="section">
         <div class="section-title"><h2>تحليل النتائج</h2><span class="muted">قراءة سريعة لتقدمك</span></div>
@@ -779,7 +850,6 @@
       </div>
     </div>
 
-    <!-- الملف -->
     <div id="screen-profile" class="hidden">
       <div class="section">
         <div class="section-title"><h2>الملف الشخصي</h2><span class="muted">محفوظ على هذا الجهاز</span></div>
@@ -805,107 +875,23 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "captain-yasser-complete-v1";
+    const STORAGE_KEY = "captain-yasser-complete-v2";
 
     const EXERCISES = [
-      {
-        key:"bench",
-        title:"بنش برس",
-        day:"اليوم 1: Push",
-        sets:"4 × 8-12",
-        youtubeEmbed:"https://www.youtube.com/embed/rT7DgCr-3pg"
-      },
-      {
-        key:"incline",
-        title:"بنش مائل دمبل",
-        day:"اليوم 1: Push",
-        sets:"3 × 10",
-        youtubeEmbed:"https://www.youtube.com/embed/8iPEnn-ltC8"
-      },
-      {
-        key:"fly",
-        title:"تفتيح صدر",
-        day:"اليوم 1: Push",
-        sets:"3 × 12",
-        youtubeEmbed:"https://www.youtube.com/embed/eozdVDA78K0"
-      },
-      {
-        key:"tricepspushdown",
-        title:"ترايسبس كيبل",
-        day:"اليوم 1: Push",
-        sets:"3 × 12",
-        youtubeEmbed:"https://www.youtube.com/embed/2-LAMcpzODU"
-      },
-      {
-        key:"row",
-        title:"سحب أرضي",
-        day:"اليوم 2: Pull",
-        sets:"4 × 10-12",
-        youtubeEmbed:"https://www.youtube.com/embed/GZbfZ033f74"
-      },
-      {
-        key:"latpulldown",
-        title:"سحب علوي",
-        day:"اليوم 2: Pull",
-        sets:"4 × 10",
-        youtubeEmbed:"https://www.youtube.com/embed/CAwf7n6Luuc"
-      },
-      {
-        key:"facepull",
-        title:"فيس بول",
-        day:"اليوم 2: Pull",
-        sets:"3 × 12",
-        youtubeEmbed:"https://www.youtube.com/embed/rep-qVOkqgk"
-      },
-      {
-        key:"biceps",
-        title:"بايسبس دمبل",
-        day:"اليوم 2: Pull",
-        sets:"3 × 10",
-        youtubeEmbed:"https://www.youtube.com/embed/ykJmrZ5v0Oo"
-      },
-      {
-        key:"squat",
-        title:"سكوات",
-        day:"اليوم 3: Legs",
-        sets:"4 × 8-12",
-        youtubeEmbed:"https://www.youtube.com/embed/aclHkVaku9U"
-      },
-      {
-        key:"legpress",
-        title:"ليج برس",
-        day:"اليوم 3: Legs",
-        sets:"4 × 12",
-        youtubeEmbed:"https://www.youtube.com/embed/IZxyjW7MPJQ"
-      },
-      {
-        key:"legcurl",
-        title:"ليج كورل",
-        day:"اليوم 3: Legs",
-        sets:"3 × 12",
-        youtubeEmbed:"https://www.youtube.com/embed/1Tq3QdYUuHs"
-      },
-      {
-        key:"core",
-        title:"كرنش + بلانك",
-        day:"اليوم 3: Legs",
-        sets:"3 جولات",
-        youtubeEmbed:"https://www.youtube.com/embed/Xyd_fa5zoEU"
-      },
-      {
-        key:"inclinelight",
-        title:"إنكلين صدر خفيف",
-        day:"اليوم 4: Upper Pump",
-        sets:"3 × 12",
-        youtubeEmbed:"https://www.youtube.com/embed/8iPEnn-ltC8"
-      },
-      {
-        key:"rear",
-        title:"رفرفة خلفية",
-        day:"اليوم 4: Upper Pump",
-        sets:"2 × 15",
-        youtubeEmbed:"https://www.youtube.com/embed/EA7u4Q_8HQ0"
-      }
+      { key:"bench", title:"بنش برس", day:"اليوم 1: Push", sets:"4 × 8-12", youtubeEmbed:"https://www.youtube.com/embed/rT7DgCr-3pg" },
+      { key:"incline", title:"بنش مائل دمبل", day:"اليوم 1: Push", sets:"3 × 10", youtubeEmbed:"https://www.youtube.com/embed/8iPEnn-ltC8" },
+      { key:"fly", title:"تفتيح صدر", day:"اليوم 1: Push", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/eozdVDA78K0" },
+      { key:"tricepspushdown", title:"ترايسبس كيبل", day:"اليوم 1: Push", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/2-LAMcpzODU" },
+      { key:"row", title:"سحب أرضي", day:"اليوم 2: Pull", sets:"4 × 10-12", youtubeEmbed:"https://www.youtube.com/embed/GZbfZ033f74" },
+      { key:"latpulldown", title:"سحب علوي", day:"اليوم 2: Pull", sets:"4 × 10", youtubeEmbed:"https://www.youtube.com/embed/CAwf7n6Luuc" },
+      { key:"facepull", title:"فيس بول", day:"اليوم 2: Pull", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/rep-qVOkqgk" },
+      { key:"biceps", title:"بايسبس دمبل", day:"اليوم 2: Pull", sets:"3 × 10", youtubeEmbed:"https://www.youtube.com/embed/ykJmrZ5v0Oo" },
+      { key:"squat", title:"سكوات", day:"اليوم 3: Legs", sets:"4 × 8-12", youtubeEmbed:"https://www.youtube.com/embed/aclHkVaku9U" },
+      { key:"legpress", title:"ليج برس", day:"اليوم 3: Legs", sets:"4 × 12", youtubeEmbed:"https://www.youtube.com/embed/IZxyjW7MPJQ" },
+      { key:"legcurl", title:"ليج كورل", day:"اليوم 3: Legs", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/1Tq3QdYUuHs" },
+      { key:"core", title:"كرنش + بلانك", day:"اليوم 3: Legs", sets:"3 جولات", youtubeEmbed:"https://www.youtube.com/embed/Xyd_fa5zoEU" },
+      { key:"inclinelight", title:"إنكلين صدر خفيف", day:"اليوم 4: Upper Pump", sets:"3 × 12", youtubeEmbed:"https://www.youtube.com/embed/8iPEnn-ltC8" },
+      { key:"rear", title:"رفرفة خلفية", day:"اليوم 4: Upper Pump", sets:"2 × 15", youtubeEmbed:"https://www.youtube.com/embed/EA7u4Q_8HQ0" }
     ];
 
     const TRACKED_EXERCISES = ["bench","squat","biceps"];
@@ -969,10 +955,7 @@
       return defaultUser();
     }
 
-    function saveState(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
+    function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
     function calcLevel(xp){ return Math.floor((xp || 0) / 100) + 1; }
     function calcProgress(xp){ return (xp || 0) % 100; }
 
@@ -1031,6 +1014,11 @@
       return arr.length ? arr[arr.length - 1] : null;
     }
 
+    function exerciseTitle(key){
+      const found = EXERCISES.find(e => e.key === key);
+      return found ? found.title : key;
+    }
+
     function getProgressText(key, label){
       const arr = state.tracker[key] || [];
       if(arr.length === 0) return `${label}: ابدأ التسجيل...`;
@@ -1068,11 +1056,6 @@
       }
       if(summary.length) return `تحليلك الحالي ممتاز: ${summary.join(" | ")}. استمر على نفس النهج.`;
       return "فيه ثبات أو تراجع بسيط. ركز على النوم، الإحماء، وثبات التقنية قبل زيادة الوزن.";
-    }
-
-    function exerciseTitle(key){
-      const found = EXERCISES.find(e => e.key === key);
-      return found ? found.title : key;
     }
 
     function drawChart(canvasId, arr){
@@ -1158,7 +1141,7 @@
                 <canvas id="${ex.key}Chart" width="600" height="220"></canvas>
               </div>
               ` : `
-              <div class="small">هذا التمرين حاليًا بدون تتبع وزن رقمي داخل الرسم البياني.</div>
+              <div class="small">هذا التمرين بدون تتبع وزن رقمي داخل الرسم البياني.</div>
               `
             }
           </div>
@@ -1455,17 +1438,27 @@
       });
     }
 
+    function initSplash(){
+      window.addEventListener("load", ()=>{
+        const splash = document.getElementById("splashScreen");
+        if(!splash) return;
+        setTimeout(()=>{
+          splash.classList.add("hide");
+        }, 2200);
+      });
+    }
+
     function initApp(){
       state = loadState();
       renderExerciseCards();
       initNav();
       initButtons();
       initMealAI();
+      initSplash();
       render();
-      setTimeout(()=> document.getElementById("splash").classList.add("fade-out"), 1600);
     }
 
     initApp();
   </script>
 </body>
-  </html>
+          </html>
