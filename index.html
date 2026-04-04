@@ -26,22 +26,40 @@
       .app { max-width: 1200px; margin: 0 auto; padding: 16px; }
       .tabs { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
       .tab-btn {
-        border: 0; border-radius: 18px; padding: 14px 18px; background: #fff; color: var(--muted);
-        font-weight: 700; cursor: pointer; box-shadow: var(--shadow);
+        border: 0;
+        border-radius: 18px;
+        padding: 14px 18px;
+        background: #fff;
+        color: var(--muted);
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: var(--shadow);
       }
       .tab-btn.active { background: var(--primary); color: #fff; }
       .card {
-        background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
       }
       .hero { padding: 28px; margin-bottom: 20px; }
       .hero-badge {
-        display: inline-block; background: var(--primary-soft); color: var(--primary); padding: 8px 12px;
-        border-radius: 999px; font-size: 12px; font-weight: 700; margin-bottom: 12px;
+        display: inline-block;
+        background: var(--primary-soft);
+        color: var(--primary);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 12px;
       }
       .hero h1 { margin: 0; font-size: 40px; line-height: 1.2; }
       .hero h1 span { color: var(--primary); display: block; margin-top: 6px; }
       .hero p { color: var(--muted); line-height: 1.9; margin: 14px 0 0; }
-      .stats, .overview-grid, .metrics-grid, .progress-grid, .meals-grid { display: grid; gap: 16px; }
+      .stats, .overview-grid, .metrics-grid, .progress-grid, .meals-grid {
+        display: grid;
+        gap: 16px;
+      }
       .stats { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 18px; }
       .overview-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 20px; }
       .metrics-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
@@ -55,47 +73,89 @@
       .list-box { display: grid; gap: 10px; }
       .list-item { background: #f8fafc; border-radius: 18px; padding: 14px; color: #475569; }
       .day-card { padding: 20px; margin-bottom: 18px; }
-      .day-head { display: flex; gap: 14px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; }
+      .day-head {
+        display: flex; gap: 14px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;
+      }
       .day-name { font-size: 30px; font-weight: 800; margin: 0; }
       .day-focus { color: var(--primary); font-weight: 700; margin-top: 6px; }
-      .day-cardio { background: var(--primary-soft); color: var(--primary); padding: 12px 16px; border-radius: 18px; font-size: 14px; font-weight: 700; }
-      .day-notes { margin: 16px 0 0; border-bottom: 4px solid #14b8a6; padding-bottom: 12px; color: var(--muted); line-height: 1.9; }
+      .day-cardio {
+        background: var(--primary-soft); color: var(--primary); padding: 12px 16px; border-radius: 18px;
+        font-size: 14px; font-weight: 700;
+      }
+      .day-notes {
+        margin: 16px 0 0; border-bottom: 4px solid #14b8a6; padding-bottom: 12px; color: var(--muted); line-height: 1.9;
+      }
       .exercise-list { margin-top: 18px; display: grid; gap: 12px; }
       .exercise-wrap { background: #f8fafc; border-radius: 24px; }
-      .exercise-row { display: flex; align-items: flex-start; gap: 12px; background: #fff; border-radius: 20px; border-right: 6px solid #14b8a6; padding: 14px; }
+      .exercise-row {
+        display: flex; align-items: flex-start; gap: 12px; background: #fff; border-radius: 20px;
+        border-right: 6px solid #14b8a6; padding: 14px;
+      }
       .watch-btn {
-        min-width: 92px; border: 0; border-radius: 18px; background: var(--primary); color: #fff; padding: 14px 16px;
-        font-weight: 800; cursor: pointer;
+        min-width: 92px; border: 0; border-radius: 18px; background: var(--primary); color: #fff;
+        padding: 14px 16px; font-weight: 800; cursor: pointer;
       }
       .exercise-content { flex: 1; }
       .exercise-title { font-size: 18px; font-weight: 800; color: var(--text); }
       .exercise-title span { color: #475569; font-weight: 500; }
-      .chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
-      .chip { background: #f1f5f9; color: #475569; border-radius: 999px; padding: 7px 12px; font-size: 12px; }
-      .progress-bar { width: 100%; height: 12px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin-top: 12px; }
+      .chips {
+        margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end;
+      }
+      .chip {
+        background: #f1f5f9; color: #475569; border-radius: 999px; padding: 7px 12px; font-size: 12px;
+      }
+      .progress-bar {
+        width: 100%; height: 12px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin-top: 12px;
+      }
       .progress-fill { height: 100%; background: var(--primary); border-radius: 999px; }
       .meal-card h3, .log-item h4 { margin: 0; font-size: 20px; }
-      .meal-top, .log-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
-      .cal-badge { background: var(--primary-soft); color: var(--primary); border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; }
-      .meal-meta, .log-meta { margin-top: 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .meta-box { background: #f8fafc; border-radius: 16px; padding: 10px; color: #475569; font-size: 14px; }
+      .meal-top, .log-top {
+        display: flex; justify-content: space-between; gap: 10px; align-items: flex-start;
+      }
+      .cal-badge {
+        background: var(--primary-soft); color: var(--primary); border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700;
+      }
+      .meal-meta, .log-meta {
+        margin-top: 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+      }
+      .meta-box {
+        background: #f8fafc; border-radius: 16px; padding: 10px; color: #475569; font-size: 14px;
+      }
       .primary-btn {
-        width: 100%; border: 0; border-radius: 18px; background: var(--primary); color: white; padding: 14px; margin-top: 14px;
-        font-weight: 800; cursor: pointer;
+        width: 100%; border: 0; border-radius: 18px; background: var(--primary); color: white; padding: 14px;
+        margin-top: 14px; font-weight: 800; cursor: pointer;
       }
       .section { margin-bottom: 18px; }
-      .section-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 16px; }
-      .count-badge { background: #f1f5f9; color: #475569; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; }
-      .suggestion-box { display: flex; justify-content: space-between; gap: 20px; align-items: center; flex-wrap: wrap; }
-      .suggestion-side { background: var(--primary-soft); color: var(--primary); border-radius: 24px; padding: 20px; min-width: 120px; text-align: center; font-weight: 800; }
-      .modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 999; }
-      .modal-card { background: white; width: min(760px, 100%); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
-      .modal-head { display: flex; justify-content: space-between; gap: 10px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
-      .close-btn { border: 0; background: #f1f5f9; color: #334155; border-radius: 14px; padding: 10px 14px; cursor: pointer; font-weight: 700; }
+      .section-head {
+        display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 16px;
+      }
+      .count-badge {
+        background: #f1f5f9; color: #475569; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700;
+      }
+      .suggestion-box {
+        display: flex; justify-content: space-between; gap: 20px; align-items: center; flex-wrap: wrap;
+      }
+      .suggestion-side {
+        background: var(--primary-soft); color: var(--primary); border-radius: 24px; padding: 20px; min-width: 120px; text-align: center; font-weight: 800;
+      }
+      .modal {
+        position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: flex; align-items: center;
+        justify-content: center; padding: 16px; z-index: 999;
+      }
+      .modal-card {
+        background: white; width: min(760px, 100%); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden;
+      }
+      .modal-head {
+        display: flex; justify-content: space-between; gap: 10px; padding: 18px 20px; border-bottom: 1px solid var(--line);
+      }
+      .close-btn {
+        border: 0; background: #f1f5f9; color: #334155; border-radius: 14px; padding: 10px 14px; cursor: pointer; font-weight: 700;
+      }
       .modal-body { padding: 20px; }
       .video-box { border-radius: 20px; background: #f8fafc; padding: 20px; text-align: center; }
-      .hidden { display: none; }
-      .input-grid { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+      .input-grid {
+        margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;
+      }
       .field, .field-textarea {
         width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 14px; background: #fff; font-family: inherit;
       }
@@ -162,14 +222,15 @@
     {
       id: 'upper-a',
       name: 'تمارين العلوي (الأحد)',
-      focus: 'صدر + ظهر + تصحيح وضعية',
+      focus: 'صدر + ظهر + كتف جانبي + كتف خلفي',
       cardio: '15 دقيقة مشي بعد التمرين',
-      notes: 'تمارين آمنة للعودة بعد الانقطاع، مع تركيز على الظهر والكتف الخلفي لتخفيف أثر الجلسة الطويلة والانحناء.',
+      notes: 'تمارين آمنة للعودة بعد الانقطاع، مع تركيز على الظهر والكتف الخلفي والجانبي لتحسين الوضعية والشكل العام.',
       exercises: [
         { id: 'machine-chest-press', arabicName: 'ضغط صدر جهاز', name: 'Machine Chest Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/FXZcFBBJgWg' },
         { id: 'lat-pulldown', arabicName: 'سحب علوي', name: 'Lat Pulldown', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/jDwfoPmHd1k' },
         { id: 'seated-row', arabicName: 'سحب أرضي جهاز', name: 'Seated Row', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/d30OHGc2VcY' },
-        { id: 'reverse-pec-deck', arabicName: 'كتف خلفي جهاز', name: 'Reverse Pec Deck', duration: '30ث', level: 'مهم', sets: '3', reps: '12', link: 'https://youtu.be/dbALgVHdJRM' }
+        { id: 'reverse-pec-deck', arabicName: 'كتف خلفي جهاز', name: 'Reverse Pec Deck', duration: '30ث', level: 'مهم', sets: '3', reps: '12', link: 'https://youtu.be/dbALgVHdJRM' },
+        { id: 'cable-lateral-raise', arabicName: 'كتف جانبي كيبل', name: 'Cable Lateral Raise', duration: '30ث', level: 'مهم', sets: '3', reps: '12-15', link: 'https://youtu.be/3VcKaXpzqRo' }
       ]
     },
     {
@@ -188,13 +249,14 @@
     {
       id: 'upper-b',
       name: 'تمارين العلوي (الأربعاء)',
-      focus: 'زوايا مختلفة للصدر والظهر',
+      focus: 'صدر علوي + ظهر + كتف جانبي + كتف خلفي',
       cardio: '15 دقيقة كارديو خفيف',
       notes: 'تنويع بسيط يخدم التضخيم ويحافظ على أمان المفاصل مع استمرار دعم الوضعية.',
       exercises: [
         { id: 'incline-press', arabicName: 'ضغط مائل', name: 'Incline Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/2caIbxcYQSU' },
         { id: 'one-arm-row', arabicName: 'سحب دمبل', name: 'One Arm Row', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/tpV2NDgxG1c' },
-        { id: 'reverse-pec-deck-b', arabicName: 'كتف خلفي جهاز', name: 'Reverse Pec Deck', duration: '30ث', level: 'مهم', sets: '3', reps: '12', link: 'https://youtu.be/dbALgVHdJRM' }
+        { id: 'reverse-pec-deck-b', arabicName: 'كتف خلفي جهاز', name: 'Reverse Pec Deck', duration: '30ث', level: 'مهم', sets: '3', reps: '12', link: 'https://youtu.be/dbALgVHdJRM' },
+        { id: 'cable-lateral-raise-b', arabicName: 'كتف جانبي كيبل', name: 'Cable Lateral Raise', duration: '30ث', level: 'مهم', sets: '3', reps: '12-15', link: 'https://youtu.be/3VcKaXpzqRo' }
       ]
     },
     {
@@ -202,7 +264,7 @@
       name: 'تمارين السفلي (الخميس)',
       focus: 'تقوية الأرجل والخلفية بشكل آمن',
       cardio: '15 دقيقة مشي',
-      notes: 'نسخة سفلي ثانية آمنة بدون رومانيان ديدلفت أو هيب ثرست، ومناسبة جدًا لمرحلة الرجوع.',
+      notes: 'نسخة سفلي ثانية آمنة بدون Romanian Deadlift أو Hip Thrust، ومناسبة جدًا لمرحلة الرجوع.',
       exercises: [
         { id: 'leg-press-b', arabicName: 'دفع الأرجل', name: 'Leg Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/W1SD96lrudY' },
         { id: 'leg-curl-b', arabicName: 'خلف الفخذ', name: 'Leg Curl', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/tHV000dBZ7A' },
@@ -500,7 +562,7 @@
       <div class="card hero">
         <div class="hero-badge">نسخة نهائية مصححة</div>
         <h1>مركز قيادة أبو خالد<span>Upper / Lower Split</span></h1>
-        <p>تم تحديث التمارين داخل الكود بالكامل بروابطك العربية المعتمدة، مع حذف التمارين غير المناسبة لك في هذه المرحلة، وتشغيل الفيديو داخل التطبيق.</p>
+        <p>تم إصلاح الكود بالكامل، مع إضافة الكتف الجانبي داخل Upper A وUpper B، والحفاظ على تمارين آمنة ومناسبة لمرحلة الرجوع.</p>
         <div class="stats">
           <div class="card mini-card"><div class="label">أيام الحديد</div><div class="value">4</div><div class="muted">علوي / سفلي</div></div>
           <div class="card mini-card"><div class="label">الكارديو</div><div class="value">15-20</div><div class="muted">دقيقة بعد التمرين</div></div>
@@ -563,7 +625,7 @@
             <div class="list-item">المدة: ${TRAINING_OVERVIEW.returnPhase.durationWeeks}</div>
             <div class="list-item">زمن الجلسة: ${TRAINING_OVERVIEW.returnPhase.workoutDuration}</div>
             <div class="list-item">الشدة: ${TRAINING_OVERVIEW.returnPhase.intensity}</div>
-            <div class="list-item">الأولوية عندك الآن: تكنيك نظيف + استمرارية + عدم تهييج الظهر.</div>
+            <div class="list-item">الأولوية الآن: تكنيك نظيف + استمرارية + عدم تهييج الظهر.</div>
           </div>
         </div>
       </div>
