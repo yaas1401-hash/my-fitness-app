@@ -16,10 +16,9 @@
         .exercise-item { background: #f9fbfd; padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border-right: 5px solid var(--secondary); }
         .video-btn { background: var(--primary); color: white; padding: 6px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
         .calc-input, .note-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
-        .calc-btn { background: var(--secondary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
-        .calc-btn:active { transform: scale(0.95); }
+        .calc-btn { background: var(--secondary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
         .result-box { margin-top: 15px; padding: 15px; background: #e0f2f1; border-radius: 10px; text-align: center; display: none; }
-        .category-title { font-size: 0.8rem; color: #666; margin-top: 10px; border-right: 3px solid var(--accent); padding-right: 5px; }
+        .time-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -33,57 +32,56 @@
     <header style="text-align:center; padding: 10px;"><h1>🚀 مركز القيادة</h1></header>
 
     <div class="card">
-        <h2><i class="fas fa-calculator"></i> حاسبة الماكروز (موسوعة الغذاء)</h2>
-        <label style="font-size: 0.9rem;">1. اختر صنف الطعام:</label>
+        <h2><i class="fas fa-utensils"></i> الجدول الغذائي والقهوة</h2>
+        <div class="time-row"><span>05:30 ص</span> <span>🥣 الشوفان + بروتين</span></div>
+        <div class="time-row"><span>01:30 م</span> <span>🍗 الغداء (دجاج + أرز)</span></div>
+        <div class="time-row"><span>08:00 م</span> <span>🥗 العشاء (تونة + بطاطس)</span></div>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-calculator"></i> حاسبة الماكروز (الموسوعة)</h2>
         <select id="food-type" class="calc-input">
-            <optgroup label="🥩 مصادر البروتين">
+            <optgroup label="🥩 بروتين">
                 <option value="chicken">صدور دجاج</option>
-                <option value="beef">لحم بقري (قليل الدهون)</option>
-                <option value="fish">سمك فيليه / مشوي</option>
-                <option value="tuna">تونة (علبة بالماء)</option>
-                <option value="turkey">صدور رومي</option>
-                <option value="greek_yogurt">زبادي يوناني</option>
+                <option value="beef">لحم بقري</option>
+                <option value="fish">سمك فيليه</option>
+                <option value="tuna">تونة</option>
                 <option value="eggs">بيض مسلوق (بالحبة)</option>
-                <option value="lentils">عدس (مطبوخ)</option>
+                <option value="greek_yogurt">زبادي يوناني</option>
             </optgroup>
-            <optgroup label="🍚 مصادر الكربوهيدرات">
+            <optgroup label="🍚 كارب">
                 <option value="rice">أرز مطبوخ</option>
                 <option value="potato">بطاطس مسلوقة</option>
-                <option value="sweet_potato">بطاطس حلوة</option>
                 <option value="oats">شوفان</option>
-                <option value="pasta">مكرونة سمراء</option>
-                <option value="bread">خبز بر (حبة)</option>
-                <option value="quinoa">كينوا</option>
+                <option value="pasta">مكرونة</option>
+                <option value="bread">خبز بر (بالحبة)</option>
             </optgroup>
-            <optgroup label="🥑 دهون صحية">
+            <optgroup label="🥑 دهون">
                 <option value="avocado">أفوكادو</option>
                 <option value="olive_oil">زيت زيتون (ملعقة)</option>
                 <option value="nuts">مكسرات مشكلة</option>
                 <option value="peanut_butter">زبدة فول سوداني</option>
             </optgroup>
         </select>
-
-        <label style="font-size: 0.9rem;">2. الوزن بالغرام (أو بالعدد للبيض والخبز):</label>
-        <input type="number" id="food-weight" class="calc-input" placeholder="مثلاً: 200">
-        
-        <button onclick="calculateMacros()" class="calc-btn">احسب الماكروز</button>
-        
+        <input type="number" id="food-weight" class="calc-input" placeholder="الوزن بالغرام">
+        <button onclick="calculateMacros()" class="calc-btn">احسب الآن</button>
         <div id="result-box" class="result-box">
-            <div id="calc-result" style="font-weight:bold; font-size:1.1rem; color:var(--primary);"></div>
+            <div id="calc-result" style="font-weight:bold; color:var(--primary);"></div>
         </div>
     </div>
 
     <div class="card">
-        <h2><i class="fas fa-dumbbell"></i> تمارينك المعتمدة</h2>
+        <h2><i class="fas fa-dumbbell"></i> التمارين المعتمدة</h2>
         <div class="exercise-item"><span>1. صدر (Chest Press)</span> <a href="https://www.youtube.com/watch?v=xZ9nHInidY" class="video-btn" target="_blank">شاهد</a></div>
         <div class="exercise-item"><span>2. سحب عالي (Lat Pull)</span> <a href="https://www.youtube.com/watch?v=CAwf7n6Luuc" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>3. كتف جانبي (Lateral)</span> <a href="https://www.youtube.com/watch?v=WJm8XInU76Y" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>4. تراي كيبل (Pushdown)</span> <a href="https://www.youtube.com/watch?v=2-LAMcpzHLU" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>3. سحب أرضي (Row)</span> <a href="https://www.youtube.com/watch?v=GZbfZ033f74" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>4. كتف جانبي (Lateral)</span> <a href="https://www.youtube.com/watch?v=WJm8XInU76Y" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>5. تراي كيبل (Pushdown)</span> <a href="https://www.youtube.com/watch?v=2-LAMcpzHLU" class="video-btn" target="_blank">شاهد</a></div>
     </div>
 
     <div class="card">
-        <h2><i class="fas fa-edit"></i> ملاحظاتك اليومية</h2>
-        <textarea id="user-note" class="note-input" rows="3" placeholder="سجل أوزانك اليوم..."></textarea>
+        <h2><i class="fas fa-edit"></i> ملاحظاتك</h2>
+        <textarea id="user-note" class="note-input" rows="3" placeholder="سجل أوزانك هنا..."></textarea>
         <button onclick="saveNote()" class="calc-btn" style="background:var(--primary);">حفظ</button>
     </div>
 </div>
@@ -100,46 +98,33 @@
     function calculateMacros() {
         const w = parseFloat(document.getElementById('food-weight').value);
         const t = document.getElementById('food-type').value;
-        if(!w) { alert("لطفاً أدخل الوزن"); return; }
-        
-        let p=0, c=0, f=0, k=0, label="";
-        
-        // حسابات الماكروز لكل 100 جرام (تقريبية)
+        if(!w) return;
+        let p=0, c=0, f=0, k=0;
         switch(t) {
-            case "chicken": p=w*0.31; k=w*1.65; label="بروتين صافي"; break;
-            case "beef": p=w*0.26; f=w*0.08; k=w*2.5; label="بروتين + دهون"; break;
-            case "fish": p=w*0.22; k=w*1.1; label="بروتين خفيف"; break;
-            case "tuna": p=w*0.25; k=w*1.1; label="بروتين سريع"; break;
-            case "turkey": p=w*0.29; k=w*1.4; label="بروتين صافي"; break;
-            case "greek_yogurt": p=w*0.1; c=w*0.04; k=w*0.6; label="بروتين + كارب"; break;
-            case "eggs": p=w*6.3; f=w*5; k=w*75; label="بروتين + دهون (بالحبة)"; break;
-            case "lentils": p=w*0.09; c=w*0.2; k=w*1.16; label="بروتين نباتي"; break;
-            case "rice": c=w*0.28; k=w*1.3; label="كارب (طاقة)"; break;
-            case "potato": c=w*0.17; k=w*0.77; label="كارب (طاقة)"; break;
-            case "sweet_potato": c=w*0.2; k=w*0.86; label="كارب مع ألياف"; break;
-            case "oats": c=w*0.66; p=w*0.14; k=w*3.9; label="كارب معقد"; break;
-            case "pasta": c=w*0.25; k=w*1.3; label="كارب (طاقة)"; break;
-            case "bread": c=w*12; p=w*3; k=w*70; label="كارب (بالحبة)"; break;
-            case "quinoa": c=w*0.21; p=w*0.04; k=w*1.2; label="كارب + بروتين"; break;
-            case "avocado": f=w*0.15; k=w*1.6; label="دهون صحية"; break;
-            case "olive_oil": f=w*14; k=w*120; label="دهون (بالملعقة)"; break;
-            case "nuts": f=w*0.5; p=w*0.2; k=w*6; label="دهون + بروتين"; break;
-            case "peanut_butter": f=w*0.5; p=w*0.25; k=w*5.9; label="دهون + بروتين"; break;
+            case "chicken": p=w*0.31; k=w*1.65; break;
+            case "beef": p=w*0.26; f=w*0.08; k=w*2.5; break;
+            case "fish": p=w*0.22; k=w*1.1; break;
+            case "tuna": p=w*0.25; k=w*1.1; break;
+            case "greek_yogurt": p=w*0.1; c=w*0.04; k=w*0.6; break;
+            case "eggs": p=w*6.3; f=w*5; k=w*75; break;
+            case "rice": c=w*0.28; k=w*1.3; break;
+            case "potato": c=w*0.17; k=w*0.77; break;
+            case "oats": c=w*0.66; p=w*0.14; k=w*3.9; break;
+            case "pasta": c=w*0.25; k=w*1.3; break;
+            case "bread": c=w*12; p=w*3; k=w*70; break;
+            case "avocado": f=w*0.15; k=w*1.6; break;
+            case "olive_oil": f=w*14; k=w*120; break;
+            case "nuts": f=w*0.5; p=w*0.2; k=w*6; break;
+            case "peanut_butter": f=w*0.5; p=w*0.25; k=w*5.9; break;
         }
-        
-        let result = `🍽️ ${label}:<br>`;
-        if(p>0) result += `بروتين: ${p.toFixed(1)}ج | `;
-        if(c>0) result += `كارب: ${c.toFixed(1)}ج | `;
-        if(f>0) result += `دهون: ${f.toFixed(1)}ج | `;
-        result += `<br>🔥 السعرات: ${k.toFixed(0)}`;
-        
+        let result = `🍽️ بروتين: ${p.toFixed(1)}ج | كارب: ${c.toFixed(1)}ج | دهون: ${f.toFixed(1)}ج | سعرات: ${k.toFixed(0)}`;
         document.getElementById('calc-result').innerHTML = result;
         document.getElementById('result-box').style.display = 'block';
     }
 
     function saveNote() {
         localStorage.setItem('abuKhaledNote', document.getElementById('user-note').value);
-        alert("تم حفظ ملاحظاتك بنجاح! ✅");
+        alert("تم الحفظ ✅");
     }
 </script>
 </body>
