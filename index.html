@@ -9,15 +9,13 @@
         :root { --primary: #1a5f7a; --secondary: #159895; --accent: #eb455f; --bg: #f0f2f5; --card: #ffffff; --warmup: #ff9f43; --stretch: #48dbfb; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: 0.8s; }
-        #splash img { max-width: 85%; border-radius: 20px; border: 2px solid var(--secondary); box-shadow: 0 0 20px var(--secondary); }
+        #splash img { max-width: 85%; border-radius: 20px; border: 2px solid var(--secondary); }
         .container { max-width: 500px; margin: 0 auto; display: none; }
         .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         h2 { color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid var(--secondary); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; margin-top: 0; }
         .exercise-item { background: #f9fbfd; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-right: 5px solid var(--secondary); }
         .video-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
-        .calc-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .calc-btn { background: var(--secondary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; }
-        .time-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        .day-tag { background: #e0f2f1; color: var(--primary); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -28,40 +26,43 @@
 </div>
 
 <div class="container" id="main-content">
-    <header style="text-align:center;"><h1>🚀 مركز القيادة</h1></header>
+    <header style="text-align:center; padding-bottom: 10px;"><h2>🚀 مركز قيادة أبو خالد</h2></header>
 
     <div class="card">
-        <h2><i class="fas fa-utensils"></i> الجدول الغذائي</h2>
-        <div class="time-row"><span>الفجر</span> <span>🥣 شوفان + بروتين</span></div>
-        <div class="time-row"><span>الظهر</span> <span>🍗 دجاج + أرز</span></div>
-        <div class="time-row"><span>العشاء</span> <span style="color:green; font-weight:bold;">🥗 تونة + بطاطس</span></div>
+        <h2><i class="fas fa-calendar-alt"></i> جدول الأيام</h2>
+        <div style="font-size: 0.9rem; line-height: 1.6;">
+            <p>🗓️ <b>الأحد / الأربعاء:</b> تمارين العلوي (صدر/ظهر/كتف/تراي)</p>
+            <p>🗓️ <b>الاثنين / الخميس:</b> تمارين السفلي (أرجل/بطن)</p>
+            <p>🗓️ <b>الثلاثاء / الجمعة / السبت:</b> راحة واستشفاء</p>
+        </div>
     </div>
 
     <div class="card">
-        <h2><i class="fas fa-dumbbell"></i> تمارينك (روابط بحث يوتيوب)</h2>
-        <div class="exercise-item"><span>دوران الأكتاف</span> <a href="https://www.youtube.com/results?search_query=shoulder+warmup" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>صدر (Chest Press)</span> <a href="https://www.youtube.com/results?search_query=chest+press+machine+form" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>كتف (Lateral Raise)</span> <a href="https://www.youtube.com/results?search_query=lateral+raise+machine+form" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>تراي (Pushdown)</span> <a href="https://www.youtube.com/results?search_query=tricep+pushdown+form" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>إطالة (Stretch)</span> <a href="https://www.youtube.com/results?search_query=chest+back+stretch" class="video-btn" target="_blank">شاهد</a></div>
+        <h2><i class="fas fa-dumbbell"></i> تمارين العلوي</h2>
+        <div class="exercise-item"><span>1. صدر (Chest Press)</span> <a href="https://www.youtube.com/watch?v=nmZfLpEOfU0" class="video-btn" target="_blank">فيديو</a></div>
+        <div class="exercise-item"><span>2. سحب عالي (Lat Pull)</span> <a href="https://www.youtube.com/watch?v=CAwf7n6Luuc" class="video-btn" target="_blank">فيديو</a></div>
+        <div class="exercise-item"><span>3. كتف (Lateral Raise)</span> <a href="https://www.youtube.com/watch?v=WJm8XInU76Y" class="video-btn" target="_blank">فيديو</a></div>
+        <div class="exercise-item"><span>4. تراي (Pushdown)</span> <a href="https://www.youtube.com/watch?v=2-LAMcpzHLU" class="video-btn" target="_blank">فيديو</a></div>
     </div>
 
     <div class="card">
-        <h2><i class="fas fa-calculator"></i> حاسبة الماكروز الشاملة</h2>
-        <select id="food-type" class="calc-input">
+        <h2><i class="fas fa-running"></i> تمارين السفلي</h2>
+        <div class="exercise-item"><span>1. دفع أرجل (Leg Press)</span> <a href="https://www.youtube.com/watch?v=IZxyjW7MPJQ" class="video-btn" target="_blank">فيديو</a></div>
+        <div class="exercise-item"><span>2. خلفيات (Leg Curl)</span> <a href="https://www.youtube.com/watch?v=ELOCsoDSmrg" class="video-btn" target="_blank">فيديو</a></div>
+        <div class="exercise-item"><span>3. بلانك (Plank)</span> <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" class="video-btn" target="_blank">فيديو</a></div>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-calculator"></i> حاسبة الماكروز</h2>
+        <select id="food-type" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px;">
             <option value="chicken">صدور دجاج</option>
-            <option value="beef">لحم بقري</option>
-            <option value="fish">سمك فيليه</option>
-            <option value="eggs">بيض (بالحبة)</option>
             <option value="rice">أرز مطبوخ</option>
-            <option value="potato">بطاطس</option>
+            <option value="eggs">بيض (بالحبة)</option>
             <option value="oats">شوفان</option>
-            <option value="nuts">مكسرات</option>
-            <option value="olive_oil">زيت زيتون (ملعقة)</option>
         </select>
-        <input type="number" id="food-weight" class="calc-input" placeholder="الوزن بالغرام">
-        <button onclick="calculateMacros()" class="calc-btn">احسب الآن</button>
-        <div id="result-box" style="margin-top:15px; padding:15px; background:#e0f2f1; border-radius:10px; text-align:center; display:none; font-weight:bold;">
+        <input type="number" id="food-weight" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px;" placeholder="الوزن بالغرام">
+        <button onclick="calculateMacros()" style="width:100%; padding:12px; background:var(--secondary); color:white; border:none; border-radius:10px; font-weight:bold;">احسب الآن</button>
+        <div id="result-box" style="margin-top:15px; text-align:center; display:none; background:#e0f2f1; padding:10px; border-radius:10px; font-weight:bold;">
             <div id="calc-result"></div>
         </div>
     </div>
@@ -82,19 +83,12 @@
         const w = parseFloat(document.getElementById('food-weight').value);
         const t = document.getElementById('food-type').value;
         if(!w) return;
-        let p=0, c=0, f=0, k=0;
-        switch(t) {
-            case "chicken": p=w*0.31; k=w*1.65; break;
-            case "beef": p=w*0.26; f=w*0.08; k=w*2.5; break;
-            case "fish": p=w*0.22; k=w*1.1; break;
-            case "eggs": p=w*6.3; f=w*5; k=w*75; break;
-            case "rice": c=w*0.28; k=w*1.3; break;
-            case "potato": c=w*0.17; k=w*0.77; break;
-            case "oats": c=w*0.66; p=w*0.14; k=w*3.9; break;
-            case "nuts": f=w*0.5; p=w*0.2; k=w*6; break;
-            case "olive_oil": f=w*14; k=w*120; break;
-        }
-        document.getElementById('calc-result').innerHTML = `🥩 بروتين: ${p.toFixed(1)}ج | 🍚 كارب: ${c.toFixed(1)}ج | 🥑 دهون: ${f.toFixed(1)}ج<br>🔥 سعرات: ${k.toFixed(0)}`;
+        let p=0, c=0, k=0;
+        if(t==="chicken"){ p=w*0.31; k=w*1.65; }
+        else if(t==="rice"){ c=w*0.28; k=w*1.3; }
+        else if(t==="eggs"){ p=w*6; k=w*70; }
+        else if(t==="oats"){ c=w*0.6; p=w*0.1; k=w*3.8; }
+        document.getElementById('calc-result').innerHTML = `بروتين: ${p.toFixed(1)}ج | كارب: ${c.toFixed(1)}ج | سعرات: ${k.toFixed(0)}`;
         document.getElementById('result-box').style.display = 'block';
     }
 </script>
