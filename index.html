@@ -3,71 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز قيادة أبو خالد 2026</title>
+    <title>مركز قيادة أبو خالد</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #1a5f7a; --secondary: #159895; --accent: #eb455f; --bg: #f0f2f5; --card: #ffffff; --warmup: #ff9f43; --stretch: #48dbfb; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s; }
-        #splash-screen img { max-width: 85%; border-radius: 20px; border: 2px solid var(--secondary); box-shadow: 0 0 20px var(--secondary); }
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: 0.8s; }
+        #splash img { max-width: 85%; border-radius: 20px; border: 2px solid var(--secondary); box-shadow: 0 0 20px var(--secondary); }
         .container { max-width: 500px; margin: 0 auto; display: none; }
         .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         h2 { color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid var(--secondary); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; margin-top: 0; }
         .exercise-item { background: #f9fbfd; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-right: 5px solid var(--secondary); }
         .video-btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
         .calc-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .calc-btn { background: var(--secondary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        .time-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        .calc-btn { background: var(--secondary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; }
+        .time-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
     </style>
 </head>
 <body>
 
-<div id="splash-screen">
-    <img src="yasser.jpg" alt="Captain Yasser">
-    <h1 style="color:white; margin-top:20px;">كابتن أبو خالد.. وقت القوة 💪</h1>
+<div id="splash">
+    <img src="https://i.postimg.cc/mD8F1YjD/1000347326.jpg" alt="Captain Yasser">
+    <h1 style="color:white; margin-top:20px; text-align:center;">كابتن أبو خالد.. وقت القوة 💪</h1>
 </div>
 
 <div class="container" id="main-content">
-    <header style="text-align:center;"><h1>🚀 مركز قيادة أبو خالد</h1></header>
+    <header style="text-align:center;"><h1>🚀 مركز القيادة</h1></header>
 
     <div class="card">
         <h2><i class="fas fa-utensils"></i> الجدول الغذائي</h2>
-        <div class="time-row"><span>05:30 ص</span> <span>🥣 الشوفان + بروتين</span></div>
-        <div class="time-row"><span>01:30 م</span> <span>🍗 الغداء (دجاج + أرز)</span></div>
-        <div class="time-row"><span>08:00 م</span> <span style="color:green; font-weight:bold;">🥗 العشاء (تونة + بطاطس)</span></div>
+        <div class="time-row"><span>الفجر</span> <span>🥣 شوفان + بروتين</span></div>
+        <div class="time-row"><span>الظهر</span> <span>🍗 دجاج + أرز</span></div>
+        <div class="time-row"><span>العشاء</span> <span style="color:green; font-weight:bold;">🥗 تونة + بطاطس</span></div>
     </div>
 
     <div class="card">
-        <h2 style="color:var(--warmup);"><i class="fas fa-fire"></i> إحماء (يومي)</h2>
-        <div class="exercise-item" style="border-right-color: var(--warmup);">
-            <span>دوران الأكتاف والذراعين</span> <a href="https://www.youtube.com/watch?v=1asWpS_O9-s" class="video-btn" target="_blank">شاهد</a>
-        </div>
-        <div class="exercise-item" style="border-right-color: var(--warmup);">
-            <span>تدوير الجذع والقرفصاء</span> <a href="https://www.youtube.com/watch?v=mGvzVjuY8SY" class="video-btn" target="_blank">شاهد</a>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2><i class="fas fa-dumbbell"></i> العلوي (الأحد/الأربعاء)</h2>
-        <div class="exercise-item"><span>1. صدر (Chest Press)</span> <a href="https://www.youtube.com/watch?v=xZ9nHInidY" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>2. سحب عالي (Lat Pull)</span> <a href="https://www.youtube.com/watch?v=CAwf7n6Luuc" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>3. سحب أرضي (Row)</span> <a href="https://www.youtube.com/watch?v=GZbfZ033f74" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>4. كتف جانبي (Lateral)</span> <a href="https://www.youtube.com/watch?v=WJm8XInU76Y" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>5. تراي كيبل (Pushdown)</span> <a href="https://www.youtube.com/watch?v=2-LAMcpzHLU" class="video-btn" target="_blank">شاهد</a></div>
-    </div>
-
-    <div class="card">
-        <h2><i class="fas fa-running"></i> السفلي (الاثنين/الخميس)</h2>
-        <div class="exercise-item"><span>1. دفع أرجل (Leg Press)</span> <a href="https://www.youtube.com/watch?v=IZxyjW7MPJQ" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>2. خلفيات (Leg Curl)</span> <a href="https://www.youtube.com/watch?v=ELOCsoDSmrg" class="video-btn" target="_blank">شاهد</a></div>
-        <div class="exercise-item"><span>3. بلانك (Plank)</span> <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" class="video-btn" target="_blank">شاهد</a></div>
-    </div>
-
-    <div class="card">
-        <h2 style="color:var(--stretch);"><i class="fas fa-child"></i> إطالة (بعد التمرين)</h2>
-        <div class="exercise-item" style="border-right-color: var(--stretch);">
-            <span>إطالة الصدر والكتف والظهر</span> <a href="https://www.youtube.com/watch?v=S8L_30c-gL8" class="video-btn" target="_blank">شاهد</a>
-        </div>
+        <h2><i class="fas fa-dumbbell"></i> تمارينك (روابط بحث يوتيوب)</h2>
+        <div class="exercise-item"><span>دوران الأكتاف</span> <a href="https://www.youtube.com/results?search_query=shoulder+warmup" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>صدر (Chest Press)</span> <a href="https://www.youtube.com/results?search_query=chest+press+machine+form" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>كتف (Lateral Raise)</span> <a href="https://www.youtube.com/results?search_query=lateral+raise+machine+form" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>تراي (Pushdown)</span> <a href="https://www.youtube.com/results?search_query=tricep+pushdown+form" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>إطالة (Stretch)</span> <a href="https://www.youtube.com/results?search_query=chest+back+stretch" class="video-btn" target="_blank">شاهد</a></div>
     </div>
 
     <div class="card">
@@ -78,29 +54,29 @@
             <option value="fish">سمك فيليه</option>
             <option value="eggs">بيض (بالحبة)</option>
             <option value="rice">أرز مطبوخ</option>
-            <option value="potato">بطاطس مسلوقة</option>
+            <option value="potato">بطاطس</option>
             <option value="oats">شوفان</option>
             <option value="nuts">مكسرات</option>
             <option value="olive_oil">زيت زيتون (ملعقة)</option>
         </select>
         <input type="number" id="food-weight" class="calc-input" placeholder="الوزن بالغرام">
-        <button onclick="calculateMacros()" class="calc-btn">احسب الماكروز</button>
-        <div id="result-box" style="margin-top:15px; padding:10px; background:#e0f2f1; border-radius:10px; text-align:center; display:none; font-weight:bold;">
+        <button onclick="calculateMacros()" class="calc-btn">احسب الآن</button>
+        <div id="result-box" style="margin-top:15px; padding:15px; background:#e0f2f1; border-radius:10px; text-align:center; display:none; font-weight:bold;">
             <div id="calc-result"></div>
         </div>
     </div>
 </div>
 
 <script>
-    window.addEventListener('load', function() {
+    window.onload = () => {
         setTimeout(() => {
-            document.getElementById('splash-screen').style.opacity = '0';
+            document.getElementById('splash').style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('splash').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
             }, 800);
         }, 3000);
-    });
+    };
 
     function calculateMacros() {
         const w = parseFloat(document.getElementById('food-weight').value);
