@@ -1,328 +1,114 @@
-import React, { useEffect, useMemo, useState } from 'react'; import { motion } from 'framer-motion'; import { Dumbbell, Flame, Target, Apple, BarChart3, CalendarDays, ChevronRight, CircleCheck, Zap, Activity, Play, Clock3, Layers3, } from 'lucide-react'; import { initializeApp, getApps } from 'firebase/app'; import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, serverTimestamp, query, orderBy, } from 'firebase/firestore';
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز قيادة أبو خالد 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #1a5f7a; --secondary: #159895; --accent: #eb455f; --bg: #f0f2f5; --card: #ffffff; --warmup: #ff9f43; --stretch: #48dbfb; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
+        
+        /* شاشة الافتتاح المحفزة */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease-out; }
+        #splash-screen img { max-width: 85%; border-radius: 20px; border: 2px solid var(--secondary); box-shadow: 0 0 20px rgba(21, 152, 149, 0.5); }
+        #splash-screen h1 { color: white; margin-top: 20px; font-size: 1.4rem; text-align: center; }
 
-const firebaseConfig = { apiKey: 'PUT_YOUR_API_KEY_HERE', authDomain: 'PUT_YOUR_AUTH_DOMAIN_HERE', projectId: 'PUT_YOUR_PROJECT_ID_HERE', storageBucket: 'PUT_YOUR_STORAGE_BUCKET_HERE', messagingSenderId: 'PUT_YOUR_MESSAGING_SENDER_ID_HERE', appId: 'PUT_YOUR_APP_ID_HERE', };
+        .container { max-width: 500px; margin: 0 auto; display: none; }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        header { text-align: center; padding: 10px; color: var(--primary); }
+        h2 { color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid var(--secondary); padding-bottom: 8px; margin-top: 0; display: flex; align-items: center; gap: 8px; }
+        
+        .time-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        .exercise-item { background: #f9fbfd; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-right: 5px solid var(--secondary); }
+        .warmup-item { border-right-color: var(--warmup); }
+        .stretch-item { border-right-color: var(--stretch); }
+        .video-btn { background: var(--primary); color: white; padding: 6px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
+        
+        .calc-input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .calc-btn { background: var(--secondary); color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .dinner-tag { background: #e8f5e9; color: #2e7d32; padding: 3px 10px; border-radius: 15px; font-weight: bold; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
 
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig); const db = getFirestore(app);
-
-const DAILY_TARGETS = { calories: 2200, protein: 150, carbs: 220, fat: 60, };
-
-const DEFAULT_USER_ID = 'captain-yasser-user';
-
-const APP_TABS = { dashboard: 'dashboard', training: 'training', meals: 'meals', };
-
-const TRAINING_OVERVIEW = { title: 'Upper / Lower Split', subtitle: 'نظام تضخيم عضلي مع تنشيف بسيط ومناسب للعودة بعد انقطاع', weeklyStructure: [ 'اليوم 1: Upper A', 'اليوم 2: Lower A', 'اليوم 3: راحة أو مشي خفيف', 'اليوم 4: Upper B', 'اليوم 5: Lower B', 'اليوم 6: كارديو خفيف أو راحة', 'اليوم 7: راحة كاملة', ], returnPhase: { durationWeeks: '2-4 أسابيع', workoutDuration: '45-60 دقيقة حديد + 15-20 دقيقة كارديو بعد التمرين', intensity: 'ابدأ بجهد متوسط واترك 2-3 عدات احتياط في أول أسبوعين', }, };
-
-const TRAINING_DAYS = [ { id: 'upper-a', name: 'تمارين العلوي (الأحد)', shortName: 'Upper A', focus: 'صدر + ظهر + أكتاف + ذراعين', cardio: '15-20 دقيقة مشي سريع بعد التمرين', notes: 'حصة علوي متوازنة تركّز على الأساسيات مع حجم تدريبي مناسب للعودة التدريجية.', exercises: [ { id: 'incline-db-press', name: 'Incline Dumbbell Press', arabicName: 'ضغط دمبل مائل', videoLabel: 'شاهد', duration: '35ث', level: 'مبتدئ', sets: '3', reps: '8-10', rest: '90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/PectoralClavicular/DBInclineBenchPress', }, { id: 'chest-supported-row', name: 'Chest Supported Row', arabicName: 'تجديف مدعوم للصدر', videoLabel: 'شاهد', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '8-10', rest: '90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/BackGeneral/TBarChestSupportedRow', }, { id: 'machine-chest-press', name: 'Machine Chest Press', arabicName: 'ضغط صدر على الجهاز', videoLabel: 'شاهد', duration: '30ث', level: 'مبتدئ', sets: '2-3', reps: '10-12', rest: '75 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/PectoralSternal/LVChestPress', }, { id: 'lat-pulldown', name: 'Lat Pulldown', arabicName: 'سحب علوي', videoLabel: 'شاهد', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '10-12', rest: '75 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/LatissimusDorsi/CBFrontPulldown', }, { id: 'seated-db-shoulder-press', name: 'Seated Dumbbell Shoulder Press', arabicName: 'ضغط أكتاف دمبل جالس', videoLabel: 'شاهد', duration: '35ث', level: 'متوسط', sets: '2-3', reps: '8-10', rest: '75 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/DeltoidAnterior/DBShoulderPress', }, { id: 'cable-lateral-raise', name: 'Cable Lateral Raise', arabicName: 'رفرفة جانبية كيبل', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2', reps: '12-15', rest: '60 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/DeltoidLateral/CBLateralRaise', }, { id: 'rope-pushdown', name: 'Rope Pushdown', arabicName: 'ترايسبس كيبل بالحبل', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2', reps: '10-12', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Triceps/CBPushdown', }, { id: 'incline-db-curl', name: 'Incline Dumbbell Curl', arabicName: 'بايسبس دمبل مائل', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2', reps: '10-12', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Biceps/DBInclineCurl', }, ], }, { id: 'lower-a', name: 'تمارين السفلي (الاثنين)', shortName: 'Lower A', focus: 'فخذ أمامي + خلفي + سمانة + كور', cardio: '15-20 دقيقة مشي مائل بعد التمرين', notes: 'حصة سفلي تركّز على حركة سكوات آمنة نسبيًا مع أحجام متوازنة للمفاصل.', exercises: [ { id: 'leg-press', name: 'Leg Press', arabicName: 'دفع الأرجل', videoLabel: 'شاهد', duration: '35ث', level: 'مبتدئ', sets: '3', reps: '10-12', rest: '90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/Quadriceps/Sled45LegPress', }, { id: 'romanian-deadlift-db', name: 'Dumbbell Romanian Deadlift', arabicName: 'رومانيان ديدلفت دمبل', videoLabel: 'شاهد', duration: '40ث', level: 'متوسط', sets: '3', reps: '8-10', rest: '90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/Hamstrings/DBRomanianDeadlift', }, { id: 'walking-lunge', name: 'Walking Lunge', arabicName: 'لانجز مشي', videoLabel: 'شاهد', duration: '30ث', level: 'متوسط', sets: '2', reps: '10 خطوات لكل رجل', rest: '75 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/GluteusMaximus/DBWalkingLunge', }, { id: 'lying-leg-curl', name: 'Lying Leg Curl', arabicName: 'كيرل خلفي للأرجل', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2-3', reps: '10-12', rest: '75 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/Hamstrings/LVLyingLegCurl', }, { id: 'leg-extension', name: 'Leg Extension', arabicName: 'تمديد الأرجل', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2', reps: '12-15', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Quadriceps/LVLegExtension', }, { id: 'standing-calf-raise', name: 'Standing Calf Raise', arabicName: 'سمانة واقف', videoLabel: 'شاهد', duration: '20ث', level: 'مبتدئ', sets: '3', reps: '12-15', rest: '45-60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Gastrocnemius/LVStandingCalfRaise', }, { id: 'plank', name: 'Plank', arabicName: 'بلانك', videoLabel: 'شاهد', duration: '20ث', level: 'مبتدئ', sets: '3', reps: '30-45 ثانية', rest: '45 ثانية', rir: '-', link: 'https://exrx.net/WeightExercises/RectusAbdominis/WtFrontPlank', }, ], }, { id: 'upper-b', name: 'تمارين العلوي (الأربعاء)', shortName: 'Upper B', focus: 'علوي بتنوّع مختلف وزوايا مختلفة', cardio: '15-20 دقيقة مشي سريع أو دراجة خفيفة بعد التمرين', notes: 'الحصة الثانية للجزء العلوي تركز على تنويع المسارات لتحفيز عضلي أفضل.', exercises: [ { id: 'flat-machine-press', name: 'Flat Machine Press', arabicName: 'ضغط صدر مستوي على الجهاز', videoLabel: 'شاهد', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '8-10', rest: '90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/PectoralSternal/LVChestPress', }, { id: 'one-arm-cable-row', name: 'One Arm Cable Row', arabicName: 'تجديف كيبل بيد واحدة', videoLabel: 'شاهد', duration: '35ث', level: 'متوسط', sets: '3', reps: '10-12', rest: '75 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/BackGeneral/CBOneArmSeatedRow', }, { id: 'pec-deck-fly', name: 'Pec Deck Fly', arabicName: 'تفتيح صدر جهاز', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2', reps: '12-15', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/PectoralSternal/LVPecDeckFly', }, { id: 'neutral-grip-pulldown', name: 'Neutral Grip Pulldown', arabicName: 'سحب علوي قبضة محايدة', videoLabel: 'شاهد', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '10-12', rest: '75 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/LatissimusDorsi/CBFrontPulldown', }, { id: 'rear-delt-machine', name: 'Rear Delt Machine Fly', arabicName: 'خلفي أكتاف جهاز', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2-3', reps: '12-15', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/DeltoidPosterior/LVRearDeltRow', }, { id: 'machine-shoulder-press', name: 'Machine Shoulder Press', arabicName: 'ضغط أكتاف جهاز', videoLabel: 'شاهد', duration: '30ث', level: 'مبتدئ', sets: '2', reps: '10-12', rest: '75 ثانية', rir: '1-2', link: 'https://exrx.net/WeightExercises/DeltoidAnterior/LVShoulderPress', }, { id: 'ez-bar-curl', name: 'EZ Bar Curl', arabicName: 'بايسبس إي زد', videoLabel: 'شاهد', duration: '20ث', level: 'مبتدئ', sets: '2', reps: '10-12', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Biceps/BBBentArmCurl', }, { id: 'overhead-rope-extension', name: 'Overhead Rope Extension', arabicName: 'ترايسبس فوق الرأس بالحبل', videoLabel: 'شاهد', duration: '20ث', level: 'مبتدئ', sets: '2', reps: '10-12', rest: '60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Triceps/CBStandingTricepsExtension', }, ], }, { id: 'lower-b', name: 'تمارين السفلي (الخميس)', shortName: 'Lower B', focus: 'سفلي بتأكيد أكبر على الغلوت والهامسترينغ والثبات', cardio: '15-20 دقيقة مشي مائل أو جهاز إليبتكال بعد التمرين', notes: 'الحصة الثانية للسفلي متنوعة وأكثر لطفًا على أسفل الظهر من الأنظمة العشوائية.', exercises: [ { id: 'goblet-squat', name: 'Goblet Squat', arabicName: 'سكوات كوبلت', videoLabel: 'شاهد', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '10-12', rest: '75-90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/Quadriceps/DBGobletSquat', }, { id: 'hip-thrust', name: 'Hip Thrust', arabicName: 'هيب ثرست', videoLabel: 'شاهد', duration: '35ث', level: 'متوسط', sets: '3', reps: '8-10', rest: '90 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/GluteusMaximus/BBHipThrust', }, { id: 'bulgarian-split-squat', name: 'Bulgarian Split Squat', arabicName: 'بلغاريان سبليت سكوات', videoLabel: 'شاهد', duration: '35ث', level: 'متوسط', sets: '2', reps: '8-10 لكل رجل', rest: '75 ثانية', rir: '2', link: 'https://exrx.net/WeightExercises/Quadriceps/DBBulgarianSplitSquat', }, { id: 'seated-leg-curl', name: 'Seated Leg Curl', arabicName: 'كيرل خلفي جالس', videoLabel: 'شاهد', duration: '25ث', level: 'مبتدئ', sets: '2-3', reps: '10-12', rest: '60-75 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Hamstrings/LVSeatedLegCurl', }, { id: 'seated-calf-raise', name: 'Seated Calf Raise', arabicName: 'سمانة جالس', videoLabel: 'شاهد', duration: '20ث', level: 'مبتدئ', sets: '3', reps: '12-15', rest: '45-60 ثانية', rir: '1', link: 'https://exrx.net/WeightExercises/Soleus/LVSeatedCalfRaise', }, { id: 'dead-bug', name: 'Dead Bug', arabicName: 'ديد باغ', videoLabel: 'شاهد', duration: '20ث', level: 'مبتدئ', sets: '3', reps: '8-10 لكل جهة', rest: '45 ثانية', rir: '-', link: 'https://exrx.net/WeightExercises/RectusAbdominis/BWDeadBug', }, ], }, ];
-
-const defaultMeals = [ { id: 'breakfast-eggs-oats', name: 'بيض + شوفان', category: 'فطور', calories: 420, protein: 28, carbs: 32, fat: 18 }, { id: 'greek-yogurt-honey-fruit', name: 'زبادي يوناني + عسل + فاكهة', category: 'فطور', calories: 310, protein: 20, carbs: 35, fat: 8 }, { id: 'chicken-rice', name: 'دجاج + رز', category: 'غداء', calories: 540, protein: 42, carbs: 52, fat: 14 }, { id: 'beef-potato', name: 'لحم + بطاطس', category: 'غداء', calories: 610, protein: 40, carbs: 48, fat: 24 }, { id: 'fish-rice', name: 'سمك + رز', category: 'غداء', calories: 470, protein: 38, carbs: 45, fat: 11 }, { id: 'tuna-salad', name: 'تونة + سلطة', category: 'عشاء', calories: 290, protein: 32, carbs: 8, fat: 12 }, { id: 'light-chicken-salad', name: 'دجاج خفيف + سلطة', category: 'عشاء', calories: 340, protein: 35, carbs: 12, fat: 15 }, { id: 'eggs-vegetables', name: 'بيض + خضار', category: 'عشاء', calories: 260, protein: 18, carbs: 9, fat: 16 }, { id: 'banana-snack', name: 'موزة', category: 'سناك', calories: 105, protein: 1, carbs: 27, fat: 0 }, { id: 'dates-coffee', name: 'تمر + قهوة', category: 'سناك', calories: 160, protein: 2, carbs: 36, fat: 0 }, { id: 'whey-shake', name: 'بروتين شيك', category: 'سناك', calories: 130, protein: 24, carbs: 3, fat: 2 }, ];
-
-function getTodayKey() { const d = new Date(); const year = d.getFullYear(); const month = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); return ${year}-${month}-${day}; }
-
-function clampPercent(value, total) { if (!total || total <= 0) return 0; return Math.min(100, Math.round((value / total) * 100)); }
-
-function remainingValue(current, target) { return Math.max(0, target - current); }
-
-async function seedMealsIfEmpty() { const mealsRef = collection(db, 'meals'); const snap = await getDocs(mealsRef); if (!snap.empty) return;
-
-await Promise.all( defaultMeals.map((meal) => setDoc(doc(db, 'meals', meal.id), { ...meal, createdAt: serverTimestamp(), }) ) ); }
-
-async function fetchMeals() { const mealsQuery = query(collection(db, 'meals'), orderBy('category')); const snap = await getDocs(mealsQuery); return snap.docs.map((d) => ({ id: d.id, ...d.data() })); }
-
-async function ensureTodayIntake(userId, todayKey) { const intakeRef = doc(db, 'userDailyIntake', ${userId}_${todayKey}); const snap = await getDoc(intakeRef);
-
-if (!snap.exists()) { await setDoc(intakeRef, { userId, date: todayKey, calories: 0, protein: 0, carbs: 0, fat: 0, meals: [], targets: DAILY_TARGETS, createdAt: serverTimestamp(), updatedAt: serverTimestamp(), }); }
-
-const refreshed = await getDoc(intakeRef); return { id: intakeRef.id, ...refreshed.data() }; }
-
-async function getTodayIntake(userId, todayKey) { const intakeRef = doc(db, 'userDailyIntake', ${userId}_${todayKey}); const snap = await getDoc(intakeRef); if (!snap.exists()) return null; return { id: snap.id, ...snap.data() }; }
-
-async function addMealToDay({ userId, todayKey, meal }) { const intakeRef = doc(db, 'userDailyIntake', ${userId}_${todayKey}); const currentSnap = await getDoc(intakeRef);
-
-if (!currentSnap.exists()) { await ensureTodayIntake(userId, todayKey); }
-
-const latestSnap = await getDoc(intakeRef); const currentData = latestSnap.data() || {}; const currentMeals = Array.isArray(currentData.meals) ? currentData.meals : [];
-
-const mealEntry = { mealId: meal.id, name: meal.name, category: meal.category, calories: meal.calories, protein: meal.protein, carbs: meal.carbs, fat: meal.fat, addedAt: new Date().toISOString(), };
-
-await updateDoc(intakeRef, { calories: increment(Number(meal.calories) || 0), protein: increment(Number(meal.protein) || 0), carbs: increment(Number(meal.carbs) || 0), fat: increment(Number(meal.fat) || 0), meals: [...currentMeals, mealEntry], updatedAt: serverTimestamp(), });
-
-return getTodayIntake(userId, todayKey); }
-
-function cn(...classes) { return classes.filter(Boolean).join(' '); }
-
-function SoftCard({ className = '', children }) { return <div className={cn('rounded-[28px] border border-slate-200 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.08)]', className)}>{children}</div>; }
-
-function TopTabButton({ active, onClick, icon: Icon, children }) { return ( <button onClick={onClick} className={cn( 'flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold transition', active ? 'bg-teal-700 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-50' )} > <Icon size={16} /> <span>{children}</span> </button> ); }
-
-function HeaderCard() { return ( <SoftCard className="overflow-hidden p-6 sm:p-8"> <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr] lg:items-center"> <div> <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs text-teal-700"> <Zap size={14} /> نسخة مريحة للعين </div> <h1 className="text-3xl font-black leading-tight text-slate-800 sm:text-5xl"> مركز قيادة أبو خالد <span className="mt-2 block text-teal-700">Upper / Lower Split</span> </h1> <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500 sm:text-base"> تم تحويل الواجهة إلى ستايل فاتح ومرتب، مع بطاقات أنظف، وتوزيع أوضح للفيديوهات والوجبات، وواجهة مناسبة للاستخدام اليومي على الجوال. </p> </div>
-
-<div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-      <StatCard icon={Dumbbell} label="أيام الحديد" value="4" note="علوي / سفلي" />
-      <StatCard icon={Flame} label="الكارديو" value="15-20" note="دقيقة بعد التمرين" />
-      <StatCard icon={Target} label="التهيئة" value="2-4" note="أسابيع أولى" />
-    </div>
-  </div>
-</SoftCard>
-
-); }
-
-function StatCard({ icon: Icon, label, value, note }) { return ( <SoftCard className="p-4"> <div className="flex items-start justify-between gap-3"> <div> <p className="text-xs text-slate-500">{label}</p> <p className="mt-2 text-3xl font-black text-slate-800">{value}</p> <p className="mt-1 text-xs text-slate-400">{note}</p> </div> <div className="rounded-2xl bg-teal-50 p-3 text-teal-700"> <Icon size={18} /> </div> </div> </SoftCard> ); }
-
-function SectionHeader({ icon: Icon, title, subtitle }) { return ( <div className="mb-5 flex items-center justify-between gap-4"> <div className="flex items-center gap-3"> <div className="rounded-2xl bg-teal-50 p-3 text-teal-700"> <Icon size={18} /> </div> <div> <h2 className="text-2xl font-black text-slate-800">{title}</h2> {subtitle ? <p className="text-sm text-slate-500">{subtitle}</p> : null} </div> </div> </div> ); }
-
-function MiniMetric({ label, value }) { return ( <div className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3"> <span className="text-sm text-slate-500">{label}</span> <span className="text-base font-bold text-slate-800">{value}</span> </div> ); }
-
-function DashboardScreen() { const totalExercises = TRAINING_DAYS.reduce((sum, day) => sum + day.exercises.length, 0); return ( <div className="space-y-6"> <HeaderCard />
-
-<div className="grid gap-4 xl:grid-cols-[0.95fr,1.05fr]">
-    <SoftCard className="p-5">
-      <SectionHeader icon={CalendarDays} title="توزيع الأسبوع" subtitle="الخطة الحالية المعتمدة" />
-      <div className="grid gap-3 sm:grid-cols-2">
-        {TRAINING_OVERVIEW.weeklyStructure.map((item, index) => (
-          <div key={item} className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
-            <span className="mb-1 block text-xs text-teal-700">اليوم {index + 1}</span>
-            {item}
-          </div>
-        ))}
-      </div>
-    </SoftCard>
-
-    <SoftCard className="p-5">
-      <SectionHeader icon={Activity} title="ملاحظات البداية" subtitle="مهم جدًا في أول أسابيع الرجوع" />
-      <div className="grid gap-3">
-        {[
-          `المدة: ${TRAINING_OVERVIEW.returnPhase.durationWeeks}`,
-          `زمن الجلسة: ${TRAINING_OVERVIEW.returnPhase.workoutDuration}`,
-          `الشدة: ${TRAINING_OVERVIEW.returnPhase.intensity}`,
-          'ركز على الأداء النظيف قبل زيادة الوزن.',
-        ].map((item) => (
-          <div key={item} className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-            <CircleCheck className="mt-0.5 text-emerald-600" size={16} />
-            <span>{item}</span>
-          </div>
-        ))}
-      </div>
-    </SoftCard>
-  </div>
-
-  <div className="grid gap-4 lg:grid-cols-3">
-    <SoftCard className="p-5 lg:col-span-2">
-      <SectionHeader icon={Layers3} title="لماذا هذا التوزيع ممتاز؟" subtitle="خصوصًا مع عودتك للنادي" />
-      <div className="grid gap-3 sm:grid-cols-2">
-        {[
-          'تقسيم أوضح وأسهل في الالتزام من الجداول المزدحمة.',
-          'مناسب لعمر 44 سنة مع العودة بعد سنوات من الخمول.',
-          'يدعم التضخيم مع تنشيف بسيط بدون فوضى تدريبية.',
-          'الكارديو بعد التمرين مدمج داخل الخطة نفسها.',
-        ].map((item) => (
-          <div key={item} className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-            {item}
-          </div>
-        ))}
-      </div>
-    </SoftCard>
-
-    <SoftCard className="p-5">
-      <SectionHeader icon={BarChart3} title="أرقام سريعة" subtitle="نظرة مختصرة" />
-      <div className="space-y-3">
-        <MiniMetric label="عدد الأيام التدريبية" value={`${TRAINING_DAYS.length}`} />
-        <MiniMetric label="عدد التمارين" value={`${totalExercises}`} />
-        <MiniMetric label="هدف السعرات" value={`${DAILY_TARGETS.calories}`} />
-        <MiniMetric label="هدف البروتين" value={`${DAILY_TARGETS.protein} جم`} />
-      </div>
-    </SoftCard>
-  </div>
+<div id="splash-screen">
+    <img src="https://i.postimg.cc/mD8F1YjD/1000347326.jpg" alt="Captain Yasser">
+    <h1>كابتن أبو خالد.. جاهز لتحدي اليوم؟ 💪</h1>
 </div>
 
-); }
+<div class="container" id="main-content">
+    <header><h1>🚀 مركز قيادة أبو خالد</h1></header>
 
-function DayCard({ day }) { return ( <SoftCard className="p-5 sm:p-6"> <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"> <div> <h3 className="text-2xl font-black text-slate-800">{day.name}</h3> <p className="mt-1 text-sm text-teal-700">{day.focus}</p> </div> <div className="rounded-2xl bg-teal-50 px-4 py-3 text-sm text-teal-700">{day.cardio}</div> </div>
-
-<div className="border-b-4 border-teal-500/90 pb-3 text-sm leading-7 text-slate-500">{day.notes}</div>
-
-  <div className="mt-5 space-y-3">
-    {day.exercises.map((exercise, index) => (
-      <ExerciseRow key={exercise.id} exercise={exercise} index={index} />
-    ))}
-  </div>
-</SoftCard>
-
-); }
-
-function ExerciseRow({ exercise, index }) { return ( <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.2 }} className="rounded-[24px] bg-slate-50 p-3" > <div className="flex items-center gap-3 rounded-[20px] border-r-[6px] border-teal-500 bg-white p-3 sm:p-4"> <a
-href={exercise.link}
-target="_blank"
-rel="noreferrer"
-className="flex min-w-[82px] items-center justify-center gap-2 rounded-2xl bg-teal-700 px-4 py-4 text-sm font-bold text-white transition hover:bg-teal-600"
-> <Play size={15} fill="currentColor" /> {exercise.videoLabel} </a>
-
-<div className="flex-1 text-right">
-      <div className="text-lg font-bold text-slate-800">
-        {index + 1}. {exercise.arabicName}
-        <span className="mr-2 text-slate-500">({exercise.name})</span>
-      </div>
-      <div className="mt-2 flex flex-wrap items-center justify-end gap-2 text-xs text-slate-500">
-        <span className="rounded-full bg-slate-100 px-3 py-1">{exercise.duration}</span>
-        <span className="rounded-full bg-slate-100 px-3 py-1">{exercise.level}</span>
-        <span className="rounded-full bg-slate-100 px-3 py-1">{exercise.sets} مجموعات</span>
-        <span className="rounded-full bg-slate-100 px-3 py-1">{exercise.reps}</span>
-      </div>
-    </div>
-  </div>
-</motion.div>
-
-); }
-
-function TrainingScreen() { return ( <div className="space-y-6"> <SoftCard className="p-6 sm:p-8"> <SectionHeader icon={Dumbbell} title="النظام التدريبي" subtitle="واجهة أفتح وأرتب للفيديوهات" /> <p className="max-w-3xl text-sm leading-7 text-slate-500 sm:text-base"> تم تعديل صفحة التمارين بحيث تكون قريبة من التوزيع الذي اخترته: زر شاهد واضح، اسم التمرين كبير، وبطاقات فاتحة ومريحة للعين ومناسبة جدًا لشاشة الجوال. </p> </SoftCard>
-
-{TRAINING_DAYS.map((day) => (
-    <DayCard key={day.id} day={day} />
-  ))}
-</div>
-
-); }
-
-function ProgressCard({ label, value, target, unit, icon: Icon }) { const percent = clampPercent(value, target);
-
-return ( <SoftCard className="p-4"> <div className="mb-3 flex items-center justify-between"> <div className="flex items-center gap-2 text-slate-600"> <div className="rounded-xl bg-teal-50 p-2 text-teal-700"> <Icon size={16} /> </div> <span className="text-sm">{label}</span> </div> <span className="text-sm font-semibold text-slate-800"> {value} / {target} {unit} </span> </div> <div className="h-3 w-full overflow-hidden rounded-full bg-slate-100"> <div className="h-full rounded-full bg-teal-600 transition-all duration-300" style={{ width: ${percent}% }} /> </div> </SoftCard> ); }
-
-function SmartSuggestion({ meals, intake }) { const suggestion = useMemo(() => { if (!intake || !meals.length) return null;
-
-const proteinRemaining = remainingValue(intake.protein || 0, DAILY_TARGETS.protein);
-const carbsRemaining = remainingValue(intake.carbs || 0, DAILY_TARGETS.carbs);
-const fatRemaining = remainingValue(intake.fat || 0, DAILY_TARGETS.fat);
-
-if (proteinRemaining >= carbsRemaining && proteinRemaining >= fatRemaining) {
-  return meals.filter((m) => m.protein >= 20).sort((a, b) => b.protein - a.protein)[0];
-}
-if (carbsRemaining >= proteinRemaining && carbsRemaining >= fatRemaining) {
-  return meals.filter((m) => m.carbs >= 20).sort((a, b) => b.carbs - a.carbs)[0];
-}
-return meals.filter((m) => m.fat >= 10).sort((a, b) => b.fat - a.fat)[0];
-
-}, [intake, meals]);
-
-if (!suggestion) return null;
-
-return ( <SoftCard className="p-5"> <SectionHeader icon={Apple} title="اقتراح ذكي" subtitle="حسب النقص الحالي في يومك" /> <div className="grid gap-4 lg:grid-cols-[1fr,auto] lg:items-center"> <div> <h3 className="text-2xl font-black text-slate-800">{suggestion.name}</h3> <p className="mt-2 text-sm text-slate-500">هذه الوجبة مناسبة غالبًا لتعويض النقص الحالي في الماكروز.</p> <div className="mt-4 flex flex-wrap gap-2 text-sm text-slate-600"> <div className="rounded-full bg-slate-100 px-3 py-1">{suggestion.calories} سعرة</div> <div className="rounded-full bg-slate-100 px-3 py-1">بروتين {suggestion.protein}</div> <div className="rounded-full bg-slate-100 px-3 py-1">كارب {suggestion.carbs}</div> <div className="rounded-full bg-slate-100 px-3 py-1">دهون {suggestion.fat}</div> </div> </div> <div className="rounded-3xl bg-teal-50 p-5 text-center text-teal-700"> <Target className="mx-auto mb-2" /> ذكي </div> </div> </SoftCard> ); }
-
-function MealCard({ meal, onAdd, isAdding }) { return ( <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.2 }} > <SoftCard className="p-4"> <div className="mb-3 flex items-start justify-between gap-3"> <div> <h3 className="text-lg font-bold text-slate-800">{meal.name}</h3> <p className="text-sm text-slate-500">{meal.category}</p> </div> <div className="rounded-full bg-teal-50 px-3 py-1 text-xs text-teal-700">{meal.calories} سعرة</div> </div>
-
-<div className="grid grid-cols-2 gap-2 text-sm text-slate-600 sm:grid-cols-4">
-      <div className="rounded-2xl bg-slate-50 p-2">بروتين: {meal.protein}</div>
-      <div className="rounded-2xl bg-slate-50 p-2">كارب: {meal.carbs}</div>
-      <div className="rounded-2xl bg-slate-50 p-2">دهون: {meal.fat}</div>
-      <div className="rounded-2xl bg-slate-50 p-2">{meal.category}</div>
+    <div class="card">
+        <h2><i class="fas fa-utensils"></i> الجدول الغذائي والقهوة</h2>
+        <div class="time-row"><span>05:30 ص</span> <span>🥣 الشوفان + بروتين</span></div>
+        <div class="time-row"><span>07:00 ص</span> <span>☕ القهوة 1 (الدوام)</span></div>
+        <div class="time-row"><span>10:30 ص</span> <span>🍌 موزة + 10 لوز</span></div>
+        <div class="time-row"><span>11:30 ص</span> <span>☕ القهوة 2 (قبل النادي)</span></div>
+        <div class="time-row"><span>01:30 م</span> <span>🍗 الغداء (دجاج + أرز)</span></div>
+        <div class="time-row"><span class="dinner-tag">08:00 م</span> <span style="font-weight:bold;">🥗 العشاء (تونة + بطاطس)</span></div>
     </div>
 
-    <button
-      onClick={() => onAdd(meal)}
-      disabled={isAdding}
-      className="mt-4 w-full rounded-2xl bg-teal-700 px-4 py-3 font-semibold text-white transition hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      {isAdding ? 'جارٍ الإضافة...' : 'إضافة لليوم'}
-    </button>
-  </SoftCard>
-</motion.div>
+    <div class="card">
+        <h2 style="color:var(--warmup); border-color:var(--warmup);"><i class="fas fa-fire"></i> إحماء (قبل التمرين)</h2>
+        <div class="exercise-item warmup-item"><span>1. دوران الأكتاف والذراعين</span> <a href="https://www.youtube.com/shorts/1asWpS_O9-s" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item warmup-item"><span>2. تدوير الجذع والقرفصاء</span> <a href="https://www.youtube.com/shorts/mGvzVjuY8SY" class="video-btn" target="_blank">شاهد</a></div>
+    </div>
 
-); }
+    <div class="card">
+        <h2><i class="fas fa-dumbbell"></i> تمارين العلوي (الأحد/الأربعاء)</h2>
+        <div class="exercise-item"><span>1. صدر (Chest Press)</span> <a href="https://www.youtube.com/shorts/3p-Y7XN_C6U" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>2. سحب عالي (Lat Pull)</span> <a href="https://www.youtube.com/shorts/qPZl1Wz2F9U" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>3. سحب أرضي (Row)</span> <a href="https://www.youtube.com/shorts/GZbfZ033f74" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>4. كتف جانبي (Lateral)</span> <a href="https://www.youtube.com/shorts/WJm8XInU76Y" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>5. تراي كيبل (Pushdown)</span> <a href="https://www.youtube.com/shorts/2-LAMcpzHLU" class="video-btn" target="_blank">شاهد</a></div>
+    </div>
 
-function MealsScreen() { const [meals, setMeals] = useState([]); const [intake, setIntake] = useState(null); const [loading, setLoading] = useState(true); const [addingMealId, setAddingMealId] = useState(''); const [error, setError] = useState('');
+    <div class="card">
+        <h2><i class="fas fa-running"></i> تمارين السفلي (الاثنين/الخميس)</h2>
+        <div class="exercise-item"><span>1. دفع أرجل (Leg Press)</span> <a href="https://www.youtube.com/shorts/IZxyjW7MPJQ" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>2. خلفيات (Leg Curl)</span> <a href="https://www.youtube.com/shorts/ELOCsoDSmrg" class="video-btn" target="_blank">شاهد</a></div>
+        <div class="exercise-item"><span>3. بلانك (Plank)</span> <a href="https://www.youtube.com/shorts/pSHjTRCQxIw" class="video-btn" target="_blank">شاهد</a></div>
+    </div>
 
-const todayKey = getTodayKey(); const userId = DEFAULT_USER_ID;
+    <div class="card">
+        <h2 style="color:var(--stretch); border-color:var(--stretch);"><i class="fas fa-child"></i> إطالة (بعد التمرين)</h2>
+        <div class="exercise-item stretch-item"><span>إطالة الصدر والكتف والظهر</span> <a href="https://www.youtube.com/shorts/S8L_30c-gL8" class="video-btn" target="_blank">شاهد</a></div>
+    </div>
 
-useEffect(() => { async function boot() { try { setLoading(true); setError(''); await seedMealsIfEmpty(); const mealsData = await fetchMeals(); const todayIntake = await ensureTodayIntake(userId, todayKey); setMeals(mealsData); setIntake(todayIntake); } catch (err) { console.error(err); setError('حدث خطأ أثناء تحميل بيانات الوجبات.'); } finally { setLoading(false); } } boot(); }, [todayKey, userId]);
-
-async function handleAddMeal(meal) { try { setAddingMealId(meal.id); setError(''); const updated = await addMealToDay({ userId, todayKey, meal }); setIntake(updated); } catch (err) { console.error(err); setError('تعذر إضافة الوجبة الآن.'); } finally { setAddingMealId(''); } }
-
-const groupedMeals = useMemo(() => { const groups = { فطور: [], غداء: [], عشاء: [], سناك: [] }; meals.forEach((meal) => { if (!groups[meal.category]) groups[meal.category] = []; groups[meal.category].push(meal); }); return groups; }, [meals]);
-
-return ( <div className="space-y-6"> <SoftCard className="p-6 sm:p-8"> <SectionHeader icon={Apple} title="الوجبات والمتابعة" subtitle="ستايل فاتح ومريح للعين" /> <p className="max-w-3xl text-sm leading-7 text-slate-500"> تم تعديل شاشة الوجبات لتكون أنظف وأوضح، مع بطاقات فاتحة وأزرار مريحة للاستخدام اليومي ومؤشرات تقدم سهلة القراءة. </p> </SoftCard>
-
-{error ? <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div> : null}
-
-  {loading ? (
-    <SoftCard className="p-8 text-center text-slate-500">جارٍ تحميل بيانات الوجبات...</SoftCard>
-  ) : (
-    <>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <ProgressCard label="السعرات" value={intake?.calories || 0} target={DAILY_TARGETS.calories} unit="سعرة" icon={Flame} />
-        <ProgressCard label="البروتين" value={intake?.protein || 0} target={DAILY_TARGETS.protein} unit="جم" icon={Dumbbell} />
-        <ProgressCard label="الكربوهيدرات" value={intake?.carbs || 0} target={DAILY_TARGETS.carbs} unit="جم" icon={BarChart3} />
-        <ProgressCard label="الدهون" value={intake?.fat || 0} target={DAILY_TARGETS.fat} unit="جم" icon={Target} />
-      </div>
-
-      <SmartSuggestion meals={meals} intake={intake} />
-
-      {Object.entries(groupedMeals).map(([categoryName, items]) => (
-        <div key={categoryName} className="space-y-4">
-          <SectionHeader icon={Apple} title={categoryName} subtitle={`${items.length} وجبة جاهزة`} />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {items.map((meal) => (
-              <MealCard key={meal.id} meal={meal} onAdd={handleAddMeal} isAdding={addingMealId === meal.id} />
-            ))}
-          </div>
-        </div>
-      ))}
-
-      <SoftCard className="p-5">
-        <SectionHeader icon={CircleCheck} title="الوجبات المضافة اليوم" subtitle="سجل اليوم الحالي" />
-        {!intake?.meals?.length ? (
-          <p className="text-sm text-slate-500">لم يتم إضافة أي وجبة اليوم بعد.</p>
-        ) : (
-          <div className="space-y-3">
-            {intake.meals.map((meal, index) => (
-              <div key={`${meal.mealId}-${index}`} className="rounded-2xl bg-slate-50 p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <p className="font-semibold text-slate-800">{meal.name}</p>
-                    <p className="text-xs text-slate-500">{meal.category}</p>
-                  </div>
-                  <div className="text-sm text-slate-600">{meal.calories} سعرة</div>
-                </div>
-                <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-600 sm:grid-cols-4">
-                  <div className="rounded-xl bg-white p-2">بروتين {meal.protein}</div>
-                  <div className="rounded-xl bg-white p-2">كارب {meal.carbs}</div>
-                  <div className="rounded-xl bg-white p-2">دهون {meal.fat}</div>
-                  <div className="rounded-xl bg-white p-2">تمت الإضافة</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </SoftCard>
-    </>
-  )}
+    <div class="card">
+        <h2><i class="fas fa-calculator"></i> حاسبة الماكروز</h2>
+        <input type="number" id="food-weight" class="calc-input" placeholder="الوزن بالغرام">
+        <select id="food-type" class="calc-input">
+            <option value="chicken">دجاج (بروتين)</option>
+            <option value="rice">أرز (كارب)</option>
+        </select>
+        <button onclick="calculateMacros()" class="calc-btn">احسب الماكروز</button>
+        <div id="calc-result" style="margin-top:15px; text-align:center; font-weight:bold; color:var(--primary);"></div>
+    </div>
 </div>
 
-); }
+<script>
+    // التحكم في شاشة الافتتاح
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            }, 800);
+        }, 3000); // تظهر لمدة 3 ثوانٍ
+    });
 
-export default function CaptainYasserApp() { const [activeTab, setActiveTab] = useState(APP_TABS.dashboard);
-
-return ( <div dir="rtl" className="min-h-screen bg-[#eef1f4] p-4 text-slate-800 sm:p-6"> <div className="mx-auto max-w-7xl space-y-6"> <div className="flex flex-wrap gap-3"> <TopTabButton active={activeTab === APP_TABS.dashboard} onClick={() => setActiveTab(APP_TABS.dashboard)} icon={Zap}>الرئيسية</TopTabButton> <TopTabButton active={activeTab === APP_TABS.training} onClick={() => setActiveTab(APP_TABS.training)} icon={Dumbbell}>النظام التدريبي</TopTabButton> <TopTabButton active={activeTab === APP_TABS.meals} onClick={() => setActiveTab(APP_TABS.meals)} icon={Apple}>الوجبات والمتابعة</TopTabButton> </div>
-
-{activeTab === APP_TABS.dashboard && <DashboardScreen />}
-    {activeTab === APP_TABS.training && <TrainingScreen />}
-    {activeTab === APP_TABS.meals && <MealsScreen />}
-  </div>
-</div>
-
-); }
-
-/* ملاحظات مهمة:
-
-1. هذه النسخة تم تحويلها إلى ألوان فاتحة مريحة للعين وقريبة من التوزيع الذي اخترته.
-
-
-2. زر شاهد صار أوضح، وتم ترتيب صفوف التمارين بشكل أنظف للجوال.
-
-
-3. تحتاج مكتبة framer-motion و lucide-react داخل المشروع.
-
-
-4. ما زلت تحتاج وضع firebaseConfig الحقيقي.
-
-
-5. لاحقًا نقدر نضيف صور مصغرة أو نوافذ فيديو منبثقة لكل تمرين. */
-
-
+    // دالة الحاسبة
+    function calculateMacros() {
+        const w = document.getElementById('food-weight').value;
+        const t = document.getElementById('food-type').value;
+        if(!w) return;
+        let res = t === "chicken" ? `🍖 بروتين: ${(w*0.31).toFixed(1)}ج | سعرات: ${(w*1.6).toFixed(0)}` : `🍚 كارب: ${(w*0.28).toFixed(1)}ج | سعرات: ${(w*1.3).toFixed(0)}`;
+        document.getElementById('calc-result').innerText = res;
+    }
+</script>
+</body>
+</html>
