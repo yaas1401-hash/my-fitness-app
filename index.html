@@ -2,190 +2,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>مركز قيادة أبو خالد</title>
+    <title>كابتن ياسر - نسخة جاهزة مع الأنيميشن</title>
     <style>
-      :root {
-        --bg: #eef1f4;
-        --card: #ffffff;
-        --muted: #64748b;
-        --text: #1e293b;
-        --primary: #0f766e;
-        --primary-soft: #ccfbf1;
-        --line: #e2e8f0;
-        --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-        --radius: 28px;
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: Tahoma, Arial, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-      }
-      a { text-decoration: none; }
-      .app { max-width: 1200px; margin: 0 auto; padding: 16px; }
-      .tabs { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-      .tab-btn {
-        border: 0;
-        border-radius: 18px;
-        padding: 14px 18px;
-        background: #fff;
-        color: var(--muted);
-        font-weight: 700;
-        cursor: pointer;
-        box-shadow: var(--shadow);
-      }
-      .tab-btn.active { background: var(--primary); color: #fff; }
-      .card {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-      }
-      .hero { padding: 28px; margin-bottom: 20px; }
-      .hero-badge {
-        display: inline-block;
-        background: var(--primary-soft);
-        color: var(--primary);
-        padding: 8px 12px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 700;
-        margin-bottom: 12px;
-      }
-      .hero h1 { margin: 0; font-size: 40px; line-height: 1.2; }
-      .hero h1 span { color: var(--primary); display: block; margin-top: 6px; }
-      .hero p { color: var(--muted); line-height: 1.9; margin: 14px 0 0; }
-      .stats, .overview-grid, .metrics-grid, .progress-grid, .meals-grid {
-        display: grid;
-        gap: 16px;
-      }
-      .stats { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 18px; }
-      .overview-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 20px; }
-      .metrics-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-      .progress-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-      .meals-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-      .mini-card, .section, .metric, .meal-card, .exercise-wrap, .log-item { padding: 18px; }
-      .mini-card .label, .metric .label, .meal-card .sub, .muted, .section p, .log-sub { color: var(--muted); }
-      .mini-card .value, .metric .value { font-size: 28px; font-weight: 800; margin-top: 8px; }
-      .section-title { font-size: 26px; font-weight: 800; margin: 0 0 8px; }
-      .section-subtitle { margin: 0 0 16px; color: var(--muted); line-height: 1.8; }
-      .list-box { display: grid; gap: 10px; }
-      .list-item { background: #f8fafc; border-radius: 18px; padding: 14px; color: #475569; }
-      .day-card { padding: 20px; margin-bottom: 18px; }
-      .day-head {
-        display: flex; gap: 14px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;
-      }
-      .day-name { font-size: 30px; font-weight: 800; margin: 0; }
-      .day-focus { color: var(--primary); font-weight: 700; margin-top: 6px; }
-      .day-cardio {
-        background: var(--primary-soft); color: var(--primary); padding: 12px 16px; border-radius: 18px;
-        font-size: 14px; font-weight: 700;
-      }
-      .day-notes {
-        margin: 16px 0 0; border-bottom: 4px solid #14b8a6; padding-bottom: 12px; color: var(--muted); line-height: 1.9;
-      }
-      .exercise-list { margin-top: 18px; display: grid; gap: 12px; }
-      .exercise-wrap { background: #f8fafc; border-radius: 24px; }
-      .exercise-row {
-        display: flex; align-items: flex-start; gap: 12px; background: #fff; border-radius: 20px;
-        border-right: 6px solid #14b8a6; padding: 14px;
-      }
-      .watch-btn {
-        min-width: 92px; border: 0; border-radius: 18px; background: var(--primary); color: #fff;
-        padding: 14px 16px; font-weight: 800; cursor: pointer;
-      }
-      .exercise-content { flex: 1; }
-      .exercise-title { font-size: 18px; font-weight: 800; color: var(--text); }
-      .exercise-title span { color: #475569; font-weight: 500; }
-      .chips {
-        margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end;
-      }
-      .chip {
-        background: #f1f5f9; color: #475569; border-radius: 999px; padding: 7px 12px; font-size: 12px;
-      }
-      .progress-bar {
-        width: 100%; height: 12px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin-top: 12px;
-      }
-      .progress-fill { height: 100%; background: var(--primary); border-radius: 999px; }
-      .meal-card h3, .log-item h4 { margin: 0; font-size: 20px; }
-      .meal-top, .log-top {
-        display: flex; justify-content: space-between; gap: 10px; align-items: flex-start;
-      }
-      .cal-badge {
-        background: var(--primary-soft); color: var(--primary); border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700;
-      }
-      .meal-meta, .log-meta {
-        margin-top: 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
-      }
-      .meta-box {
-        background: #f8fafc; border-radius: 16px; padding: 10px; color: #475569; font-size: 14px;
-      }
-      .primary-btn {
-        width: 100%; border: 0; border-radius: 18px; background: var(--primary); color: white; padding: 14px;
-        margin-top: 14px; font-weight: 800; cursor: pointer;
-      }
-      .section { margin-bottom: 18px; }
-      .section-head {
-        display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 16px;
-      }
-      .count-badge {
-        background: #f1f5f9; color: #475569; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700;
-      }
-      .suggestion-box {
-        display: flex; justify-content: space-between; gap: 20px; align-items: center; flex-wrap: wrap;
-      }
-      .suggestion-side {
-        background: var(--primary-soft); color: var(--primary); border-radius: 24px; padding: 20px; min-width: 120px; text-align: center; font-weight: 800;
-      }
-      .modal {
-        position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: flex; align-items: center;
-        justify-content: center; padding: 16px; z-index: 999;
-      }
-      .modal-card {
-        background: white; width: min(760px, 100%); border-radius: 24px; box-shadow: var(--shadow); overflow: hidden;
-      }
-      .modal-head {
-        display: flex; justify-content: space-between; gap: 10px; padding: 18px 20px; border-bottom: 1px solid var(--line);
-      }
-      .close-btn {
-        border: 0; background: #f1f5f9; color: #334155; border-radius: 14px; padding: 10px 14px; cursor: pointer; font-weight: 700;
-      }
-      .modal-body { padding: 20px; }
-      .video-box { border-radius: 20px; background: #f8fafc; padding: 20px; text-align: center; }
-      .input-grid {
-        margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;
-      }
-      .field, .field-textarea {
-        width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 14px; background: #fff; font-family: inherit;
-      }
-      .field-textarea { min-height: 70px; resize: vertical; margin-top: 8px; }
-      @media (max-width: 768px) {
-        .hero h1 { font-size: 30px; }
-        .exercise-row { align-items: stretch; }
-        .watch-btn { min-width: 84px; }
-        .day-name { font-size: 24px; }
-      }
+      :root{--bg:#eef1f4;--card:#fff;--muted:#64748b;--text:#1e293b;--primary:#0f766e;--soft:#ccfbf1;--line:#e2e8f0;--shadow:0 12px 30px rgba(15,23,42,.08);--r:24px}
+      *{box-sizing:border-box} body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text)}
+      .app{max-width:1200px;margin:0 auto;padding:16px}.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+      .tab-btn{border:0;background:#fff;color:var(--muted);padding:14px 18px;border-radius:18px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+      .tab-btn.active{background:var(--primary);color:#fff}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+      .section{padding:18px;margin-bottom:18px}.hero{padding:28px}.hero h1{margin:0;font-size:38px}.hero h1 span{display:block;color:var(--primary)}
+      .hero p,.muted{color:var(--muted);line-height:1.9}.grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+      .metric{padding:18px}.metric .v{font-size:28px;font-weight:800;margin-top:8px}.title{font-size:26px;font-weight:800;margin:0 0 8px}.sub{margin:0 0 16px;color:var(--muted)}
+      .list{display:grid;gap:10px}.item{background:#f8fafc;border-radius:18px;padding:14px;color:#475569}.day{padding:20px}.day-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.day-name{font-size:28px;font-weight:800;margin:0}.day-focus{color:var(--primary);font-weight:700;margin-top:6px}
+      .pill{background:var(--soft);color:var(--primary);padding:12px 16px;border-radius:18px;font-weight:700}.day-notes{margin:16px 0 0;border-bottom:4px solid #14b8a6;padding-bottom:12px;color:var(--muted)}
+      .ex-list{display:grid;gap:12px;margin-top:18px}.ex-wrap{background:#f8fafc;border-radius:22px;padding:10px}.ex-row{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:18px;border-right:6px solid #14b8a6;padding:14px}
+      .watch{min-width:92px;border:0;border-radius:16px;background:var(--primary);color:#fff;padding:14px 16px;font-weight:800;cursor:pointer}.ex-content{flex:1}.ex-title{font-size:18px;font-weight:800}.chips{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.chip{background:#f1f5f9;color:#475569;border-radius:999px;padding:7px 12px;font-size:12px}
+      .inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:12px}.field,.textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;font-family:inherit}.textarea{min-height:70px;resize:vertical;margin-top:8px}
+      .btn{border:0;border-radius:16px;background:var(--primary);color:#fff;padding:12px 16px;font-weight:800;cursor:pointer}.btn.full{width:100%;margin-top:14px}.done{background:#16a34a}
+      .progress{height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:12px}.fill{height:100%;background:var(--primary)}
+      .meals{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}.meal-top,.log-top{display:flex;justify-content:space-between;gap:10px}.badge{background:var(--soft);color:var(--primary);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:700}.meta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.box{background:#f8fafc;border-radius:14px;padding:10px;color:#475569;font-size:14px}
+      .modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:999}.modal-card{background:#fff;width:min(900px,100%);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+      .modal-head{display:flex;justify-content:space-between;gap:10px;padding:18px 20px;border-bottom:1px solid var(--line)}.close{border:0;background:#f1f5f9;color:#334155;border-radius:14px;padding:10px 14px;font-weight:700;cursor:pointer}.modal-body{padding:20px}
+      .player-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.anim-box,.video-box{background:#f8fafc;border-radius:20px;padding:16px}.anim-stage{min-height:340px;display:flex;align-items:center;justify-content:center}.small{font-size:12px;color:var(--muted)}
+      @media (max-width:800px){.hero h1{font-size:30px}.player-grid{grid-template-columns:1fr}.watch{min-width:84px}.day-name{font-size:24px}}
     </style>
   </head>
   <body>
-    <div id="app"></div><script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-  import {
-    getFirestore,
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    setDoc,
-    updateDoc,
-    increment,
-    serverTimestamp,
-    query,
-    orderBy,
-  } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
-
-  const firebaseConfig = {
+    <div id="app"></div>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
+      import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, serverTimestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';const firebaseConfig = {
     apiKey: "AIzaSyA9C9uiDeN6Ikvvo3chDQ9",
     authDomain: "captain-yasser-pro.firebaseapp.com",
     projectId: "captain-yasser-pro",
@@ -193,733 +38,97 @@
     messagingSenderId: "1025929025248",
     appId: "1:1025929025248:web:fcfac87"
   };
+  const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+  const DAILY_TARGETS={calories:2200,protein:150,carbs:220,fat:60}; const TRAINING_TARGETS={painThreshold:6}; const DEFAULT_USER_ID='captain-yasser-user';
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  const DAILY_TARGETS = { calories: 2200, protein: 150, carbs: 220, fat: 60 };
-  const TRAINING_TARGETS = { weeklySessions: 4, cardioMinutes: 60, painThreshold: 6 };
-  const DEFAULT_USER_ID = 'captain-yasser-user';
-
-  const TRAINING_OVERVIEW = {
-    weeklyStructure: [
-      'الأحد: Upper A',
-      'الاثنين: Lower A',
-      'الثلاثاء: راحة أو مشي خفيف',
-      'الأربعاء: Upper B',
-      'الخميس: Lower B',
-      'الجمعة: راحة',
-      'السبت: راحة أو مشي خفيف'
-    ],
-    returnPhase: {
-      durationWeeks: '2-4 أسابيع',
-      workoutDuration: '45-60 دقيقة حديد + 15-20 دقيقة كارديو بعد التمرين',
-      intensity: 'ابدأ بجهد متوسط واترك 2-3 عدات احتياط في أول أسبوعين'
-    }
-  };
-
-  const TRAINING_DAYS = [
-    {
-      id: 'upper-a',
-      name: 'تمارين العلوي (الأحد)',
-      focus: 'صدر + ظهر + كتف جانبي + كتف خلفي',
-      cardio: '15 دقيقة مشي بعد التمرين',
-      notes: 'تمارين آمنة للعودة بعد الانقطاع، مع تركيز على الظهر والكتف الخلفي والجانبي لتحسين الوضعية والشكل العام.',
-      exercises: [
-        { id: 'machine-chest-press', arabicName: 'ضغط صدر جهاز', name: 'Machine Chest Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/FXZcFBBJgWg' },
-        { id: 'lat-pulldown', arabicName: 'سحب علوي', name: 'Lat Pulldown', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/jDwfoPmHd1k' },
-        { id: 'seated-row', arabicName: 'سحب أرضي جهاز', name: 'Seated Row', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/d30OHGc2VcY' },
-        { id: 'reverse-pec-deck', arabicName: 'كتف خلفي جهاز', name: 'Reverse Pec Deck', duration: '30ث', level: 'مهم', sets: '3', reps: '12', link: 'https://youtu.be/dbALgVHdJRM' },
-        { id: 'cable-lateral-raise', arabicName: 'كتف جانبي كيبل', name: 'Cable Lateral Raise', duration: '30ث', level: 'مهم', sets: '3', reps: '12-15', link: 'https://youtu.be/3VcKaXpzqRo' }
-      ]
-    },
-    {
-      id: 'lower-a',
-      name: 'تمارين السفلي (الاثنين)',
-      focus: 'أرجل آمنة بدون ضغط كبير على الظهر',
-      cardio: '15 دقيقة مشي مائل',
-      notes: 'تمارين مستقرة ومناسبة لوضعك الحالي، مع تجنب الحركات التي تفرض ضغطًا كبيرًا على الفقرات.',
-      exercises: [
-        { id: 'leg-press', arabicName: 'دفع الأرجل', name: 'Leg Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/W1SD96lrudY' },
-        { id: 'leg-extension', arabicName: 'تمديد الأرجل', name: 'Leg Extension', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/_2N_e-wYyeg' },
-        { id: 'leg-curl', arabicName: 'خلف الفخذ', name: 'Leg Curl', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/tHV000dBZ7A' },
-        { id: 'goblet-squat', arabicName: 'سكوات دمبل خفيف', name: 'Goblet Squat', duration: '35ث', level: 'مبتدئ', sets: '2-3', reps: '10', link: 'https://youtu.be/MeIiIdhvXT4' }
-      ]
-    },
-    {
-      id: 'upper-b',
-      name: 'تمارين العلوي (الأربعاء)',
-      focus: 'صدر علوي + ظهر + كتف جانبي + كتف خلفي',
-      cardio: '15 دقيقة كارديو خفيف',
-      notes: 'تنويع بسيط يخدم التضخيم ويحافظ على أمان المفاصل مع استمرار دعم الوضعية.',
-      exercises: [
-        { id: 'incline-press', arabicName: 'ضغط مائل', name: 'Incline Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/2caIbxcYQSU' },
-        { id: 'one-arm-row', arabicName: 'سحب دمبل', name: 'One Arm Row', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '10', link: 'https://youtu.be/tpV2NDgxG1c' },
-        { id: 'reverse-pec-deck-b', arabicName: 'كتف خلفي جهاز', name: 'Reverse Pec Deck', duration: '30ث', level: 'مهم', sets: '3', reps: '12', link: 'https://youtu.be/dbALgVHdJRM' },
-        { id: 'cable-lateral-raise-b', arabicName: 'كتف جانبي كيبل', name: 'Cable Lateral Raise', duration: '30ث', level: 'مهم', sets: '3', reps: '12-15', link: 'https://youtu.be/3VcKaXpzqRo' }
-      ]
-    },
-    {
-      id: 'lower-b',
-      name: 'تمارين السفلي (الخميس)',
-      focus: 'تقوية الأرجل والخلفية بشكل آمن',
-      cardio: '15 دقيقة مشي',
-      notes: 'نسخة سفلي ثانية آمنة بدون Romanian Deadlift أو Hip Thrust، ومناسبة جدًا لمرحلة الرجوع.',
-      exercises: [
-        { id: 'leg-press-b', arabicName: 'دفع الأرجل', name: 'Leg Press', duration: '40ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/W1SD96lrudY' },
-        { id: 'leg-curl-b', arabicName: 'خلف الفخذ', name: 'Leg Curl', duration: '30ث', level: 'مبتدئ', sets: '3', reps: '12', link: 'https://youtu.be/tHV000dBZ7A' },
-        { id: 'leg-extension-b', arabicName: 'تمديد الأرجل', name: 'Leg Extension', duration: '30ث', level: 'مبتدئ', sets: '2-3', reps: '12', link: 'https://youtu.be/_2N_e-wYyeg' },
-        { id: 'goblet-squat-b', arabicName: 'سكوات دمبل خفيف', name: 'Goblet Squat', duration: '35ث', level: 'مبتدئ', sets: '2', reps: '10', link: 'https://youtu.be/MeIiIdhvXT4' }
-      ]
-    }
+  const TRAINING_DAYS=[
+    {id:'upper-a',name:'تمارين العلوي (الأحد)',focus:'صدر + ظهر + كتف جانبي + كتف خلفي',cardio:'15 دقيقة مشي بعد التمرين',notes:'تمارين آمنة للعودة بعد الانقطاع مع تركيز على الوضعية.',exercises:[
+      {id:'machine-chest-press',animationKey:'machine_chest_press',arabicName:'ضغط صدر جهاز',name:'Machine Chest Press',duration:'40ث',level:'مبتدئ',sets:'3',reps:'10',link:'https://youtu.be/FXZcFBBJgWg'},
+      {id:'lat-pulldown',animationKey:'lat_pulldown',arabicName:'سحب علوي',name:'Lat Pulldown',duration:'40ث',level:'مبتدئ',sets:'3',reps:'10',link:'https://youtu.be/jDwfoPmHd1k'},
+      {id:'seated-row',animationKey:'seated_row',arabicName:'سحب أرضي جهاز',name:'Seated Row',duration:'40ث',level:'مبتدئ',sets:'3',reps:'10',link:'https://youtu.be/d30OHGc2VcY'},
+      {id:'reverse-pec-deck',animationKey:'reverse_pec_deck',arabicName:'كتف خلفي جهاز',name:'Reverse Pec Deck',duration:'30ث',level:'مهم',sets:'3',reps:'12',link:'https://youtu.be/dbALgVHdJRM'},
+      {id:'cable-lateral-raise',animationKey:'cable_lateral_raise',arabicName:'كتف جانبي كيبل',name:'Cable Lateral Raise',duration:'30ث',level:'مهم',sets:'3',reps:'12-15',link:'https://youtu.be/3VcKaXpzqRo'}]},
+    {id:'lower-a',name:'تمارين السفلي (الاثنين)',focus:'أرجل آمنة بدون ضغط كبير على الظهر',cardio:'15 دقيقة مشي مائل',notes:'تمارين مستقرة ومناسبة لوضعك الحالي.',exercises:[
+      {id:'leg-press',animationKey:'leg_press',arabicName:'دفع الأرجل',name:'Leg Press',duration:'40ث',level:'مبتدئ',sets:'3',reps:'12',link:'https://youtu.be/W1SD96lrudY'},
+      {id:'leg-extension',animationKey:'leg_extension',arabicName:'تمديد الأرجل',name:'Leg Extension',duration:'30ث',level:'مبتدئ',sets:'3',reps:'12',link:'https://youtu.be/_2N_e-wYyeg'},
+      {id:'leg-curl',animationKey:'leg_curl',arabicName:'خلف الفخذ',name:'Leg Curl',duration:'30ث',level:'مبتدئ',sets:'3',reps:'12',link:'https://youtu.be/tHV000dBZ7A'},
+      {id:'goblet-squat',animationKey:'goblet_squat',arabicName:'سكوات دمبل خفيف',name:'Goblet Squat',duration:'35ث',level:'مبتدئ',sets:'2-3',reps:'10',link:'https://youtu.be/MeIiIdhvXT4'}]},
+    {id:'upper-b',name:'تمارين العلوي (الأربعاء)',focus:'صدر علوي + ظهر + كتف جانبي + كتف خلفي',cardio:'15 دقيقة كارديو خفيف',notes:'تنويع بسيط يخدم التضخيم ويحافظ على أمان المفاصل.',exercises:[
+      {id:'incline-press',animationKey:'incline_press',arabicName:'ضغط مائل',name:'Incline Press',duration:'40ث',level:'مبتدئ',sets:'3',reps:'10',link:'https://youtu.be/2caIbxcYQSU'},
+      {id:'one-arm-row',animationKey:'seated_row',arabicName:'سحب دمبل',name:'One Arm Row',duration:'40ث',level:'مبتدئ',sets:'3',reps:'10',link:'https://youtu.be/tpV2NDgxG1c'},
+      {id:'reverse-pec-deck-b',animationKey:'reverse_pec_deck',arabicName:'كتف خلفي جهاز',name:'Reverse Pec Deck',duration:'30ث',level:'مهم',sets:'3',reps:'12',link:'https://youtu.be/dbALgVHdJRM'},
+      {id:'cable-lateral-raise-b',animationKey:'cable_lateral_raise',arabicName:'كتف جانبي كيبل',name:'Cable Lateral Raise',duration:'30ث',level:'مهم',sets:'3',reps:'12-15',link:'https://youtu.be/3VcKaXpzqRo'}]},
+    {id:'lower-b',name:'تمارين السفلي (الخميس)',focus:'تقوية الأرجل والخلفية بشكل آمن',cardio:'15 دقيقة مشي',notes:'نسخة سفلي ثانية آمنة بدون RDL أو Hip Thrust.',exercises:[
+      {id:'leg-press-b',animationKey:'leg_press',arabicName:'دفع الأرجل',name:'Leg Press',duration:'40ث',level:'مبتدئ',sets:'3',reps:'12',link:'https://youtu.be/W1SD96lrudY'},
+      {id:'leg-curl-b',animationKey:'leg_curl',arabicName:'خلف الفخذ',name:'Leg Curl',duration:'30ث',level:'مبتدئ',sets:'3',reps:'12',link:'https://youtu.be/tHV000dBZ7A'},
+      {id:'leg-extension-b',animationKey:'leg_extension',arabicName:'تمديد الأرجل',name:'Leg Extension',duration:'30ث',level:'مبتدئ',sets:'2-3',reps:'12',link:'https://youtu.be/_2N_e-wYyeg'},
+      {id:'goblet-squat-b',animationKey:'goblet_squat',arabicName:'سكوات دمبل خفيف',name:'Goblet Squat',duration:'35ث',level:'مبتدئ',sets:'2',reps:'10',link:'https://youtu.be/MeIiIdhvXT4'}]}
   ];
 
-  const defaultMeals = [
-    { id: 'breakfast-eggs-oats', name: 'بيض + شوفان', category: 'فطور', calories: 420, protein: 28, carbs: 32, fat: 18 },
-    { id: 'greek-yogurt-honey-fruit', name: 'زبادي يوناني + عسل + فاكهة', category: 'فطور', calories: 310, protein: 20, carbs: 35, fat: 8 },
-    { id: 'chicken-rice', name: 'دجاج + رز', category: 'غداء', calories: 540, protein: 42, carbs: 52, fat: 14 },
-    { id: 'beef-potato', name: 'لحم + بطاطس', category: 'غداء', calories: 610, protein: 40, carbs: 48, fat: 24 },
-    { id: 'fish-rice', name: 'سمك + رز', category: 'غداء', calories: 470, protein: 38, carbs: 45, fat: 11 },
-    { id: 'tuna-salad', name: 'تونة + سلطة', category: 'عشاء', calories: 290, protein: 32, carbs: 8, fat: 12 },
-    { id: 'light-chicken-salad', name: 'دجاج خفيف + سلطة', category: 'عشاء', calories: 340, protein: 35, carbs: 12, fat: 15 },
-    { id: 'banana-snack', name: 'موزة', category: 'سناك', calories: 105, protein: 1, carbs: 27, fat: 0 },
-    { id: 'whey-shake', name: 'بروتين شيك', category: 'سناك', calories: 130, protein: 24, carbs: 3, fat: 2 }
+  const defaultMeals=[
+    {id:'breakfast-eggs-oats',name:'بيض + شوفان',category:'فطور',calories:420,protein:28,carbs:32,fat:18},
+    {id:'greek-yogurt-honey-fruit',name:'زبادي يوناني + عسل + فاكهة',category:'فطور',calories:310,protein:20,carbs:35,fat:8},
+    {id:'chicken-rice',name:'دجاج + رز',category:'غداء',calories:540,protein:42,carbs:52,fat:14},
+    {id:'beef-potato',name:'لحم + بطاطس',category:'غداء',calories:610,protein:40,carbs:48,fat:24},
+    {id:'fish-rice',name:'سمك + رز',category:'غداء',calories:470,protein:38,carbs:45,fat:11},
+    {id:'tuna-salad',name:'تونة + سلطة',category:'عشاء',calories:290,protein:32,carbs:8,fat:12},
+    {id:'light-chicken-salad',name:'دجاج خفيف + سلطة',category:'عشاء',calories:340,protein:35,carbs:12,fat:15},
+    {id:'banana-snack',name:'موزة',category:'سناك',calories:105,protein:1,carbs:27,fat:0},
+    {id:'whey-shake',name:'بروتين شيك',category:'سناك',calories:130,protein:24,carbs:3,fat:2}
   ];
 
-  function getTodayKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  }
+  const COLORS={bg:'#0b0b0f',body:'#d9d9dd',outline:'#23232b',primary:'#ff6b4a',secondary:'#7aa7ff',equipment:'#7c8496',equipmentDark:'#4e5668'};
+  function shell(title,body,w=360,h=360){return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" rx="26" fill="${COLORS.bg}"/>${body}<text x="180" y="28" text-anchor="middle" fill="#fff" font-size="16" font-family="Tahoma" font-weight="700">${title}</text></svg>`}
+  function simpleBody(o={}){const {x=180,y=180,armL=0,armR=0,legL=0,legR=0,torsoTilt=0,chest=false,delts=false,lats=false,upperBack=false,biceps=false,triceps=false,quads=false,hams=false}=o; const cc=chest?COLORS.primary:COLORS.body, dc=delts?COLORS.primary:COLORS.body, lc=lats?COLORS.primary:COLORS.body, ub=upperBack?COLORS.primary:COLORS.body, bc=biceps?COLORS.secondary:COLORS.body, tc=triceps?COLORS.secondary:COLORS.body, qc=quads?COLORS.primary:COLORS.body, hc=hams?COLORS.secondary:COLORS.body; return `<g transform="translate(${x} ${y}) rotate(${torsoTilt})"><ellipse cx="0" cy="-82" rx="20" ry="24" fill="${COLORS.body}" stroke="${COLORS.outline}" stroke-width="2"/><path d="M-38,-48 Q0,-66 38,-48 L28,28 Q0,48 -28,28 Z" fill="${COLORS.body}" stroke="${COLORS.outline}" stroke-width="2"/><path d="M-34,-42 Q-8,-55 0,-18 Q-16,-4 -30,-12 Z" fill="${cc}"/><path d="M34,-42 Q8,-55 0,-18 Q16,-4 30,-12 Z" fill="${cc}"/><ellipse cx="-33" cy="-36" rx="15" ry="14" fill="${dc}" stroke="${COLORS.outline}" stroke-width="1.5"/><ellipse cx="33" cy="-36" rx="15" ry="14" fill="${dc}" stroke="${COLORS.outline}" stroke-width="1.5"/><path d="M-28,-18 Q-46,4 -34,24 Q-18,12 -14,-8 Z" fill="${lc}"/><path d="M28,-18 Q46,4 34,24 Q18,12 14,-8 Z" fill="${lc}"/><path d="M-16,-22 Q0,-6 16,-22 Q4,-30 0,-30 Q-4,-30 -16,-22 Z" fill="${ub}" opacity=".5"/><g transform="translate(-33 -30) rotate(${armL})"><rect x="-8" y="0" width="16" height="46" rx="8" fill="${bc}" stroke="${COLORS.outline}" stroke-width="1.5"/><rect x="-7" y="44" width="14" height="46" rx="7" fill="${tc}" stroke="${COLORS.outline}" stroke-width="1.5"/><circle cx="0" cy="92" r="8" fill="${COLORS.body}" stroke="${COLORS.outline}" stroke-width="1.5"/></g><g transform="translate(33 -30) rotate(${armR})"><rect x="-8" y="0" width="16" height="46" rx="8" fill="${bc}" stroke="${COLORS.outline}" stroke-width="1.5"/><rect x="-7" y="44" width="14" height="46" rx="7" fill="${tc}" stroke="${COLORS.outline}" stroke-width="1.5"/><circle cx="0" cy="92" r="8" fill="${COLORS.body}" stroke="${COLORS.outline}" stroke-width="1.5"/></g><g transform="translate(-16 28) rotate(${legL})"><rect x="-9" y="0" width="18" height="52" rx="9" fill="${qc}" stroke="${COLORS.outline}" stroke-width="1.5"/><rect x="-8" y="50" width="16" height="52" rx="8" fill="${hc}" stroke="${COLORS.outline}" stroke-width="1.5"/></g><g transform="translate(16 28) rotate(${legR})"><rect x="-9" y="0" width="18" height="52" rx="9" fill="${qc}" stroke="${COLORS.outline}" stroke-width="1.5"/><rect x="-8" y="50" width="16" height="52" rx="8" fill="${hc}" stroke="${COLORS.outline}" stroke-width="1.5"/></g></g>`}
+  function bench(t,inc=false,top=false){const body=simpleBody({x:182,y:212,armL:top?-78:-25,armR:top?78:25,torsoTilt:inc?-28:-88,chest:true,delts:true,triceps:true}); const benchShape=inc?`<g transform="translate(115 234) rotate(-28)"><rect x="0" y="0" width="138" height="18" rx="9" fill="${COLORS.equipment}"/><rect x="-8" y="-14" width="12" height="90" rx="6" fill="${COLORS.equipmentDark}"/><rect x="128" y="-14" width="12" height="90" rx="6" fill="${COLORS.equipmentDark}"/></g>`:`<g transform="translate(108 226)"><rect x="0" y="0" width="148" height="18" rx="9" fill="${COLORS.equipment}"/><rect x="10" y="10" width="12" height="80" rx="6" fill="${COLORS.equipmentDark}"/><rect x="126" y="10" width="12" height="80" rx="6" fill="${COLORS.equipmentDark}"/></g>`; return shell(t,`${benchShape}${body}`)}
+  function pulldown(t,bottom=false){const barY=bottom?110:62; return shell(t,`<g><rect x="98" y="44" width="10" height="208" rx="5" fill="${COLORS.equipmentDark}"/><rect x="252" y="44" width="10" height="208" rx="5" fill="${COLORS.equipmentDark}"/><rect x="110" y="42" width="140" height="8" rx="4" fill="${COLORS.equipment}"/><line x1="180" y1="50" x2="180" y2="${barY}" stroke="#d9dee6" stroke-width="4"/><rect x="128" y="${barY}" width="104" height="8" rx="4" fill="#d9dee6"/></g>${simpleBody({x:180,y:206,armL:bottom?-20:-58,armR:bottom?20:58,lats:true,biceps:true,upperBack:true})}`)}
+  function row(t,pull=true){const handleX=pull?180:234; return shell(t,`<g><rect x="62" y="214" width="220" height="12" rx="6" fill="${COLORS.equipmentDark}"/><rect x="70" y="160" width="18" height="64" rx="8" fill="${COLORS.equipment}"/><rect x="82" y="152" width="54" height="12" rx="6" fill="${COLORS.equipment}"/><line x1="266" y1="72" x2="${handleX}" y2="146" stroke="#d9dee6" stroke-width="4"/><path d="M${handleX-10} 146 h20" stroke="#d9dee6" stroke-width="5" stroke-linecap="round"/></g>${simpleBody({x:162,y:196,armL:pull?-10:-52,armR:pull?10:52,upperBack:true,lats:true,biceps:true,torsoTilt:pull?6:16})}`)}
+  function reversePec(t,open=true){return shell(t,`<g><rect x="112" y="86" width="136" height="146" rx="20" fill="${COLORS.equipmentDark}"/><rect x="168" y="108" width="24" height="108" rx="10" fill="${COLORS.equipment}"/><circle cx="132" cy="128" r="16" fill="${COLORS.equipment}"/><circle cx="228" cy="128" r="16" fill="${COLORS.equipment}"/></g>${simpleBody({x:180,y:212,armL:open?-86:-28,armR:open?86:28,delts:true,upperBack:true})}`)}
+  function latRaise(t,top=false){return shell(t,`${simpleBody({x:180,y:214,armL:top?-88:-18,armR:top?88:18,delts:true})}`)}
+  function legPressAnim(t,extend=false){return shell(t,`<g transform="translate(78 250)"><line x1="0" y1="0" x2="142" y2="-142" stroke="${COLORS.equipmentDark}" stroke-width="12"/><rect x="118" y="-168" width="62" height="94" rx="12" transform="rotate(-45 118 -168)" fill="${COLORS.equipment}"/></g>${simpleBody({x:168,y:222,armL:44,armR:-44,legL:extend?-60:-8,legR:extend?-60:-8,quads:true,hams:true,torsoTilt:-42})}`)}
+  function legExtensionAnim(t,extend=true){return shell(t,`<g><rect x="122" y="246" width="116" height="14" rx="7" fill="${COLORS.equipmentDark}"/><rect x="126" y="152" width="22" height="94" rx="10" fill="${COLORS.equipment}"/><rect x="146" y="148" width="76" height="16" rx="8" fill="${COLORS.equipment}"/><rect x="210" y="206" width="52" height="12" rx="6" fill="${COLORS.equipment}"/></g>${simpleBody({x:180,y:206,legL:extend?-88:-28,legR:extend?-88:-28,quads:true})}`)}
+  function legCurlAnim(t,curl=true){return shell(t,`<g transform="translate(112 210)"><rect x="0" y="0" width="128" height="16" rx="8" fill="${COLORS.equipment}"/><rect x="10" y="-14" width="12" height="92" rx="6" fill="${COLORS.equipmentDark}"/><rect x="106" y="-14" width="12" height="92" rx="6" fill="${COLORS.equipmentDark}"/></g>${simpleBody({x:178,y:188,armL:14,armR:-14,legL:curl?52:6,legR:curl?-52:-6,hams:true,torsoTilt:-88})}`)}
+  function goblet(t,down=false){return shell(t,`${simpleBody({x:180,y:down?228:206,armL:-6,armR:6,legL:down?48:8,legR:down?-48:-8,quads:true,hams:true})}<g transform="translate(168 ${down?134:120})"><circle r="12" fill="#111"/><circle cx="24" r="12" fill="#111"/><rect x="-5" y="-4" width="34" height="8" rx="4" fill="#c3cad5"/></g>`)}
+  const EX_ANIMS={machine_chest_press:[()=>bench('ضغط صدر جهاز',false,false),()=>bench('ضغط صدر جهاز',false,true),()=>bench('ضغط صدر جهاز',false,false)],incline_press:[()=>bench('ضغط مائل',true,false),()=>bench('ضغط مائل',true,true),()=>bench('ضغط مائل',true,false)],lat_pulldown:[()=>pulldown('سحب علوي',false),()=>pulldown('سحب علوي',true),()=>pulldown('سحب علوي',false)],seated_row:[()=>row('سحب أرضي جهاز',false),()=>row('سحب أرضي جهاز',true),()=>row('سحب أرضي جهاز',false)],reverse_pec_deck:[()=>reversePec('كتف خلفي جهاز',false),()=>reversePec('كتف خلفي جهاز',true),()=>reversePec('كتف خلفي جهاز',false)],cable_lateral_raise:[()=>latRaise('كتف جانبي كيبل',false),()=>latRaise('كتف جانبي كيبل',true),()=>latRaise('كتف جانبي كيبل',false)],leg_press:[()=>legPressAnim('دفع الأرجل',false),()=>legPressAnim('دفع الأرجل',true),()=>legPressAnim('دفع الأرجل',false)],leg_extension:[()=>legExtensionAnim('تمديد الأرجل',false),()=>legExtensionAnim('تمديد الأرجل',true),()=>legExtensionAnim('تمديد الأرجل',false)],leg_curl:[()=>legCurlAnim('خلف الفخذ',false),()=>legCurlAnim('خلف الفخذ',true),()=>legCurlAnim('خلف الفخذ',false)],goblet_squat:[()=>goblet('سكوات دمبل خفيف',false),()=>goblet('سكوات دمبل خفيف',true),()=>goblet('سكوات دمبل خفيف',false)]};
 
-  function getTodayArabicDay() {
-    const names = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-    return names[new Date().getDay()];
-  }
-
-  function getTodayWorkout() {
-    const map = {
-      'الأحد': 'upper-a',
-      'الاثنين': 'lower-a',
-      'الثلاثاء': null,
-      'الأربعاء': 'upper-b',
-      'الخميس': 'lower-b',
-      'الجمعة': null,
-      'السبت': null
-    };
-    const workoutId = map[getTodayArabicDay()];
-    return TRAINING_DAYS.find((d) => d.id === workoutId) || null;
-  }
-
-  function percent(value, total) {
-    if (!total) return 0;
-    return Math.min(100, Math.round((value / total) * 100));
-  }
-
-  async function seedMealsIfEmpty() {
-    const mealsRef = collection(db, 'meals');
-    const snap = await getDocs(mealsRef);
-    if (!snap.empty) return;
-    await Promise.all(defaultMeals.map((meal) => setDoc(doc(db, 'meals', meal.id), { ...meal, createdAt: serverTimestamp() })));
-  }
-
-  async function fetchMeals() {
-    const mealsQuery = query(collection(db, 'meals'), orderBy('category'));
-    const snap = await getDocs(mealsQuery);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  }
-
-  async function ensureTodayIntake(userId, todayKey) {
-    const intakeRef = doc(db, 'userDailyIntake', `${userId}_${todayKey}`);
-    const snap = await getDoc(intakeRef);
-    if (!snap.exists()) {
-      await setDoc(intakeRef, {
-        userId, date: todayKey, calories: 0, protein: 0, carbs: 0, fat: 0, meals: [],
-        targets: DAILY_TARGETS, createdAt: serverTimestamp(), updatedAt: serverTimestamp()
-      });
-    }
-    const refreshed = await getDoc(intakeRef);
-    return { id: intakeRef.id, ...refreshed.data() };
-  }
-
-  async function getTodayIntake(userId, todayKey) {
-    const intakeRef = doc(db, 'userDailyIntake', `${userId}_${todayKey}`);
-    const snap = await getDoc(intakeRef);
-    if (!snap.exists()) return null;
-    return { id: snap.id, ...snap.data() };
-  }
-
-  async function addMealToDay({ userId, todayKey, meal }) {
-    const intakeRef = doc(db, 'userDailyIntake', `${userId}_${todayKey}`);
-    const currentSnap = await getDoc(intakeRef);
-    if (!currentSnap.exists()) await ensureTodayIntake(userId, todayKey);
-
-    const latestSnap = await getDoc(intakeRef);
-    const currentData = latestSnap.data() || {};
-    const currentMeals = Array.isArray(currentData.meals) ? currentData.meals : [];
-
-    const mealEntry = {
-      mealId: meal.id, name: meal.name, category: meal.category,
-      calories: meal.calories, protein: meal.protein, carbs: meal.carbs, fat: meal.fat,
-      addedAt: new Date().toISOString()
-    };
-
-    await updateDoc(intakeRef, {
-      calories: increment(Number(meal.calories) || 0),
-      protein: increment(Number(meal.protein) || 0),
-      carbs: increment(Number(meal.carbs) || 0),
-      fat: increment(Number(meal.fat) || 0),
-      meals: [...currentMeals, mealEntry],
-      updatedAt: serverTimestamp()
-    });
-
-    return getTodayIntake(userId, todayKey);
-  }
-
-  function getYoutubeEmbedUrl(url) {
-    if (!url) return '';
-    try {
-      const parsed = new URL(url);
-      if (parsed.hostname.includes('youtube.com')) {
-        const v = parsed.searchParams.get('v');
-        if (v) return `https://www.youtube-nocookie.com/embed/${v}`;
-      }
-      if (parsed.hostname.includes('youtu.be')) {
-        const id = parsed.pathname.replace('/', '').trim();
-        if (id) return `https://www.youtube-nocookie.com/embed/${id}`;
-      }
-    } catch (_) {}
-    return '';
-  }
-
-  function groupedMeals(meals) {
-    const groups = { 'فطور': [], 'غداء': [], 'عشاء': [], 'سناك': [] };
-    meals.forEach((meal) => {
-      if (!groups[meal.category]) groups[meal.category] = [];
-      groups[meal.category].push(meal);
-    });
-    return groups;
-  }
-
-  function getTrainingStorageKey() {
-    return `captain_yasser_training_${getTodayKey()}`;
-  }
-
-  const state = {
-    tab: 'dashboard',
-    meals: [],
-    intake: null,
-    modalExercise: null,
-    todayWorkout: null,
-    trainingLog: {},
-    weeklySummary: { completedSessions: 0, cardioMinutes: 0, painAlerts: 0 },
-    smartCoach: { message: 'ابدأ اليوم بهدوء وركّز على الأداء النظيف.', status: 'ready' }
-  };
-
-  const appEl = document.getElementById('app');
-
-  function saveTrainingLog() {
-    localStorage.setItem(getTrainingStorageKey(), JSON.stringify({
-      trainingLog: state.trainingLog,
-      weeklySummary: state.weeklySummary,
-      smartCoach: state.smartCoach
-    }));
-  }
-
-  function loadTrainingLog() {
-    const raw = localStorage.getItem(getTrainingStorageKey());
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw);
-      state.trainingLog = parsed.trainingLog || {};
-      state.weeklySummary = parsed.weeklySummary || state.weeklySummary;
-      state.smartCoach = parsed.smartCoach || state.smartCoach;
-    } catch (_) {}
-  }
-
-  function refreshWeeklySummary() {
-    const entries = Object.values(state.trainingLog || {});
-    state.weeklySummary.completedSessions = entries.filter((x) => x.completed).length;
-    state.weeklySummary.painAlerts = entries.filter((x) => Number(x.pain || 0) >= TRAINING_TARGETS.painThreshold).length;
-  }
-
-  function evaluateSmartCoach() {
-    const entries = Object.values(state.trainingLog || {});
-    const doneCount = entries.filter((x) => x.completed).length;
-    const avgPain = entries.length ? entries.reduce((s, x) => s + (Number(x.pain || 0)), 0) / entries.length : 0;
-    const cardio = state.weeklySummary.cardioMinutes || 0;
-
-    if (avgPain >= TRAINING_TARGETS.painThreshold) {
-      state.smartCoach = {
-        status: 'warning',
-        message: 'مستوى الألم مرتفع اليوم. خفف الشدة، وتجنب أي حركة تضغط على الظهر، وركّز على التحكم.'
-      };
-      return;
-    }
-    if (doneCount >= 3 && cardio >= 15) {
-      state.smartCoach = {
-        status: 'great',
-        message: 'أداء ممتاز. إذا كانت آخر مجموعة مريحة، زد الوزن زيادة بسيطة جدًا في الحصة القادمة.'
-      };
-      return;
-    }
-    if (doneCount === 0) {
-      state.smartCoach = {
-        status: 'ready',
-        message: 'ابدأ اليوم بأول تمرين فقط ثم قيّم طاقتك. الأهم الآن الاستمرارية لا المثالية.'
-      };
-      return;
-    }
-    state.smartCoach = {
-      status: 'good',
-      message: 'أنت ماشي بشكل جيد. كمّل بهدوء، وخلك مركز على التكنيك أكثر من الوزن.'
-    };
-  }
-
-  function getSuggestion() {
-    if (!state.intake || !state.meals.length) return null;
-    const proteinRemaining = Math.max(0, DAILY_TARGETS.protein - (state.intake.protein || 0));
-    const carbsRemaining = Math.max(0, DAILY_TARGETS.carbs - (state.intake.carbs || 0));
-    const fatRemaining = Math.max(0, DAILY_TARGETS.fat - (state.intake.fat || 0));
-    if (proteinRemaining >= carbsRemaining && proteinRemaining >= fatRemaining) {
-      return [...state.meals].filter((m) => m.protein >= 20).sort((a, b) => b.protein - a.protein)[0];
-    }
-    if (carbsRemaining >= proteinRemaining && carbsRemaining >= fatRemaining) {
-      return [...state.meals].filter((m) => m.carbs >= 20).sort((a, b) => b.carbs - a.carbs)[0];
-    }
-    return [...state.meals].filter((m) => m.fat >= 10).sort((a, b) => b.fat - a.fat)[0];
-  }
-
-  function setTab(tab) {
-    state.tab = tab;
-    render();
-  }
-
-  function openExercise(exercise) {
-    state.modalExercise = exercise;
-    render();
-  }
-
-  function closeModal() {
-    state.modalExercise = null;
-    render();
-  }
-
-  function toggleExerciseDone(exerciseId) {
-    const current = state.trainingLog[exerciseId] || { completed: false, weight: '', repsDone: '', pain: 0, notes: '' };
-    state.trainingLog[exerciseId] = { ...current, completed: !current.completed };
-    refreshWeeklySummary();
-    evaluateSmartCoach();
-    saveTrainingLog();
-    render();
-  }
-
-  function updateExerciseField(exerciseId, field, value) {
-    const current = state.trainingLog[exerciseId] || { completed: false, weight: '', repsDone: '', pain: 0, notes: '' };
-    state.trainingLog[exerciseId] = { ...current, [field]: value };
-    refreshWeeklySummary();
-    evaluateSmartCoach();
-    saveTrainingLog();
-  }
-
-  function updateCardioMinutes(value) {
-    state.weeklySummary.cardioMinutes = Number(value || 0);
-    evaluateSmartCoach();
-    saveTrainingLog();
-    render();
-  }
-
-  async function handleAddMeal(mealId) {
-    const meal = state.meals.find((m) => m.id === mealId);
-    if (!meal) return;
-    const updated = await addMealToDay({ userId: DEFAULT_USER_ID, todayKey: getTodayKey(), meal });
-    state.intake = updated;
-    render();
-  }
-
-  function renderTabs() {
-    return `
-      <div class="tabs">
-        <button class="tab-btn ${state.tab === 'dashboard' ? 'active' : ''}" onclick="window.__appSetTab('dashboard')">الرئيسية</button>
-        <button class="tab-btn ${state.tab === 'training' ? 'active' : ''}" onclick="window.__appSetTab('training')">النظام التدريبي</button>
-        <button class="tab-btn ${state.tab === 'meals' ? 'active' : ''}" onclick="window.__appSetTab('meals')">الوجبات والمتابعة</button>
-      </div>
-    `;
-  }
-
-  function renderCoachBadge() {
-    const map = {
-      ready: { bg: '#ecfeff', color: '#0f766e', title: 'جاهز' },
-      good: { bg: '#eff6ff', color: '#1d4ed8', title: 'جيد' },
-      great: { bg: '#ecfccb', color: '#3f6212', title: 'ممتاز' },
-      warning: { bg: '#fef2f2', color: '#b91c1c', title: 'تنبيه' }
-    };
-    const s = map[state.smartCoach.status] || map.ready;
-    return `<div style="background:${s.bg};color:${s.color};padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;display:inline-block">${s.title}</div>`;
-  }
-
-  function renderHero() {
-    return `
-      <div class="card hero">
-        <div class="hero-badge">نسخة نهائية مصححة</div>
-        <h1>مركز قيادة أبو خالد<span>Upper / Lower Split</span></h1>
-        <p>تم إصلاح الكود بالكامل، مع إضافة الكتف الجانبي داخل Upper A وUpper B، والحفاظ على تمارين آمنة ومناسبة لمرحلة الرجوع.</p>
-        <div class="stats">
-          <div class="card mini-card"><div class="label">أيام الحديد</div><div class="value">4</div><div class="muted">علوي / سفلي</div></div>
-          <div class="card mini-card"><div class="label">الكارديو</div><div class="value">15-20</div><div class="muted">دقيقة بعد التمرين</div></div>
-          <div class="card mini-card"><div class="label">التهيئة</div><div class="value">2-4</div><div class="muted">أسابيع أولى</div></div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderDashboard() {
-    const totalExercises = TRAINING_DAYS.reduce((sum, day) => sum + day.exercises.length, 0);
-    const todayWorkout = state.todayWorkout;
-    return `
-      ${renderHero()}
-      <div class="card section" style="margin-bottom:18px">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">المدرب الذكي</h2>
-            <p class="section-subtitle">توصية اليوم بناءً على تقدمك الفعلي</p>
-          </div>
-          ${renderCoachBadge()}
-        </div>
-        <div class="list-item" style="background:#fff7ed;color:#7c2d12">${state.smartCoach.message}</div>
-      </div>
-
-      <div class="overview-grid" style="margin-bottom:20px">
-        <div class="card section">
-          <h2 class="section-title">تمرين اليوم التلقائي</h2>
-          <p class="section-subtitle">يظهر لك تلقائيًا حسب اليوم</p>
-          ${todayWorkout ? `
-            <div class="list-item"><strong>${todayWorkout.name}</strong><br><span class="muted">${todayWorkout.focus}</span></div>
-            <button class="primary-btn" onclick="window.__appSetTab('training')">افتح تمرين اليوم</button>
-          ` : `
-            <div class="list-item">اليوم مخصص للراحة أو المشي الخفيف. خذ 20-30 دقيقة مشي إذا قدرت.</div>
-          `}
-        </div>
-        <div class="card section">
-          <h2 class="section-title">ملخصك اليومي</h2>
-          <p class="section-subtitle">متابعة ذكية وسريعة</p>
-          <div class="list-box">
-            <div class="list-item">التمارين المنجزة: ${state.weeklySummary.completedSessions}</div>
-            <div class="list-item">دقائق الكارديو: ${state.weeklySummary.cardioMinutes}</div>
-            <div class="list-item">تنبيهات الألم: ${state.weeklySummary.painAlerts}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="overview-grid">
-        <div class="card section">
-          <h2 class="section-title">توزيع الأسبوع</h2>
-          <p class="section-subtitle">الخطة الحالية المعتمدة</p>
-          <div class="list-box">
-            ${TRAINING_OVERVIEW.weeklyStructure.map((item) => `<div class="list-item">${item}</div>`).join('')}
-          </div>
-        </div>
-        <div class="card section">
-          <h2 class="section-title">ملاحظات البداية</h2>
-          <p class="section-subtitle">مهم جدًا في أول أسابيع الرجوع</p>
-          <div class="list-box">
-            <div class="list-item">المدة: ${TRAINING_OVERVIEW.returnPhase.durationWeeks}</div>
-            <div class="list-item">زمن الجلسة: ${TRAINING_OVERVIEW.returnPhase.workoutDuration}</div>
-            <div class="list-item">الشدة: ${TRAINING_OVERVIEW.returnPhase.intensity}</div>
-            <div class="list-item">الأولوية الآن: تكنيك نظيف + استمرارية + عدم تهييج الظهر.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="metrics-grid">
-        <div class="card metric"><div class="label">عدد الأيام التدريبية</div><div class="value">${TRAINING_DAYS.length}</div></div>
-        <div class="card metric"><div class="label">عدد التمارين</div><div class="value">${totalExercises}</div></div>
-        <div class="card metric"><div class="label">هدف السعرات</div><div class="value">${DAILY_TARGETS.calories}</div></div>
-        <div class="card metric"><div class="label">هدف البروتين</div><div class="value">${DAILY_TARGETS.protein} جم</div></div>
-      </div>
-    `;
-  }
-
-  function renderTrainingControls(exercise) {
-    const log = state.trainingLog[exercise.id] || { completed: false, weight: '', repsDone: '', pain: 0, notes: '' };
-    return `
-      <div class="input-grid">
-        <input value="${log.weight || ''}" oninput="window.__updateExerciseField('${exercise.id}','weight', this.value)" placeholder="الوزن" class="field" />
-        <input value="${log.repsDone || ''}" oninput="window.__updateExerciseField('${exercise.id}','repsDone', this.value)" placeholder="العدات الفعلية" class="field" />
-        <input value="${log.pain || ''}" oninput="window.__updateExerciseField('${exercise.id}','pain', this.value)" placeholder="مستوى الألم 0-10" class="field" />
-      </div>
-      <textarea oninput="window.__updateExerciseField('${exercise.id}','notes', this.value)" placeholder="ملاحظات سريعة" class="field-textarea">${log.notes || ''}</textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-start;margin-top:10px;flex-wrap:wrap">
-        <button class="primary-btn" style="width:auto;margin-top:0;background:${log.completed ? '#16a34a' : '#0f766e'}" onclick="window.__toggleExerciseDone('${exercise.id}')">${log.completed ? 'تم الإنجاز ✓' : 'تسجيل الإنجاز'}</button>
-      </div>
-    `;
-  }
-
-  function renderTraining() {
-    const todayWorkout = state.todayWorkout;
-    return `
-      <div class="card section">
-        <h2 class="section-title">النظام التدريبي</h2>
-        <p class="section-subtitle">واجهة أفتح وأرتب للفيديوهات، وكل تمرين صار فيه تسجيل وزن وعدات وألم وملاحظات.</p>
-        ${todayWorkout ? `<div class="list-item" style="margin-top:12px;background:#ecfeff;color:#155e75"><strong>تمرين اليوم:</strong> ${todayWorkout.name}</div>` : ''}
-        <div class="card section" style="margin-top:16px;padding:16px;background:#f8fafc">
-          <div class="section-head" style="margin-bottom:10px">
-            <div>
-              <h2 class="section-title" style="font-size:22px">لوحة المتابعة الذكية</h2>
-              <p class="section-subtitle">سجل الكارديو ودع المدرب الذكي يعطيك توصية فورية</p>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-            <div class="list-item">التمارين المنجزة اليوم: ${state.weeklySummary.completedSessions}</div>
-            <div class="list-item">تنبيهات الألم: ${state.weeklySummary.painAlerts}</div>
-            <div class="list-item">دقائق الكارديو
-              <input value="${state.weeklySummary.cardioMinutes || ''}" oninput="window.__updateCardioMinutes(this.value)" placeholder="مثلاً 15" class="field" style="margin-top:8px" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      ${TRAINING_DAYS.map((day) => `
-        <div class="card day-card">
-          <div class="day-head">
-            <div>
-              <h3 class="day-name">${day.name}</h3>
-              <div class="day-focus">${day.focus}</div>
-            </div>
-            <div class="day-cardio">${day.cardio}</div>
-          </div>
-          <div class="day-notes">${day.notes}</div>
-          <div class="exercise-list">
-            ${day.exercises.map((exercise, index) => {
-              const log = state.trainingLog[exercise.id] || { completed: false, weight: '', repsDone: '', pain: 0, notes: '' };
-              return `
-                <div class="exercise-wrap">
-                  <div class="exercise-row">
-                    <button class="watch-btn" onclick="window.__openExercise('${exercise.id}')">شاهد</button>
-                    <div class="exercise-content">
-                      <div class="exercise-title">${index + 1}. ${exercise.arabicName} <span>(${exercise.name})</span></div>
-                      <div class="chips">
-                        <div class="chip">${exercise.duration}</div>
-                        <div class="chip">${exercise.level}</div>
-                        <div class="chip">${exercise.sets} مجموعات</div>
-                        <div class="chip">${exercise.reps}</div>
-                        ${log.completed ? '<div class="chip" style="background:#dcfce7;color:#166534">منجز</div>' : ''}
-                      </div>
-                      ${renderTrainingControls(exercise)}
-                    </div>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `).join('')}
-    `;
-  }
-
-  function renderProgress(label, value, target, unit) {
-    return `
-      <div class="card section">
-        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-          <div class="label">${label}</div>
-          <div style="font-weight:700">${value} / ${target} ${unit}</div>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${percent(value, target)}%"></div></div>
-      </div>
-    `;
-  }
-
-  function renderMeals() {
-    const intake = state.intake || { calories: 0, protein: 0, carbs: 0, fat: 0, meals: [] };
-    const suggestion = getSuggestion();
-    const groups = groupedMeals(state.meals);
-
-    return `
-      <div class="card section">
-        <h2 class="section-title">الوجبات والمتابعة</h2>
-        <p class="section-subtitle">واجهة فاتحة ومريحة للعين، مع إضافة الوجبات مباشرة وتحديث الماكروز في Firestore.</p>
-      </div>
-
-      <div class="progress-grid">
-        ${renderProgress('السعرات', intake.calories || 0, DAILY_TARGETS.calories, 'سعرة')}
-        ${renderProgress('البروتين', intake.protein || 0, DAILY_TARGETS.protein, 'جم')}
-        ${renderProgress('الكربوهيدرات', intake.carbs || 0, DAILY_TARGETS.carbs, 'جم')}
-        ${renderProgress('الدهون', intake.fat || 0, DAILY_TARGETS.fat, 'جم')}
-      </div>
-
-      ${suggestion ? `
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">اقتراح ذكي</h2>
-              <p class="section-subtitle">حسب النقص الحالي في يومك</p>
-            </div>
-          </div>
-          <div class="suggestion-box">
-            <div>
-              <h3 style="margin:0;font-size:28px">${suggestion.name}</h3>
-              <p class="muted">هذه الوجبة مناسبة غالبًا لتعويض النقص الحالي في الماكروز.</p>
-              <div class="chips" style="justify-content:flex-start">
-                <div class="chip">${suggestion.calories} سعرة</div>
-                <div class="chip">بروتين ${suggestion.protein}</div>
-                <div class="chip">كارب ${suggestion.carbs}</div>
-                <div class="chip">دهون ${suggestion.fat}</div>
-              </div>
-            </div>
-            <div class="suggestion-side">ذكي</div>
-          </div>
-        </div>
-      ` : ''}
-
-      ${Object.entries(groups).map(([categoryName, items]) => `
-        <div class="card section">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title">${categoryName}</h2>
-              <p class="section-subtitle">وجبات جاهزة</p>
-            </div>
-            <div class="count-badge">${items.length} وجبة</div>
-          </div>
-          <div class="meals-grid">
-            ${items.map((meal) => `
-              <div class="card meal-card">
-                <div class="meal-top">
-                  <div>
-                    <h3>${meal.name}</h3>
-                    <div class="sub">${meal.category}</div>
-                  </div>
-                  <div class="cal-badge">${meal.calories} سعرة</div>
-                </div>
-                <div class="meal-meta">
-                  <div class="meta-box">بروتين: ${meal.protein}</div>
-                  <div class="meta-box">كارب: ${meal.carbs}</div>
-                  <div class="meta-box">دهون: ${meal.fat}</div>
-                  <div class="meta-box">${meal.category}</div>
-                </div>
-                <button class="primary-btn" onclick="window.__addMeal('${meal.id}')">إضافة لليوم</button>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('')}
-
-      <div class="card section">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">الوجبات المضافة اليوم</h2>
-            <p class="section-subtitle">سجل اليوم الحالي</p>
-          </div>
-        </div>
-        ${!intake.meals || !intake.meals.length ? `<p class="muted">لم يتم إضافة أي وجبة اليوم بعد.</p>` : `
-          <div class="list-box">
-            ${intake.meals.map((meal) => `
-              <div class="card log-item">
-                <div class="log-top">
-                  <div>
-                    <h4>${meal.name}</h4>
-                    <div class="log-sub">${meal.category}</div>
-                  </div>
-                  <div class="muted">${meal.calories} سعرة</div>
-                </div>
-                <div class="log-meta">
-                  <div class="meta-box">بروتين ${meal.protein}</div>
-                  <div class="meta-box">كارب ${meal.carbs}</div>
-                  <div class="meta-box">دهون ${meal.fat}</div>
-                  <div class="meta-box">تمت الإضافة</div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `}
-      </div>
-    `;
-  }
-
-  function renderModal() {
-    if (!state.modalExercise) return '';
-    const embedUrl = getYoutubeEmbedUrl(state.modalExercise.link);
-    return `
-      <div class="modal" onclick="window.__closeModal(event)">
-        <div class="modal-card" onclick="event.stopPropagation()">
-          <div class="modal-head">
-            <div>
-              <div style="font-size:22px;font-weight:800">${state.modalExercise.arabicName}</div>
-              <div class="muted">${state.modalExercise.name}</div>
-            </div>
-            <button class="close-btn" onclick="window.__hideModal()">إغلاق</button>
-          </div>
-          <div class="modal-body">
-            <div class="video-box">
-              <div style="font-size:20px;font-weight:800;color:#0f766e">عرض شرح التمرين</div>
-              <p class="muted" style="line-height:1.9">الفيديو يعمل داخل التطبيق مباشرة. التمارين الحالية مناسبة لمرحلة الرجوع وتجنّب التحميل العالي على الظهر.</p>
-              <div class="chips" style="justify-content:center">
-                <div class="chip">${state.modalExercise.duration}</div>
-                <div class="chip">${state.modalExercise.level}</div>
-                <div class="chip">${state.modalExercise.sets} مجموعات</div>
-                <div class="chip">${state.modalExercise.reps}</div>
-              </div>
-              ${embedUrl ? `
-                <div style="margin-top:16px;position:relative;padding-top:56.25%;border-radius:18px;overflow:hidden;background:#e2e8f0;">
-                  <iframe
-                    src="${embedUrl}"
-                    title="${state.modalExercise.arabicName}"
-                    style="position:absolute;inset:0;width:100%;height:100%;border:0;"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                    referrerpolicy="strict-origin-when-cross-origin"
-                  ></iframe>
-                </div>
-              ` : `<p class="muted">تعذر تضمين الفيديو. افتح الرابط خارجيًا: <a href="${state.modalExercise.link}" target="_blank" rel="noreferrer">فتح الرابط</a></p>`}
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function render() {
-    let content = '';
-    if (state.tab === 'dashboard') content = renderDashboard();
-    if (state.tab === 'training') content = renderTraining();
-    if (state.tab === 'meals') content = renderMeals();
-    appEl.innerHTML = `
-      <div class="app">
-        ${renderTabs()}
-        ${content}
-        ${renderModal()}
-      </div>
-    `;
-  }
-
-  window.__appSetTab = setTab;
-  window.__toggleExerciseDone = toggleExerciseDone;
-  window.__updateExerciseField = updateExerciseField;
-  window.__updateCardioMinutes = updateCardioMinutes;
-  window.__addMeal = handleAddMeal;
-  window.__hideModal = closeModal;
-  window.__closeModal = function (event) { if (event.target.classList.contains('modal')) closeModal(); };
-  window.__openExercise = function (exerciseId) {
-    const allExercises = TRAINING_DAYS.flatMap((day) => day.exercises);
-    const exercise = allExercises.find((item) => item.id === exerciseId);
-    if (!exercise) return;
-    openExercise(exercise);
-  };
-
-  async function init() {
-    state.todayWorkout = getTodayWorkout();
-    loadTrainingLog();
-    render();
-    await seedMealsIfEmpty();
-    state.meals = await fetchMeals();
-    state.intake = await ensureTodayIntake(DEFAULT_USER_ID, getTodayKey());
-    refreshWeeklySummary();
-    evaluateSmartCoach();
-    render();
-  }
-
-  init().catch((error) => {
-    console.error(error);
-    appEl.innerHTML = `<div class="app"><div class="card section"><h2 class="section-title">صار خطأ في التشغيل</h2><p class="section-subtitle">غالبًا Firestore لم يُفعّل أو يوجد خطأ في بيانات Firebase.</p></div></div>`;
-  });
+  function mountAnimation(target,key){if(!target||!EX_ANIMS[key]) return null; let i=0; target.innerHTML=EX_ANIMS[key][0](); const timer=setInterval(()=>{i=(i+1)%EX_ANIMS[key].length; target.innerHTML=EX_ANIMS[key][i]();},650); return ()=>clearInterval(timer)}
+  function yt(url){try{const u=new URL(url); if(u.hostname.includes('youtube.com')){const v=u.searchParams.get('v'); if(v) return `https://www.youtube-nocookie.com/embed/${v}`;} if(u.hostname.includes('youtu.be')) return `https://www.youtube-nocookie.com/embed/${u.pathname.replace('/','').trim()}`;}catch(_){} return ''}
+  function gMeals(ms){const g={فطور:[],غداء:[],عشاء:[],سناك:[]}; ms.forEach(m=>{(g[m.category]||(g[m.category]=[])).push(m)}); return g}
+  function keyDay(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+  function dayName(){return ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'][new Date().getDay()]}
+  function todayWorkout(){const m={'الأحد':'upper-a','الاثنين':'lower-a','الثلاثاء':null,'الأربعاء':'upper-b','الخميس':'lower-b','الجمعة':null,'السبت':null}; return TRAINING_DAYS.find(d=>d.id===m[dayName()])||null}
+  async function seedMealsIfEmpty(){const r=collection(db,'meals');const s=await getDocs(r); if(!s.empty) return; await Promise.all(defaultMeals.map(m=>setDoc(doc(db,'meals',m.id),{...m,createdAt:serverTimestamp()})))}
+  async function fetchMeals(){const s=await getDocs(query(collection(db,'meals'),orderBy('category'))); return s.docs.map(d=>({id:d.id,...d.data()}))}
+  async function ensureTodayIntake(userId,todayKey){const ref=doc(db,'userDailyIntake',`${userId}_${todayKey}`); const s=await getDoc(ref); if(!s.exists()) await setDoc(ref,{userId,date:todayKey,calories:0,protein:0,carbs:0,fat:0,meals:[],targets:DAILY_TARGETS,createdAt:serverTimestamp(),updatedAt:serverTimestamp()}); const r=await getDoc(ref); return {id:r.id,...r.data()}}
+  async function getTodayIntake(userId,todayKey){const ref=doc(db,'userDailyIntake',`${userId}_${todayKey}`); const s=await getDoc(ref); return s.exists()?{id:s.id,...s.data()}:null}
+  async function addMealToDay({userId,todayKey,meal}){const ref=doc(db,'userDailyIntake',`${userId}_${todayKey}`); const s=await getDoc(ref); if(!s.exists()) await ensureTodayIntake(userId,todayKey); const l=await getDoc(ref); const data=l.data()||{}; const meals=Array.isArray(data.meals)?data.meals:[]; const entry={mealId:meal.id,name:meal.name,category:meal.category,calories:meal.calories,protein:meal.protein,carbs:meal.carbs,fat:meal.fat,addedAt:new Date().toISOString()}; await updateDoc(ref,{calories:increment(Number(meal.calories)||0),protein:increment(Number(meal.protein)||0),carbs:increment(Number(meal.carbs)||0),fat:increment(Number(meal.fat)||0),meals:[...meals,entry],updatedAt:serverTimestamp()}); return getTodayIntake(userId,todayKey)}
+  function tStore(){return `captain_yasser_training_${keyDay()}`}
+  const state={tab:'dashboard',meals:[],intake:null,modalExercise:null,todayWorkout:null,trainingLog:{},weeklySummary:{completedSessions:0,cardioMinutes:0,painAlerts:0},smartCoach:{message:'ابدأ اليوم بهدوء وركّز على الأداء النظيف.',status:'ready'}}; const appEl=document.getElementById('app'); let stopAnim=null;
+  function saveLog(){localStorage.setItem(tStore(),JSON.stringify({trainingLog:state.trainingLog,weeklySummary:state.weeklySummary,smartCoach:state.smartCoach}))}
+  function loadLog(){const raw=localStorage.getItem(tStore()); if(!raw) return; try{const p=JSON.parse(raw); state.trainingLog=p.trainingLog||{}; state.weeklySummary=p.weeklySummary||state.weeklySummary; state.smartCoach=p.smartCoach||state.smartCoach}catch(_){}}
+  function refreshSummary(){const e=Object.values(state.trainingLog||{}); state.weeklySummary.completedSessions=e.filter(x=>x.completed).length; state.weeklySummary.painAlerts=e.filter(x=>Number(x.pain||0)>=TRAINING_TARGETS.painThreshold).length}
+  function evalCoach(){const e=Object.values(state.trainingLog||{}); const done=e.filter(x=>x.completed).length; const avg=e.length?e.reduce((s,x)=>s+Number(x.pain||0),0)/e.length:0; const c=state.weeklySummary.cardioMinutes||0; if(avg>=TRAINING_TARGETS.painThreshold){state.smartCoach={status:'warning',message:'مستوى الألم مرتفع اليوم. خفف الشدة وركز على التحكم.'};return} if(done>=3&&c>=15){state.smartCoach={status:'great',message:'أداء ممتاز. إذا كانت آخر مجموعة مريحة، زد الوزن زيادة بسيطة جدًا في الحصة القادمة.'};return} if(done===0){state.smartCoach={status:'ready',message:'ابدأ اليوم بأول تمرين فقط ثم قيّم طاقتك. الأهم الآن الاستمرارية لا المثالية.'};return} state.smartCoach={status:'good',message:'أنت ماشي بشكل جيد. كمّل بهدوء، وخلك مركز على التكنيك أكثر من الوزن.'}}
+  function suggestion(){if(!state.intake||!state.meals.length) return null; const p=Math.max(0,DAILY_TARGETS.protein-(state.intake.protein||0)), c=Math.max(0,DAILY_TARGETS.carbs-(state.intake.carbs||0)), f=Math.max(0,DAILY_TARGETS.fat-(state.intake.fat||0)); if(p>=c&&p>=f) return [...state.meals].filter(m=>m.protein>=20).sort((a,b)=>b.protein-a.protein)[0]; if(c>=p&&c>=f) return [...state.meals].filter(m=>m.carbs>=20).sort((a,b)=>b.carbs-a.carbs)[0]; return [...state.meals].filter(m=>m.fat>=10).sort((a,b)=>b.fat-a.fat)[0]}
+  function setTab(tab){state.tab=tab; render()}
+  function openExercise(ex){state.modalExercise=ex; render()}
+  function closeModal(){state.modalExercise=null; if(stopAnim){stopAnim(); stopAnim=null} render()}
+  function toggleDone(id){const c=state.trainingLog[id]||{completed:false,weight:'',repsDone:'',pain:0,notes:''}; state.trainingLog[id]={...c,completed:!c.completed}; refreshSummary(); evalCoach(); saveLog(); render()}
+  function updateField(id,field,value){const c=state.trainingLog[id]||{completed:false,weight:'',repsDone:'',pain:0,notes:''}; state.trainingLog[id]={...c,[field]:value}; refreshSummary(); evalCoach(); saveLog()}
+  function updateCardio(value){state.weeklySummary.cardioMinutes=Number(value||0); evalCoach(); saveLog(); render()}
+  async function addMeal(id){const meal=state.meals.find(m=>m.id===id); if(!meal) return; state.intake=await addMealToDay({userId:DEFAULT_USER_ID,todayKey:keyDay(),meal}); render()}
+  function coachBadge(){const m={ready:['#ecfeff','#0f766e','جاهز'],good:['#eff6ff','#1d4ed8','جيد'],great:['#ecfccb','#3f6212','ممتاز'],warning:['#fef2f2','#b91c1c','تنبيه']}; const s=m[state.smartCoach.status]||m.ready; return `<div style="background:${s[0]};color:${s[1]};padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;display:inline-block">${s[2]}</div>`}
+  function tabs(){return `<div class="tabs"><button class="tab-btn ${state.tab==='dashboard'?'active':''}" onclick="window.__appSetTab('dashboard')">الرئيسية</button><button class="tab-btn ${state.tab==='training'?'active':''}" onclick="window.__appSetTab('training')">النظام التدريبي</button><button class="tab-btn ${state.tab==='meals'?'active':''}" onclick="window.__appSetTab('meals')">الوجبات والمتابعة</button></div>`}
+  function hero(){return `<div class="card hero"><div class="hero-badge">نسخة مدمجة مع الأنيميشن</div><h1>كابتن ياسر<span>Upper / Lower Split</span></h1><p>كل التعديلات السابقة موجودة، ومعها أنيميشن ذكي أصلي داخل صفحة التمرين جنب الفيديو.</p><div class="grid grid-4"><div class="card metric"><div class="muted">أيام الحديد</div><div class="v">4</div></div><div class="card metric"><div class="muted">الكارديو</div><div class="v">15-20</div></div><div class="card metric"><div class="muted">التهيئة</div><div class="v">2-4</div></div><div class="card metric"><div class="muted">الأنيميشن</div><div class="v">ذكي</div></div></div></div>`}
+  function dashboard(){const total=TRAINING_DAYS.reduce((s,d)=>s+d.exercises.length,0); const tw=state.todayWorkout; return `${hero()}<div class="card section"><div class="section-head"><div><h2 class="title">المدرب الذكي</h2><p class="sub">توصية اليوم بناءً على تقدمك الفعلي</p></div>${coachBadge()}</div><div class="item" style="background:#fff7ed;color:#7c2d12">${state.smartCoach.message}</div></div><div class="grid grid-2"><div class="card section"><h2 class="title">تمرين اليوم التلقائي</h2><p class="sub">يظهر لك تلقائيًا حسب اليوم</p>${tw?`<div class="item"><strong>${tw.name}</strong><br><span class="muted">${tw.focus}</span></div><button class="btn full" onclick="window.__appSetTab('training')">افتح تمرين اليوم</button>`:`<div class="item">اليوم مخصص للراحة أو المشي الخفيف.</div>`}</div><div class="card section"><h2 class="title">ملخصك اليومي</h2><p class="sub">متابعة ذكية وسريعة</p><div class="list"><div class="item">التمارين المنجزة: ${state.weeklySummary.completedSessions}</div><div class="item">دقائق الكارديو: ${state.weeklySummary.cardioMinutes}</div><div class="item">تنبيهات الألم: ${state.weeklySummary.painAlerts}</div></div></div></div><div class="grid grid-2"><div class="card section"><h2 class="title">توزيع الأسبوع</h2><p class="sub">الخطة الحالية</p><div class="list">${TRAINING_OVERVIEW.weeklyStructure.map(i=>`<div class="item">${i}</div>`).join('')}</div></div><div class="card section"><h2 class="title">ملاحظات البداية</h2><p class="sub">أول أسابيع الرجوع</p><div class="list"><div class="item">المدة: ${TRAINING_OVERVIEW.returnPhase.durationWeeks}</div><div class="item">زمن الجلسة: ${TRAINING_OVERVIEW.returnPhase.workoutDuration}</div><div class="item">الشدة: ${TRAINING_OVERVIEW.returnPhase.intensity}</div></div></div></div><div class="grid grid-4"><div class="card metric"><div class="muted">عدد الأيام التدريبية</div><div class="v">${TRAINING_DAYS.length}</div></div><div class="card metric"><div class="muted">عدد التمارين</div><div class="v">${total}</div></div><div class="card metric"><div class="muted">هدف السعرات</div><div class="v">${DAILY_TARGETS.calories}</div></div><div class="card metric"><div class="muted">هدف البروتين</div><div class="v">${DAILY_TARGETS.protein} جم</div></div></div>`}
+  function trainingControls(ex){const l=state.trainingLog[ex.id]||{completed:false,weight:'',repsDone:'',pain:0,notes:''}; return `<div class="inputs"><input class="field" value="${l.weight||''}" oninput="window.__updateExerciseField('${ex.id}','weight',this.value)" placeholder="الوزن"/><input class="field" value="${l.repsDone||''}" oninput="window.__updateExerciseField('${ex.id}','repsDone',this.value)" placeholder="العدات الفعلية"/><input class="field" value="${l.pain||''}" oninput="window.__updateExerciseField('${ex.id}','pain',this.value)" placeholder="مستوى الألم 0-10"/></div><textarea class="textarea" oninput="window.__updateExerciseField('${ex.id}','notes',this.value)" placeholder="ملاحظات سريعة">${l.notes||''}</textarea><button class="btn ${l.completed?'done':''}" style="margin-top:10px" onclick="window.__toggleExerciseDone('${ex.id}')">${l.completed?'تم الإنجاز ✓':'تسجيل الإنجاز'}</button>`}
+  function training(){const tw=state.todayWorkout; return `<div class="card section"><h2 class="title">النظام التدريبي</h2><p class="sub">كل تمرين فيه فيديو + أنيميشن + تسجيل وزن وعدات وألم.</p>${tw?`<div class="item" style="background:#ecfeff;color:#155e75"><strong>تمرين اليوم:</strong> ${tw.name}</div>`:''}<div class="card section" style="margin-top:16px;background:#f8fafc"><div class="section-head"><div><h2 class="title" style="font-size:22px">لوحة المتابعة الذكية</h2><p class="sub">سجل الكارديو ودع المدرب الذكي يعطيك توصية فورية</p></div></div><div class="grid grid-4"><div class="item">التمارين المنجزة: ${state.weeklySummary.completedSessions}</div><div class="item">تنبيهات الألم: ${state.weeklySummary.painAlerts}</div><div class="item">دقائق الكارديو<input class="field" value="${state.weeklySummary.cardioMinutes||''}" oninput="window.__updateCardioMinutes(this.value)" placeholder="مثلاً 15" style="margin-top:8px"/></div></div></div></div>${TRAINING_DAYS.map(day=>`<div class="card day"><div class="day-head"><div><h3 class="day-name">${day.name}</h3><div class="day-focus">${day.focus}</div></div><div class="pill">${day.cardio}</div></div><div class="day-notes">${day.notes}</div><div class="ex-list">${day.exercises.map((ex,i)=>{const l=state.trainingLog[ex.id]||{}; return `<div class="ex-wrap"><div class="ex-row"><button class="watch" onclick="window.__openExercise('${ex.id}')">شاهد</button><div class="ex-content"><div class="ex-title">${i+1}. ${ex.arabicName} <span>(${ex.name})</span></div><div class="chips"><div class="chip">${ex.duration}</div><div class="chip">${ex.level}</div><div class="chip">${ex.sets} مجموعات</div><div class="chip">${ex.reps}</div>${l.completed?'<div class="chip" style="background:#dcfce7;color:#166534">منجز</div>':''}</div>${trainingControls(ex)}</div></div></div>`}).join('')}</div></div>`).join('')}`}
+  function progress(label,val,target,unit){return `<div class="card section"><div style="display:flex;justify-content:space-between;gap:10px"><div class="muted">${label}</div><div style="font-weight:700">${val} / ${target} ${unit}</div></div><div class="progress"><div class="fill" style="width:${Math.min(100,Math.round((val/target)*100))}%"></div></div></div>`}
+  function meals(){const intake=state.intake||{calories:0,protein:0,carbs:0,fat:0,meals:[]}; const sug=suggestion(); const groups=gMeals(state.meals); return `<div class="card section"><h2 class="title">الوجبات والمتابعة</h2><p class="sub">واجهة فاتحة ومريحة للعين، مع إضافة الوجبات مباشرة وتحديث الماكروز في Firestore.</p></div><div class="grid grid-4">${progress('السعرات',intake.calories||0,DAILY_TARGETS.calories,'سعرة')}${progress('البروتين',intake.protein||0,DAILY_TARGETS.protein,'جم')}${progress('الكربوهيدرات',intake.carbs||0,DAILY_TARGETS.carbs,'جم')}${progress('الدهون',intake.fat||0,DAILY_TARGETS.fat,'جم')}</div>${sug?`<div class="card section"><div class="section-head"><div><h2 class="title">اقتراح ذكي</h2><p class="sub">حسب النقص الحالي في يومك</p></div></div><div class="suggestion-box"><div><h3 style="margin:0;font-size:28px">${sug.name}</h3><p class="muted">هذه الوجبة مناسبة غالبًا لتعويض النقص الحالي.</p><div class="chips" style="justify-content:flex-start"><div class="chip">${sug.calories} سعرة</div><div class="chip">بروتين ${sug.protein}</div><div class="chip">كارب ${sug.carbs}</div><div class="chip">دهون ${sug.fat}</div></div></div><div class="suggestion-side">ذكي</div></div></div>`:''}${Object.entries(groups).map(([cat,items])=>`<div class="card section"><div class="section-head"><div><h2 class="title">${cat}</h2><p class="sub">وجبات جاهزة</p></div><div class="badge">${items.length} وجبة</div></div><div class="meals">${items.map(meal=>`<div class="card section"><div class="meal-top"><div><h3>${meal.name}</h3><div class="muted">${meal.category}</div></div><div class="badge">${meal.calories} سعرة</div></div><div class="meta"><div class="box">بروتين: ${meal.protein}</div><div class="box">كارب: ${meal.carbs}</div><div class="box">دهون: ${meal.fat}</div><div class="box">${meal.category}</div></div><button class="btn full" onclick="window.__addMeal('${meal.id}')">إضافة لليوم</button></div>`).join('')}</div></div>`).join('')}<div class="card section"><div class="section-head"><div><h2 class="title">الوجبات المضافة اليوم</h2><p class="sub">سجل اليوم الحالي</p></div></div>${!intake.meals||!intake.meals.length?`<p class="muted">لم يتم إضافة أي وجبة اليوم بعد.</p>`:`<div class="list">${intake.meals.map(m=>`<div class="card section"><div class="log-top"><div><h4>${m.name}</h4><div class="muted">${m.category}</div></div><div class="muted">${m.calories} سعرة</div></div><div class="meta"><div class="box">بروتين ${m.protein}</div><div class="box">كارب ${m.carbs}</div><div class="box">دهون ${m.fat}</div><div class="box">تمت الإضافة</div></div></div>`).join('')}</div>`}</div>`}
+  function modal(){if(!state.modalExercise) return ''; const embed=yt(state.modalExercise.link); return `<div class="modal" onclick="window.__closeModal(event)"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-head"><div><div style="font-size:22px;font-weight:800">${state.modalExercise.arabicName}</div><div class="muted">${state.modalExercise.name}</div></div><button class="close" onclick="window.__hideModal()">إغلاق</button></div><div class="modal-body"><div class="player-grid"><div class="anim-box"><div style="font-size:18px;font-weight:800;margin-bottom:10px">الأنيميشن الذكي</div><div id="anim-stage" class="anim-stage"></div><div class="small">تمثيل بصري أصلي وخفيف للتمرين داخل التطبيق.</div></div><div class="video-box"><div style="font-size:18px;font-weight:800;margin-bottom:10px">الفيديو التعليمي</div>${embed?`<div style="position:relative;padding-top:56.25%;border-radius:18px;overflow:hidden;background:#e2e8f0"><iframe src="${embed}" title="${state.modalExercise.arabicName}" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`:`<p class="muted">تعذر تضمين الفيديو.</p>`}<div class="chips" style="justify-content:flex-start;margin-top:12px"><div class="chip">${state.modalExercise.duration}</div><div class="chip">${state.modalExercise.level}</div><div class="chip">${state.modalExercise.sets} مجموعات</div><div class="chip">${state.modalExercise.reps}</div></div></div></div></div></div></div>`}
+  function render(){let content=''; if(state.tab==='dashboard') content=dashboard(); if(state.tab==='training') content=training(); if(state.tab==='meals') content=meals(); appEl.innerHTML=`<div class="app">${tabs()}${content}${modal()}</div>`; if(state.modalExercise){const stage=document.getElementById('anim-stage'); if(stage&&state.modalExercise.animationKey){if(stopAnim) stopAnim(); stopAnim=mountAnimation(stage,state.modalExercise.animationKey)}}}
+  window.__appSetTab=setTab; window.__toggleExerciseDone=toggleDone; window.__updateExerciseField=updateField; window.__updateCardioMinutes=updateCardio; window.__addMeal=addMeal; window.__hideModal=closeModal; window.__closeModal=(e)=>{if(e.target.classList.contains('modal')) closeModal()}; window.__openExercise=(id)=>{const ex=TRAINING_DAYS.flatMap(d=>d.exercises).find(x=>x.id===id); if(ex) openExercise(ex)};
+  async function init(){state.todayWorkout=todayWorkout(); loadLog(); render(); await seedMealsIfEmpty(); state.meals=await fetchMeals(); state.intake=await ensureTodayIntake(DEFAULT_USER_ID,keyDay()); refreshSummary(); evalCoach(); render()}
+  init().catch(err=>{console.error(err); appEl.innerHTML=`<div class="app"><div class="card section"><h2 class="title">صار خطأ في التشغيل</h2><p class="sub">غالبًا Firestore لم يُفعّل أو يوجد خطأ في بيانات Firebase.</p></div></div>`})
 </script>
 
   </body>
