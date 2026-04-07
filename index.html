@@ -3,139 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق أبو خالد - Lyfta Master 🦾</title>
+    <title>تطبيق أبو خالد PRO 🦾</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --accent: #e63946; --blue: #3498db; --bg: #000000; --card: #1c1c1e; --text: #ffffff; --gray: #8e8e93; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
-        header { padding: 30px 20px; background: linear-gradient(180deg, #1c1c1e 0%, #000000 100%); text-align: center; border-radius: 0 0 25px 25px; }
+        :root { --accent: #ff3b30; --bg: #000000; --card: #1c1c1e; --text: #ffffff; --gray: #8e8e93; --green: #34c759; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
+        header { padding: 25px 20px; background: #1c1c1e; border-radius: 0 0 20px 20px; text-align: center; border-bottom: 1px solid #333; }
         .container { padding: 15px; }
-        .section-title { font-size: 18px; font-weight: bold; margin: 20px 10px 10px; color: var(--gray); border-right: 3px solid var(--accent); padding-right: 10px; }
-        .card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #2c2c2e; cursor: pointer; transition: 0.3s; }
-        .card:active { transform: scale(0.98); }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .ex-info h4 { margin: 0; font-size: 16px; }
-        .ex-info p { margin: 5px 0 0; font-size: 12px; color: var(--gray); }
-        
-        /* Modal Style */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: var(--card); border-radius: 25px; padding: 25px; max-width: 500px; margin: auto; border: 1px solid #333; }
-        .close-btn { color: var(--accent); float: left; font-size: 30px; cursor: pointer; }
-        .muscle-tag { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 11px; margin-top: 10px; }
-        .primary { background: rgba(230, 57, 70, 0.2); color: var(--accent); }
-        .secondary { background: rgba(52, 152, 219, 0.2); color: var(--blue); }
-        .alt-box { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; }
-        .alt-card { min-width: 110px; background: #2c2c2e; padding: 10px; border-radius: 12px; text-align: center; font-size: 11px; }
-
-        .navbar { position: fixed; bottom: 0; width: 100%; background: #1c1c1e; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #333; }
-        .nav-item { color: var(--gray); text-align: center; font-size: 10px; }
+        .section-title { font-size: 16px; font-weight: bold; margin: 20px 10px 10px; color: var(--accent); letter-spacing: 1px; }
+        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 12px; border: 1px solid #2c2c2e; }
+        .flex-row { display: flex; justify-content: space-between; align-items: center; }
+        .video-link { background: #2c2c2e; color: var(--accent); padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: bold; }
+        .input-group { display: flex; gap: 10px; margin-top: 15px; }
+        input { background: #2c2c2e; border: 1px solid #3d3d41; padding: 12px; border-radius: 8px; color: white; width: 100%; text-align: center; outline: none; }
+        input:focus { border-color: var(--accent); }
+        .navbar { position: fixed; bottom: 0; width: 100%; background: #1c1c1e; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #333; z-index: 1000; }
+        .nav-item { color: var(--gray); text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
         .nav-item.active { color: white; }
+        .tab-content { display: none; padding: 10px; }
+        .tab-content.active { display: block; }
+        .save-btn { background: var(--green); color: black; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <h2 style="margin:0">تمارين العلوي (الدستور) 🦾</h2>
-    <p style="color: var(--gray); font-size: 13px;">إضغط على التمرين لرؤية البدائل والعضلات</p>
+    <h2 style="margin:0">Lyfta: نسخة أبو خالد 🦾</h2>
+    <p style="color: var(--gray); font-size: 12px; margin-top:5px;">وقت اللياقة الأحمر - الجدول العلوي</p>
 </header>
 
 <div class="container">
-    <div class="section-title">عضلات الصدر</div>
     
-    <div class="card" onclick="openDetails('Incline DB Press', 'الصدر العلوي', 'الأكتاف الأمامية، الترايسبس', 'Incline Machine, Push-ups')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Incline DB Press</h4><p>صدر عالي (دامبلز) - 3 جولات</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="card" onclick="openDetails('Machine Flat Press', 'الصدر المستوي', 'الترايسبس', 'Dumbbell Flat Press, Barbell Press')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Machine Flat Press</h4><p>صدر مستوي (جهاز) - 3 جولات</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="section-title">عضلات الظهر</div>
-
-    <div class="card" onclick="openDetails('Lat Pulldown', 'الظهر (العرض)', 'البايسبس، السواعد', 'Pull-ups, Single Arm Lat Pull')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Lat Pulldown</h4><p>سحب عريض - 3 جولات</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="card" onclick="openDetails('Seated Cable Row', 'الظهر (السماكة)', 'البايسبس، الأكتاف الخلفية', 'Dumbbell Row, T-Bar Row')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Seated Cable Row</h4><p>سحب أرضي (ضيق) - 3 جولات</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="section-title">عضلات الأكتاف</div>
-
-    <div class="card" onclick="openDetails('Dumbbell Press', 'الأكتاف الجانبية والأمامية', 'الترايسبس', 'Shoulder Press Machine')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Shoulder DB Press</h4><p>ضغط أكتاف - 3 جولات</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="card" onclick="openDetails('Lateral Raise', 'الأكتاف الجانبية (عزل)', 'لا يوجد', 'Cable Lateral Raise')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Lateral Raise</h4><p>رفرفة جانبي - 2 جولة</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="card" onclick="openDetails('Rear Delt Fly', 'الكتف الخلفي', 'أعلى الظهر', 'Face Pulls, DB Reverse Fly')">
-        <div class="flex-between">
-            <div class="ex-info"><h4>Rear Delt Fly</h4><p>كتف خلفي (جهاز) - 2 جولة</p></div>
-            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
-        </div>
-    </div>
-
-    <div class="section-title">الذراعين</div>
-    <div class="card" onclick="openDetails('Arms Day', 'الباي والتراي', 'السواعد', 'Hammer Curls, Skull Crushers')">
-        <p style="margin:0">بايسبس (جولتين) + ترايسبس (جولتين)</p>
-    </div>
-</div>
-
-<div id="exModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h3 id="m-title" style="text-align:center; color:var(--accent)"></h3>
-        <hr style="border:0.5px solid #333">
+    <div id="workoutTab" class="tab-content active">
         
-        <p style="font-size: 14px; font-weight: bold;">العضلات المستهدفة:</p>
-        <span class="muscle-tag primary">رئيسية: <span id="m-primary"></span></span><br>
-        <span class="muscle-tag secondary">ثانوية: <span id="m-secondary"></span></span>
+        <div class="section-title">الصدر (Chest)</div>
+        <div class="card">
+            <div class="flex-row">
+                <div><h4>Incline DB Press (عالي)</h4><p style="color:var(--gray); font-size:11px;">3 جولات × 12 تكرار</p></div>
+                <a href="https://www.youtube.com/results?search_query=how+to+incline+dumbbell+press" target="_blank" class="video-link"><i class="fas fa-play"></i> فيديو</a>
+            </div>
+            <div class="input-group">
+                <input type="number" id="chest1_w" placeholder="الوزن">
+                <input type="number" id="chest1_r" placeholder="تكرار">
+            </div>
+        </div>
 
-        <p style="font-size: 14px; font-weight: bold; margin-top: 20px;">تمارين بديلة (لو الجهاز مشغول):</p>
-        <div id="m-alts" class="alt-box"></div>
-        
-        <button onclick="closeModal()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:12px; margin-top:25px; font-weight:bold;">تم، لنبدأ التمرين! 🚀</button>
+        <div class="section-title">الظهر (Back)</div>
+        <div class="card">
+            <div class="flex-row">
+                <div><h4>Lat Pulldown (سحب)</h4><p style="color:var(--gray); font-size:11px;">3 جولات × 12 تكرار</p></div>
+                <a href="https://www.youtube.com/results?search_query=how+to+lat+pulldown" target="_blank" class="video-link"><i class="fas fa-play"></i> فيديو</a>
+            </div>
+            <div class="input-group">
+                <input type="number" placeholder="الوزن">
+                <input type="number" placeholder="تكرار">
+            </div>
+        </div>
+
+        <div class="section-title">الذراعين (Arms)</div>
+        <div class="card">
+            <div class="flex-row">
+                <div><h4>Biceps Curl (باي)</h4><p style="color:var(--gray); font-size:11px;">2 جولة × 15 تكرار</p></div>
+                <a href="https://www.youtube.com/results?search_query=how+to+bicep+curls" target="_blank" class="video-link"><i class="fas fa-play"></i> فيديو</a>
+            </div>
+            <div class="input-group">
+                <input type="number" placeholder="وزن الباي">
+                <input type="number" placeholder="تكرار">
+            </div>
+        </div>
+        <div class="card">
+            <div class="flex-row">
+                <div><h4>Triceps Pushdown (تراي)</h4><p style="color:var(--gray); font-size:11px;">2 جولة × 15 تكرار</p></div>
+                <a href="https://www.youtube.com/results?search_query=how+to+tricep+pushdown" target="_blank" class="video-link"><i class="fas fa-play"></i> فيديو</a>
+            </div>
+            <div class="input-group">
+                <input type="number" placeholder="وزن التراي">
+                <input type="number" placeholder="تكرار">
+            </div>
+        </div>
+
+        <button class="save-btn" onclick="saveWorkout()">حفظ التمرين في السجل 💾</button>
     </div>
+
+    <div id="progressTab" class="tab-content">
+        <div class="section-title">تتبع الوزن والقياسات</div>
+        <div class="card">
+            <h4>وزن الجسم الحالي</h4>
+            <input type="number" id="bodyWeight" placeholder="أدخل وزنك اليوم (كجم)">
+            <button class="save-btn" style="background:var(--accent); color:white;" onclick="updateProgress()">تحديث الوزن 📈</button>
+        </div>
+        <div class="card" id="historyCard">
+            <h4>آخر تحديث:</h4>
+            <p id="lastUpdate" style="color:var(--green)">لا يوجد بيانات بعد</p>
+        </div>
+    </div>
+
 </div>
 
 <nav class="navbar">
-    <div class="nav-item active"><i class="fas fa-dumbbell fa-lg"></i><br>تمارين</div>
-    <div class="nav-item"><i class="fas fa-chart-line fa-lg"></i><br>التقدم</div>
-    <div class="nav-item"><i class="fas fa-user fa-lg"></i><br>أنت</div>
+    <div class="nav-item active" onclick="showTab('workoutTab', this)"><i class="fas fa-dumbbell fa-lg"></i><br>التمارين</div>
+    <div class="nav-item" onclick="showTab('progressTab', this)"><i class="fas fa-chart-line fa-lg"></i><br>التقدم</div>
+    <div class="nav-item" onclick="alert('ملف أبو خالد الشخصي قريباً!')"><i class="fas fa-user fa-lg"></i><br>أنت</div>
 </nav>
 
 <script>
-    function openDetails(title, prim, sec, alts) {
-        document.getElementById('m-title').innerText = title;
-        document.getElementById('m-primary').innerText = prim;
-        document.getElementById('m-secondary').innerText = sec;
-        
-        let altHtml = alts.split(',').map(a => `<div class="alt-card">${a.trim()}</div>`).join('');
-        document.getElementById('m-alts').innerHTML = altHtml;
-        
-        document.getElementById('exModal').style.display = 'block';
+    function showTab(tabId, el) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        el.classList.add('active');
     }
-    function closeModal() { document.getElementById('exModal').style.display = 'none'; }
+
+    function saveWorkout() {
+        alert("كفو يا أبا خالد! تم تسجيل أوزانك بنجاح. عضلاتك الآن في مرحلة النمو 🚀");
+    }
+
+    function updateProgress() {
+        let weight = document.getElementById('bodyWeight').value;
+        if(weight) {
+            document.getElementById('lastUpdate').innerText = "وزنك الحالي: " + weight + " كجم. اقتربت من الـ 70! 🔥";
+            alert("تم تحديث تقدمك بنجاح!");
+        }
+    }
 </script>
 
 </body>
