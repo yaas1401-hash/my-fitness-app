@@ -3,75 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lyfta Abu Khalid - Smart Edition 🦾</title>
+    <title>تطبيق أبو خالد - Lyfta Master 🦾</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --accent: #e63946; --blue-assist: #3498db; --bg: #000000; --card: #1c1c1e; --text: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 80px; }
-        
-        .card { background: var(--card); border-radius: 15px; padding: 15px; margin: 15px; cursor: pointer; border: 1px solid #2c2c2e; }
+        :root { --accent: #e63946; --blue: #3498db; --bg: #000000; --card: #1c1c1e; --text: #ffffff; --gray: #8e8e93; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
+        header { padding: 30px 20px; background: linear-gradient(180deg, #1c1c1e 0%, #000000 100%); text-align: center; border-radius: 0 0 25px 25px; }
+        .container { padding: 15px; }
+        .section-title { font-size: 18px; font-weight: bold; margin: 20px 10px 10px; color: var(--gray); border-right: 3px solid var(--accent); padding-right: 10px; }
+        .card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #2c2c2e; cursor: pointer; transition: 0.3s; }
+        .card:active { transform: scale(0.98); }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .ex-info h4 { margin: 0; font-size: 16px; }
+        .ex-info p { margin: 5px 0 0; font-size: 12px; color: var(--gray); }
         
-        /* Modal Style (نافذة التفاصيل) */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: var(--card); border-radius: 20px; padding: 20px; max-width: 500px; margin: auto; }
-        .close-btn { color: var(--accent); float: left; font-size: 28px; font-weight: bold; cursor: pointer; }
+        /* Modal Style */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: var(--card); border-radius: 25px; padding: 25px; max-width: 500px; margin: auto; border: 1px solid #333; }
+        .close-btn { color: var(--accent); float: left; font-size: 30px; cursor: pointer; }
+        .muscle-tag { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 11px; margin-top: 10px; }
+        .primary { background: rgba(230, 57, 70, 0.2); color: var(--accent); }
+        .secondary { background: rgba(52, 152, 219, 0.2); color: var(--blue); }
+        .alt-box { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; }
+        .alt-card { min-width: 110px; background: #2c2c2e; padding: 10px; border-radius: 12px; text-align: center; font-size: 11px; }
 
-        /* Muscle Legend (دليل العضلات) */
-        .muscle-info { margin-top: 15px; padding: 10px; border-radius: 10px; background: #2c2c2e; }
-        .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-left: 5px; }
-        
-        .alternative-box { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 10px; }
-        .alt-item { min-width: 100px; background: #2c2c2e; padding: 10px; border-radius: 10px; text-align: center; font-size: 11px; }
+        .navbar { position: fixed; bottom: 0; width: 100%; background: #1c1c1e; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #333; }
+        .nav-item { color: var(--gray); text-align: center; font-size: 10px; }
+        .nav-item.active { color: white; }
     </style>
 </head>
 <body>
 
-<div style="padding: 20px; text-align: center;">
-    <h2>تمارين اليوم 🏋️‍♂️</h2>
-    <p style="color: #888;">إضغط على التمرين لمعرفة التفاصيل والبدائل</p>
-</div>
+<header>
+    <h2 style="margin:0">تمارين العلوي (الدستور) 🦾</h2>
+    <p style="color: var(--gray); font-size: 13px;">إضغط على التمرين لرؤية البدائل والعضلات</p>
+</header>
 
-<div class="card" onclick="openModal()">
-    <div class="flex-between">
-        <div>
-            <h4 style="margin:0">Bench Press</h4>
-            <p style="margin:5px 0 0; font-size:12px; color:#888;">الصدر المستوي - 3 جولات</p>
+<div class="container">
+    <div class="section-title">عضلات الصدر</div>
+    
+    <div class="card" onclick="openDetails('Incline DB Press', 'الصدر العلوي', 'الأكتاف الأمامية، الترايسبس', 'Incline Machine, Push-ups')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Incline DB Press</h4><p>صدر عالي (دامبلز) - 3 جولات</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
         </div>
-        <i class="fas fa-info-circle" style="color: var(--accent); font-size: 20px;"></i>
+    </div>
+
+    <div class="card" onclick="openDetails('Machine Flat Press', 'الصدر المستوي', 'الترايسبس', 'Dumbbell Flat Press, Barbell Press')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Machine Flat Press</h4><p>صدر مستوي (جهاز) - 3 جولات</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
+        </div>
+    </div>
+
+    <div class="section-title">عضلات الظهر</div>
+
+    <div class="card" onclick="openDetails('Lat Pulldown', 'الظهر (العرض)', 'البايسبس، السواعد', 'Pull-ups, Single Arm Lat Pull')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Lat Pulldown</h4><p>سحب عريض - 3 جولات</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
+        </div>
+    </div>
+
+    <div class="card" onclick="openDetails('Seated Cable Row', 'الظهر (السماكة)', 'البايسبس، الأكتاف الخلفية', 'Dumbbell Row, T-Bar Row')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Seated Cable Row</h4><p>سحب أرضي (ضيق) - 3 جولات</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
+        </div>
+    </div>
+
+    <div class="section-title">عضلات الأكتاف</div>
+
+    <div class="card" onclick="openDetails('Dumbbell Press', 'الأكتاف الجانبية والأمامية', 'الترايسبس', 'Shoulder Press Machine')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Shoulder DB Press</h4><p>ضغط أكتاف - 3 جولات</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
+        </div>
+    </div>
+
+    <div class="card" onclick="openDetails('Lateral Raise', 'الأكتاف الجانبية (عزل)', 'لا يوجد', 'Cable Lateral Raise')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Lateral Raise</h4><p>رفرفة جانبي - 2 جولة</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
+        </div>
+    </div>
+
+    <div class="card" onclick="openDetails('Rear Delt Fly', 'الكتف الخلفي', 'أعلى الظهر', 'Face Pulls, DB Reverse Fly')">
+        <div class="flex-between">
+            <div class="ex-info"><h4>Rear Delt Fly</h4><p>كتف خلفي (جهاز) - 2 جولة</p></div>
+            <i class="fas fa-chevron-left" style="color: var(--accent)"></i>
+        </div>
+    </div>
+
+    <div class="section-title">الذراعين</div>
+    <div class="card" onclick="openDetails('Arms Day', 'الباي والتراي', 'السواعد', 'Hammer Curls, Skull Crushers')">
+        <p style="margin:0">بايسبس (جولتين) + ترايسبس (جولتين)</p>
     </div>
 </div>
 
-<div id="exerciseModal" class="modal">
+<div id="exModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h3 style="text-align: center;">Bench Press (مستوي)</h3>
+        <h3 id="m-title" style="text-align:center; color:var(--accent)"></h3>
+        <hr style="border:0.5px solid #333">
         
-        <div style="width: 100%; height: 200px; background: #333; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-dumbbell fa-4x" style="color: #555;"></i>
-            <p style="position: absolute; font-size: 12px;">[صورة توضيحية للحركة]</p>
-        </div>
+        <p style="font-size: 14px; font-weight: bold;">العضلات المستهدفة:</p>
+        <span class="muscle-tag primary">رئيسية: <span id="m-primary"></span></span><br>
+        <span class="muscle-tag secondary">ثانوية: <span id="m-secondary"></span></span>
 
-        <div class="muscle-info">
-            <h4 style="margin: 0 0 10px 0;">العضلات المستهدفة:</h4>
-            <p style="font-size: 14px;"><span class="dot" style="background: var(--accent);"></span> رئيسية: عضلة الصدر الكبرى</p>
-            <p style="font-size: 14px;"><span class="dot" style="background: var(--blue-assist);"></span> ثانوية: الترايسبس، الأكتاف الأمامية</p>
-        </div>
-
-        <h4 style="margin: 20px 0 10px 0;">تمارين بديلة:</h4>
-        <div class="alternative-box">
-            <div class="alt-item"><i class="fas fa-person-breastfeeding"></i><br>Push-up</div>
-            <div class="alt-item"><i class="fas fa-grip-lines"></i><br>Dumbbell Press</div>
-            <div class="alt-item"><i class="fas fa-vector-square"></i><br>Chest Press Machine</div>
-        </div>
+        <p style="font-size: 14px; font-weight: bold; margin-top: 20px;">تمارين بديلة (لو الجهاز مشغول):</p>
+        <div id="m-alts" class="alt-box"></div>
         
-        <button onclick="closeModal()" style="width: 100%; padding: 15px; background: var(--accent); border: none; color: white; border-radius: 12px; margin-top: 20px; font-weight: bold;">فهمت، لنبدأ! 🚀</button>
+        <button onclick="closeModal()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:12px; margin-top:25px; font-weight:bold;">تم، لنبدأ التمرين! 🚀</button>
     </div>
 </div>
 
+<nav class="navbar">
+    <div class="nav-item active"><i class="fas fa-dumbbell fa-lg"></i><br>تمارين</div>
+    <div class="nav-item"><i class="fas fa-chart-line fa-lg"></i><br>التقدم</div>
+    <div class="nav-item"><i class="fas fa-user fa-lg"></i><br>أنت</div>
+</nav>
+
 <script>
-    function openModal() { document.getElementById("exerciseModal").style.display = "block"; }
-    function closeModal() { document.getElementById("exerciseModal").style.display = "none"; }
+    function openDetails(title, prim, sec, alts) {
+        document.getElementById('m-title').innerText = title;
+        document.getElementById('m-primary').innerText = prim;
+        document.getElementById('m-secondary').innerText = sec;
+        
+        let altHtml = alts.split(',').map(a => `<div class="alt-card">${a.trim()}</div>`).join('');
+        document.getElementById('m-alts').innerHTML = altHtml;
+        
+        document.getElementById('exModal').style.display = 'block';
+    }
+    function closeModal() { document.getElementById('exModal').style.display = 'none'; }
 </script>
 
 </body>
